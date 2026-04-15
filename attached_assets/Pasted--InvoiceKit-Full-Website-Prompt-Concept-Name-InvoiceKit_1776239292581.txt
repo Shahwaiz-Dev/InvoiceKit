@@ -1,0 +1,169 @@
+# InvoiceKit — Full Website Prompt
+
+## Concept & Name
+InvoiceKit — a free, no-login invoicing tool. The entire promise lives in one sentence: "Pick a template. Fill it in. Download your invoice." No accounts. No friction. No clutter.
+
+---
+
+## Color Scheme
+
+| Role | Color | Hex |
+|---|---|---|
+| Primary Brand | Slate Blue | #3B5BDB |
+| Primary Dark | Deep Navy | #1E3A8A |
+| Accent | Teal Mint | #0D9488 |
+| Background | Warm White | #F8F7F4 |
+| Surface | Pure White | #FFFFFF |
+| Text Primary | Deep Ink | #1C1917 |
+| Text Muted | Stone Gray | #78716C |
+| Border | Light Smoke | #E7E5E4 |
+| Danger/Error | Soft Red | #EF4444 |
+
+Typography: "Inter" for UI, "DM Serif Display" for the hero headline only — creates one elegant serif moment that says "professional document" before the user even reads a word.
+
+---
+
+## User Flow
+
+Land on Hero → Scroll to Templates → Click "Use Template"
+→ Side Panel opens → User fills in fields → Live Preview updates
+→ Click "Download PDF" → File saves instantly → Done.
+
+Zero pages. Zero navigation. Zero login. Everything happens on one long scrollable page with a slide-in editor panel.
+
+---
+
+## Section-by-Section Breakdown
+
+### 1. Top Navigation Bar
+- Height: 60px, sticky, white background, 1px bottom border in #E7E5E4
+- Left: Logo — a small document icon (two stacked rectangles with a diagonal corner fold) in Slate Blue, next to the wordmark "InvoiceKit" in Inter 600 weight
+- Right: Two ghost-style text links — "How it works" and "Templates" — both anchor-scroll links, no pages. A small badge next to the logo reads "Free · No Login" in a teal pill — 11px, bold, teal background at 15% opacity, teal text
+- Behavior: On scroll past 80px, the nav gets a subtle box-shadow (0 1px 8px rgba(0,0,0,0.06)) to lift it visually
+
+### 2. Hero Section
+- Background: Warm White #F8F7F4
+- Layout: Centered, full viewport height (100vh)
+- Eyebrow text: "No account needed. Always free." — 13px, uppercase letter-spacing 0.08em, Stone Gray, with a small green dot (8px circle, #10B981) to its left like a live indicator
+- Headline: 56px, DM Serif Display, Deep Ink — "Professional invoices, downloaded in seconds." — line break intentional, second line slightly indented
+- Subheadline: 18px Inter 400, Stone Gray — "Choose from 4 clean templates. Fill in your details. Get a ready-to-send PDF — no signup, no watermarks, no catch."
+- CTA Button: Large pill button, 52px height, Slate Blue background, white text — "Browse Templates →" — smooth anchor scroll to template section. On hover: Deep Navy #1E3A8A
+- Secondary link: Below the button — "See how it works ↓" — plain teal underline text, no button styling
+- Hero visual: To the right (on desktop, below on mobile) — a floating mock invoice card. White surface, soft border, showing a fake invoice with placeholder lines. Three colored badges float on it: one green "PAID", one blue "PDF Ready", one showing a small download icon. Purely decorative SVG/illustration — not interactive
+- Bottom of Hero: A thin row of 5 social proof micro-stats in Stone Gray — "4 Templates" · "Instant PDF" · "No Watermarks" · "No Login" · "Free Forever" — separated by centered dots
+
+### 3. "How It Works" Section
+- Background: White
+- Section label: "Simple by design" — teal, 12px uppercase
+- Heading: "Three steps to a sent invoice" — 36px, Deep Ink
+- Layout: Three horizontal cards in a row, each with a large step number in the background (80px, #3B5BDB at 6% opacity)
+  - Step 1 — Pick: Icon of a cursor clicking a card. Text: "Browse 4 professionally designed invoice templates and choose the one that fits your business."
+  - Step 2 — Fill: Icon of a pen writing. Text: "Enter your details — client name, line items, due date, tax rate. A live preview updates as you type."
+  - Step 3 — Download: Icon of a download arrow into a document. Text: "Click download. Get a pixel-perfect PDF, ready to email or print. No watermarks. No account."
+- Card style: White, 1px border #E7E5E4, 12px radius, 28px padding. On hover: border lifts to Slate Blue at 40% opacity with 2px
+
+### 4. Templates Section (Core Section)
+- Background: Warm White #F8F7F4
+- Section label: "Templates" — teal uppercase
+- Heading: "Choose your template" — 36px
+- Layout: 2×2 grid on desktop, 1 column on mobile
+
+Each Template Card contains:
+- A tall thumbnail preview (aspect ratio ~3:4) of the actual invoice layout
+- Template name in 16px Inter 600
+- A short descriptor tag: e.g. "Minimalist" / "Corporate" / "Creative" / "Contractor"
+- Two subtle feature tags — small pills in #F1F5F9 background with #475569 text
+- A full-width "Use This Template →" button in Slate Blue at the bottom
+
+The four templates:
+1. Clean — Pure white, serif invoice number, left-aligned logo zone, simple line items table. Best for: Freelancers, consultants
+2. Corporate — Navy header bar with white logo zone, bold column headers, formal footer with bank details. Best for: Agencies, firms
+3. Minimal — No header bar, ultra-sparse layout, lots of whitespace, light gray table rows. Best for: Designers, creatives
+4. Contractor — Orange-accented header, large "INVOICE" stamp-style text, day-rate line items. Best for: Tradespeople, contractors
+
+Card hover state: Card lifts (transform: translateY(-4px)), border shifts to Slate Blue, thumbnail gets a subtle scale(1.02)
+
+### 5. Invoice Editor Panel (Slide-In Drawer)
+Triggered when user clicks "Use This Template →"
+
+- Behavior: A panel slides in from the RIGHT side, covering 45% of the viewport width. The left 55% shows the live invoice preview updating in real time. On mobile: full screen with toggle between "Edit" and "Preview" tabs
+- Panel background: White, left border 1px #E7E5E4, no shadow (clean, document-like)
+- Panel header: Template name + a small thumbnail swatch of the chosen template + an "× Change Template" link in teal
+
+Editor fields grouped into collapsible sections:
+
+YOUR DETAILS
+- Business / Your Name (text input)
+- Your Email (text input)
+- Your Address (textarea, 3 rows)
+- Logo Upload (drag-drop zone, 80×80px preview appears inline)
+
+CLIENT DETAILS
+- Client Name (text input)
+- Client Email (text input)
+- Client Address (textarea)
+
+INVOICE INFO
+- Invoice Number (text input, pre-filled: INV-001, auto-increments hint shown)
+- Issue Date (date picker)
+- Due Date (date picker)
+
+LINE ITEMS (repeating row builder)
+- Each row: Description | Qty | Unit Price | Line Total (auto-calculated)
+- "+ Add Line Item" button — teal ghost button
+- Rows are deletable with a small × icon on hover
+
+TAX & DISCOUNT
+- Tax Rate % (number input, default 0)
+- Discount % (number input, default 0)
+- Currency selector (dropdown: USD, GBP, EUR, PKR, CAD, AUD)
+
+NOTES / PAYMENT TERMS
+- Optional textarea — e.g. "Payment due within 30 days"
+
+Download Button:
+- Full-width, 52px height, Teal background #0D9488, white text — "Download PDF" with a download arrow icon
+- Below it: "Your data never leaves your browser." — 12px Stone Gray reassurance note
+
+### 6. Live Preview Pane (Left Side of Editor)
+- Shows the invoice exactly as it will print, scaled to fit the pane
+- Updates on every keystroke with a 150ms debounce
+- A small "A4 · Portrait" label floats at the top right of the preview in a Stone Gray pill
+- When the PDF is being generated, the preview pulses softly with a Slate Blue 10% overlay and a spinning document icon
+
+### 7. FAQ Section
+- Background: White
+- Heading: "Questions? We've got them covered." — 30px
+- Layout: Two-column accordion on desktop, single column on mobile
+- Questions:
+  - "Is InvoiceKit really free?" — Yes, always. No trial, no pro tier.
+  - "Do I need to create an account?" — Never. No email, no password.
+  - "Will there be watermarks on my PDF?" — None. Zero. Not even a tiny footer.
+  - "Is my data stored anywhere?" — No. Everything stays in your browser.
+  - "Can I use my own logo?" — Yes, all 4 templates support logo upload.
+  - "What currencies are supported?" — USD, GBP, EUR, PKR, CAD, AUD, and more.
+- Accordion style: Each question is a full-width row with a + icon that rotates to × on expand. Answer slides down smoothly. Border-bottom between each item.
+
+### 8. Footer
+- Background: Deep Navy #1E3A8A
+- Text: White and white-at-60% for muted text
+- Left column: InvoiceKit logo in white + tagline — "Free invoicing for everyone."
+- Right: "Made with care. No tracking. No ads. No login." — small white-60% text, italic
+- Bottom bar: © 2025 InvoiceKit · Built for freelancers everywhere — 12px, centered, white-40%
+
+---
+
+## Key UI Rules Throughout
+- No modals. No popups. No cookie banners. No newsletter signup interruptions.
+- No skeleton loaders — everything is client-side, instant.
+- Every interactive element has a hover state, an active/pressed state (slight scale-down), and a focus ring in Slate Blue for accessibility.
+- Spacing system: 4px base grid. All padding/margin in multiples of 4.
+- Responsive: Three breakpoints — mobile (<640px), tablet (640–1024px), desktop (>1024px). Template grid: 1 col → 2 col → 2 col. Editor panel: full screen → full screen → side drawer.
+
+---
+
+## Why This Color Scheme Works for Invoicing
+Slate Blue reads as trustworthy and financial (think banking apps, DocuSign, QuickBooks). The warm white background (#F8F7F4) is a deliberate paper metaphor — users subconsciously feel like they're already looking at a document. Teal is reserved exclusively for download/success actions, so it always means "you're getting something."
+
+## The Biggest Trust Signal
+The phrase "Your data never leaves your browser" under the download button. For a financial tool with no login, users will wonder where their client names and amounts go. Answering that proactively — at the exact moment they're about to click download — removes the last hesitation.

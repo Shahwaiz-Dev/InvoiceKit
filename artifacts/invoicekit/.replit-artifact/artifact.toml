@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "InvoiceKit"
+version = "1.0.0"
+id = "artifacts/invoicekit"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20170
+
+[services.development]
+run = "pnpm --filter @workspace/invoicekit run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/invoicekit", "run", "build" ]
+publicDir = "artifacts/invoicekit/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20170"
+BASE_PATH = "/"
