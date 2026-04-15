@@ -15,8 +15,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface EditorProps {
   template: TemplateType;
@@ -30,7 +40,7 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
     taxRate: 0,
     discount: 0,
     currency: "USD",
-    invoiceNumber: "INV-001"
+    invoiceNumber: "INV-001",
   });
 
   const form = useForm<InvoiceData>({
@@ -67,13 +77,29 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
     window.print();
   };
 
-  const Section = ({ title, children, defaultOpen = true }: { title: string, children: React.ReactNode, defaultOpen?: boolean }) => {
+  const Section = ({
+    title,
+    children,
+    defaultOpen = true,
+  }: {
+    title: string;
+    children: React.ReactNode;
+    defaultOpen?: boolean;
+  }) => {
     const [open, setOpen] = useState(defaultOpen);
     return (
-      <Collapsible open={open} onOpenChange={setOpen} className="mb-6 bg-white border border-border rounded-lg overflow-hidden">
+      <Collapsible
+        open={open}
+        onOpenChange={setOpen}
+        className="mb-6 bg-white border border-border rounded-lg overflow-hidden"
+      >
         <CollapsibleTrigger className="flex justify-between items-center w-full p-4 bg-muted/5 hover:bg-muted/10 transition-colors font-semibold text-sm uppercase tracking-wider text-muted-foreground">
           {title}
-          {open ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          {open ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
         </CollapsibleTrigger>
         <CollapsibleContent className="p-4 space-y-4">
           {children}
@@ -115,7 +141,9 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                     <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-xs uppercase">
                       {template.substring(0, 2)}
                     </div>
-                    <span className="font-semibold text-foreground capitalize">{template} Template</span>
+                    <span className="font-semibold text-foreground capitalize">
+                      {template} Template
+                    </span>
                   </div>
                   <button
                     onClick={onClose}
@@ -149,7 +177,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                               <FormItem>
                                 <FormLabel>Email</FormLabel>
                                 <FormControl>
-                                  <Input type="email" {...field} value={field.value || ""} />
+                                  <Input
+                                    type="email"
+                                    {...field}
+                                    value={field.value || ""}
+                                  />
                                 </FormControl>
                               </FormItem>
                             )}
@@ -162,17 +194,27 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                             <FormItem>
                               <FormLabel>Address</FormLabel>
                               <FormControl>
-                                <Textarea rows={3} {...field} value={field.value || ""} />
+                                <Textarea
+                                  rows={3}
+                                  {...field}
+                                  value={field.value || ""}
+                                />
                               </FormControl>
                             </FormItem>
                           )}
                         />
                         <div>
-                          <FormLabel className="mb-2 block">Logo</FormLabel>
+                          <label className="mb-2 block text-sm font-medium leading-none">
+                            Logo
+                          </label>
                           <div className="flex items-center gap-4">
                             {data.logoUrl ? (
                               <div className="relative w-20 h-20 border border-border rounded flex items-center justify-center bg-white">
-                                <img src={data.logoUrl} alt="Logo preview" className="max-w-full max-h-full object-contain p-1" />
+                                <img
+                                  src={data.logoUrl}
+                                  alt="Logo preview"
+                                  className="max-w-full max-h-full object-contain p-1"
+                                />
                                 <button
                                   type="button"
                                   onClick={() => form.setValue("logoUrl", "")}
@@ -186,7 +228,12 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                                 No logo
                               </div>
                             )}
-                            <Input type="file" accept="image/*" onChange={handleLogoUpload} className="w-full max-w-xs" />
+                            <Input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleLogoUpload}
+                              className="w-full max-w-xs"
+                            />
                           </div>
                         </div>
                       </Section>
@@ -212,7 +259,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                               <FormItem>
                                 <FormLabel>Client Email</FormLabel>
                                 <FormControl>
-                                  <Input type="email" {...field} value={field.value || ""} />
+                                  <Input
+                                    type="email"
+                                    {...field}
+                                    value={field.value || ""}
+                                  />
                                 </FormControl>
                               </FormItem>
                             )}
@@ -225,7 +276,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                             <FormItem>
                               <FormLabel>Client Address</FormLabel>
                               <FormControl>
-                                <Textarea rows={3} {...field} value={field.value || ""} />
+                                <Textarea
+                                  rows={3}
+                                  {...field}
+                                  value={field.value || ""}
+                                />
                               </FormControl>
                             </FormItem>
                           )}
@@ -253,7 +308,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                               <FormItem>
                                 <FormLabel>Issue Date</FormLabel>
                                 <FormControl>
-                                  <Input type="date" {...field} value={field.value || ""} />
+                                  <Input
+                                    type="date"
+                                    {...field}
+                                    value={field.value || ""}
+                                  />
                                 </FormControl>
                               </FormItem>
                             )}
@@ -265,7 +324,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                               <FormItem>
                                 <FormLabel>Due Date</FormLabel>
                                 <FormControl>
-                                  <Input type="date" {...field} value={field.value || ""} />
+                                  <Input
+                                    type="date"
+                                    {...field}
+                                    value={field.value || ""}
+                                  />
                                 </FormControl>
                               </FormItem>
                             )}
@@ -276,7 +339,10 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                       <Section title="Line Items">
                         <div className="space-y-4">
                           {fields.map((field, index) => (
-                            <div key={field.id} className="flex items-start gap-2 relative group p-3 border border-border rounded bg-white">
+                            <div
+                              key={field.id}
+                              className="flex items-start gap-2 relative group p-3 border border-border rounded bg-white"
+                            >
                               <div className="flex-1 space-y-3">
                                 <FormField
                                   control={form.control}
@@ -284,7 +350,10 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                                   render={({ field }) => (
                                     <FormItem>
                                       <FormControl>
-                                        <Input placeholder="Description" {...field} />
+                                        <Input
+                                          placeholder="Description"
+                                          {...field}
+                                        />
                                       </FormControl>
                                     </FormItem>
                                   )}
@@ -296,7 +365,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                                     render={({ field }) => (
                                       <FormItem className="flex-1">
                                         <FormControl>
-                                          <Input type="number" placeholder="Qty" {...field} />
+                                          <Input
+                                            type="number"
+                                            placeholder="Qty"
+                                            {...field}
+                                          />
                                         </FormControl>
                                       </FormItem>
                                     )}
@@ -307,7 +380,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                                     render={({ field }) => (
                                       <FormItem className="flex-1">
                                         <FormControl>
-                                          <Input type="number" placeholder="Price" {...field} />
+                                          <Input
+                                            type="number"
+                                            placeholder="Price"
+                                            {...field}
+                                          />
                                         </FormControl>
                                       </FormItem>
                                     )}
@@ -323,10 +400,17 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                               </button>
                             </div>
                           ))}
-                          
+
                           <button
                             type="button"
-                            onClick={() => append({ id: crypto.randomUUID(), description: "", quantity: 1, unitPrice: 0 })}
+                            onClick={() =>
+                              append({
+                                id: crypto.randomUUID(),
+                                description: "",
+                                quantity: 1,
+                                unitPrice: 0,
+                              })
+                            }
                             className="w-full py-3 border-2 border-dashed border-accent/30 text-accent font-medium rounded hover:bg-accent/5 hover:border-accent/50 transition-colors flex items-center justify-center gap-2"
                           >
                             <Plus className="w-4 h-4" /> Add Line Item
@@ -334,7 +418,10 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                         </div>
                       </Section>
 
-                      <Section title="Tax, Discount & Currency" defaultOpen={false}>
+                      <Section
+                        title="Tax, Discount & Currency"
+                        defaultOpen={false}
+                      >
                         <div className="grid grid-cols-3 gap-4">
                           <FormField
                             control={form.control}
@@ -366,7 +453,10 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Currency</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
                                   <FormControl>
                                     <SelectTrigger>
                                       <SelectValue placeholder="Select" />
@@ -394,10 +484,10 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                           render={({ field }) => (
                             <FormItem>
                               <FormControl>
-                                <Textarea 
-                                  placeholder="Payment due within 30 days..." 
-                                  rows={4} 
-                                  {...field} 
+                                <Textarea
+                                  placeholder="Payment due within 30 days..."
+                                  rows={4}
+                                  {...field}
                                   value={field.value || ""}
                                 />
                               </FormControl>
@@ -416,7 +506,9 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                   >
                     <Download className="w-5 h-5" /> Download PDF
                   </button>
-                  <p className="text-xs text-muted-foreground">Your data never leaves your browser.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Your data never leaves your browser.
+                  </p>
                 </div>
               </motion.div>
             </div>
