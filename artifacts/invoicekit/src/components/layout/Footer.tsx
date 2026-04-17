@@ -1,4 +1,5 @@
 import { FileText } from "lucide-react";
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -16,8 +17,15 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="text-center text-white/40 text-xs">
-          &copy; 2026 InvoiceKit &middot; Built for freelancers everywhere
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mt-8 pt-8 border-t border-white/5">
+          <div className="text-white/40 text-xs">
+            &copy; 2026 InvoiceKit &middot; Built for freelancers everywhere
+          </div>
+          
+          <div className="flex gap-6">
+            <Link href="/privacy" className="text-white/40 hover:text-white transition-colors text-xs">Privacy Policy</Link>
+            <Link href="/terms" className="text-white/40 hover:text-white transition-colors text-xs">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>

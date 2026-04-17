@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 import { AuthShell } from "@/components/auth/AuthShell";
 
 export default function RegisterPage() {
@@ -16,6 +17,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -52,6 +54,19 @@ export default function RegisterPage() {
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setGoogleLoading(true);
+    try {
+      await signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      });
+    } catch {
+      toast.error("An unexpected error occurred");
+      setGoogleLoading(false);
     }
   };
 
@@ -127,11 +142,37 @@ export default function RegisterPage() {
 
         <Button
           type="submit"
-          className="mt-8 h-12 w-full rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-medium text-sm transition-all"
-          disabled={loading}
+          className="mt-8 h-12 w-full rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-medium text-sm transition-all shadow-sm"
+          disabled={loading || googleLoading}
         >
           {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
           {loading ? "Initializing" : "Create Account"}
+        </Button>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-border/60"></div>
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-background px-2 text-muted-foreground font-mono tracking-widest uppercase">
+              Or continue with
+            </span>
+          </div>
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleGoogleLogin}
+          disabled={loading || googleLoading}
+          className="h-12 w-full rounded-md border-border/80 bg-transparent hover:bg-muted/50 font-medium text-sm transition-all text-foreground"
+        >
+          {googleLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <FcGoogle className="mr-2 h-5 w-5" />
+          )}
+          {googleLoading ? "Connecting..." : "Google"}
         </Button>
       </motion.form>
     </AuthShell>
