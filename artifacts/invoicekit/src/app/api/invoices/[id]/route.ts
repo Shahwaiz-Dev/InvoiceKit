@@ -1,7 +1,6 @@
 import { getSession } from "@/lib/auth-session";
-import { db } from "@workspace/db";
+import { db, ObjectId } from "@workspace/db";
 import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
 
 export async function GET(
   _req: Request,

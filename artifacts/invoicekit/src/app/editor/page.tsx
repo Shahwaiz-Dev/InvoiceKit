@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+export const dynamic = "force-dynamic";
+
+import { useEffect, useRef, useState, useCallback, Suspense } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { invoiceSchema, InvoiceData, TemplateType } from "@/lib/schema";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 import {
   X,
   Plus,
@@ -49,7 +51,7 @@ import {
 import { useLocalDraft } from "@/hooks/use-local-draft";
 import Link from "next/link";
 
-const Preview = dynamic(() => import("@/components/home/Preview").then((m) => m.Preview), {
+const Preview = nextDynamic(() => import("@/components/home/Preview").then((m) => m.Preview), {
   ssr: false,
 });
 
@@ -201,7 +203,7 @@ function DraftBanner({ onRestore, onDiscard }: { onRestore: () => void; onDiscar
   );
 }
 
-export default function EditorPage() {
+function EditorContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { data: session } = useSession();
@@ -927,5 +929,20 @@ export default function EditorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function EditorPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-2">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground font-medium">Loading Editor...</p>
+        </div>
+      </div>
+    }>
+      <EditorContent />
+    </Suspense>
   );
 }

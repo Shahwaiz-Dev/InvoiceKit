@@ -14,7 +14,6 @@ export const auth = betterAuth({
             subscriptionStatus: { type: "string", required: false },
         }
     },
-    advanced: {
-        generateId: false
-    }
 });
+
+export type Session = typeof auth.$Infer.Session;

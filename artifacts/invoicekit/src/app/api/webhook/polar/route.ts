@@ -1,6 +1,5 @@
 import { Webhooks } from "@polar-sh/nextjs";
-import { db } from "@workspace/db";
-import { ObjectId } from "mongodb";
+import { db, ObjectId } from "@workspace/db";
 
 export const POST = Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,

@@ -1,4 +1,5 @@
-import { MongoClient, Db } from "mongodb";
+import { MongoClient, Db, ObjectId } from "mongodb";
+export { ObjectId, MongoClient, Db };
 
 if (!process.env.MONGODB_URI) {
   throw new Error(

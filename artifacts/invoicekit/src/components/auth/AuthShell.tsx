@@ -112,7 +112,7 @@ export function AuthShell({
             <div className="mt-10 border-t border-border/60 pt-6">
               <p className="text-sm text-muted-foreground">
                 {footerText}{" "}
-                <Link href={footerLinkHref} className="text-primary font-semibold hover:text-primary/80 transition-colors group">
+                <Link href={footerLinkHref as any} className="text-primary font-semibold hover:text-primary/80 transition-colors group">
                   {footerLinkText}
                   <ArrowRight className="inline-block ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
                 </Link>

@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   typedRoutes: true,
   transpilePackages: ["@workspace/db"],
+  turbopack: {},
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.ignoreWarnings = [
