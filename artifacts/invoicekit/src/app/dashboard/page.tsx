@@ -176,6 +176,7 @@ export default function DashboardPage() {
       queryClient.setQueryData<InvoiceRecord[]>(["invoices"], (old = []) =>
         old.filter((inv) => inv._id !== id),
       );
+      queryClient.invalidateQueries({ queryKey: ["usage"] });
       toast.success("Invoice deleted");
     },
     onError: () => toast.error("Failed to delete invoice"),

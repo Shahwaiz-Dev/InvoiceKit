@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { InvoiceData, TemplateType } from "@/lib/schema";
 import { useLocalDraft } from "@/hooks/use-local-draft";
 import { useSession } from "@/lib/auth-client";
@@ -22,6 +23,7 @@ export function useEditorSync({
   setTemplate,
 }: UseEditorSyncProps) {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
   const { saveDraft, loadDraft, hasDraft } = useLocalDraft();
   const [isSavingToDb, setIsSavingToDb] = useState(false);
   const router = useRouter();
@@ -69,6 +71,9 @@ export function useEditorSync({
 
         if (!response.ok) throw new Error("Failed to save");
 
+        // Invalidate usage query for either create or updates
+        queryClient.invalidateQueries({ queryKey: ["usage"] });
+
         toast.success(
           status === "sent" ? "Invoice sent & saved" : "Invoice saved to dashboard"
         );
@@ -82,7 +87,7 @@ export function useEditorSync({
         setIsSavingToDb(false);
       }
     },
-    [session, invoiceId, router]
+    [session, invoiceId, router, queryClient]
   );
 
   const handleRestoreDraft = useCallback(() => {
