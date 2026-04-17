@@ -53,9 +53,17 @@ export const GET = async (req: Request) => {
     });
 
     return NextResponse.redirect(checkout.url);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating checkout:", error);
-    return NextResponse.json({ error: "Failed to create checkout session" }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Failed to create checkout session", 
+      details: error?.message || error?.details || String(error),
+      debug_info: {
+        productId: process.env.POLAR_PRODUCT_ID ? "Set (ends in " + process.env.POLAR_PRODUCT_ID.slice(-4) + ")" : "Missing",
+        nodeEnv: process.env.NODE_ENV,
+        hasToken: !!process.env.POLAR_ACCESS_TOKEN
+      }
+    }, { status: 500 });
   }
 };
 
