@@ -5,7 +5,7 @@ import HomePage from "@/features/HomePage";
 export const metadata: Metadata = {
   title: "Free Invoice Generator & Professional Invoice Templates",
   description:
-    "Generate professional PDF invoices with our free invoice generator. Choose a free invoice template, customize, and download instantly. No sign up required, always free.",
+    "Generate professional PDF invoices with our free invoice generator. Use the Clean template instantly for free, then create an account to unlock the full template library.",
 };
 
 export default function Page() {
@@ -21,7 +21,7 @@ export default function Page() {
       priceCurrency: "USD",
     },
     description:
-      "InvoiceKit is a free invoice generator that allows users to create professional PDF invoices using customizable invoice templates without signing up.",
+      "InvoiceKit is a free invoice generator that lets anyone create professional PDF invoices with the Clean template, with accounts unlocking the rest of the template library.",
   };
 
   const faqJsonLd = {
@@ -41,7 +41,7 @@ export default function Page() {
         name: "Do I need to create an account?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "No, you never need to create an account. No email or password is required.",
+          text: "You can use the Clean template without an account. Create a free account to unlock the rest of the template library, saved invoices, and email sending.",
         },
       },
       {

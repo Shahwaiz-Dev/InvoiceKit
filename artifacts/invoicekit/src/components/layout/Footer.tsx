@@ -14,12 +14,12 @@ export function Footer() {
               <span className="text-white/60 ml-2">&middot; Your go-to <strong>free invoice generator</strong>.</span>
             </div>
             <p className="max-w-md text-white/40 text-[13px] leading-relaxed mt-2">
-              {APP_CONFIG.name} is an <strong>invoice generator free</strong> of charge, designed to help you find the perfect <strong>invoice template</strong> for your business. Create professional invoices instantly with our <strong>invoice generator</strong>.
+              {APP_CONFIG.name} is an <strong>invoice generator free</strong> to start with, giving every visitor instant access to the Clean template and a fast path to unlock the full <strong>invoice template</strong> library with an account.
             </p>
           </div>
           
           <div className="text-white/60 italic text-sm">
-            Made with care. No tracking. No ads. No login.
+            Made with care. No tracking. No ads. Start free.
           </div>
         </div>
         

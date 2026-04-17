@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signIn } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,12 +12,22 @@ import { Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { AuthShell } from "@/components/auth/AuthShell";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawCallbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl =
+    rawCallbackUrl && rawCallbackUrl.startsWith("/") && !rawCallbackUrl.startsWith("//")
+      ? rawCallbackUrl
+      : "/dashboard";
+  const registerHref =
+    callbackUrl === "/dashboard"
+      ? "/register"
+      : `/register?callbackUrl=${encodeURIComponent(callbackUrl)}`;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,14 +43,14 @@ export default function LoginPage() {
       const { error } = await signIn.email({
         email: normalizedEmail,
         password,
-        callbackURL: "/dashboard",
+        callbackURL: callbackUrl,
       });
 
       if (error) {
         toast.error(error.message || "Something went wrong");
       } else {
         toast.success("Welcome back!");
-        router.push("/dashboard");
+        router.push(callbackUrl as any);
       }
     } catch {
       toast.error("An unexpected error occurred");
@@ -54,7 +64,7 @@ export default function LoginPage() {
     try {
       await signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: callbackUrl,
       });
     } catch {
       toast.error("An unexpected error occurred");
@@ -71,7 +81,7 @@ export default function LoginPage() {
       panelDescription="Your account unlocks one-click invoice emailing, saved profiles, and seamless data retention without breaking the clean aesthetic you value."
       footerText="Don't have an account?"
       footerLinkText="Create one"
-      footerLinkHref="/register"
+      footerLinkHref={registerHref}
     >
       <motion.form
         onSubmit={handleLogin}
@@ -150,5 +160,13 @@ export default function LoginPage() {
         </Button>
       </motion.form>
     </AuthShell>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

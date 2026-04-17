@@ -2,6 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, Suspense, useDeferredValue, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
@@ -164,8 +165,12 @@ function EditorContent() {
     [session]
   );
 
-  const guestAuthHref = `/register?callbackUrl=${encodeURIComponent(`/editor?template=${template}`)}`;
-  const guestLoginHref = `/login?callbackUrl=${encodeURIComponent(`/editor?template=${template}`)}`;
+  const authTargetTemplate =
+    !session && isTemplateType(requestedTemplate) && !isGuestTemplate(requestedTemplate)
+      ? requestedTemplate
+      : template;
+  const guestAuthHref = `/register?callbackUrl=${encodeURIComponent(`/editor?template=${authTargetTemplate}`)}`;
+  const guestLoginHref = `/login?callbackUrl=${encodeURIComponent(`/editor?template=${authTargetTemplate}`)}`;
 
   return (
     <div className="fixed inset-0 bg-background flex flex-col overflow-hidden">
@@ -198,18 +203,18 @@ function EditorContent() {
                 : "Guests can use the Clean template for free. Create an account to unlock every other template, saved drafts, and email sending."}
             </p>
             <div className="flex flex-wrap items-center gap-2">
-              <a
-                href={guestLoginHref}
+              <Link
+                href={guestLoginHref as any}
                 className="inline-flex h-10 items-center justify-center rounded-md border border-amber-300 bg-white px-4 text-sm font-medium text-amber-950 transition-colors hover:bg-amber-100"
               >
                 Sign In
-              </a>
-              <a
-                href={guestAuthHref}
+              </Link>
+              <Link
+                href={guestAuthHref as any}
                 className="inline-flex h-10 items-center justify-center rounded-md bg-amber-500 px-4 text-sm font-medium text-white transition-colors hover:bg-amber-600"
               >
                 Create Free Account
-              </a>
+              </Link>
             </div>
           </div>
         </div>

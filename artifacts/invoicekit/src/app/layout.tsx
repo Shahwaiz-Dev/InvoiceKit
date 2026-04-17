@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: "%s | InvoiceKit",
   },
   description:
-    "InvoiceKit is a 100% free invoice generator to create professional PDF invoices instantly. Use our free invoice generator with no sign up required. Choose from professional invoice templates and download as PDF.",
+    "InvoiceKit is a free invoice generator for creating professional PDF invoices instantly. Use the Clean template without signing up, then create an account to unlock the full template library.",
   keywords: [
     "invoice generator",
     "invoice template",
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     "no login invoice generator",
   ],
   openGraph: {
-    title: "InvoiceKit | Free Professional Invoice Generator (No Sign Up)",
+    title: "InvoiceKit | Free Professional Invoice Generator",
     description:
-      "Create and download professional PDF invoices instantly. No account, no watermarks, completely free online invoice maker.",
+      "Create and download professional PDF invoices instantly. Start with the Clean template for free and unlock the full library with an account.",
     type: "website",
     url: "https://invoicekit.app",
     siteName: "InvoiceKit",
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "InvoiceKit | Free Professional Invoice Generator (No Sign Up)",
+    title: "InvoiceKit | Free Professional Invoice Generator",
     description:
-      "Create and download professional PDF invoices instantly. No account, no watermarks, completely free.",
+      "Create and download professional PDF invoices instantly. Clean is free for everyone, with more templates unlocked by account.",
     images: ["/opengraph.jpg"],
   },
   alternates: {

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { signUp, signIn } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,13 +12,23 @@ import { Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { AuthShell } from "@/components/auth/AuthShell";
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const rawCallbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl =
+    rawCallbackUrl && rawCallbackUrl.startsWith("/") && !rawCallbackUrl.startsWith("//")
+      ? rawCallbackUrl
+      : "/dashboard";
+  const loginHref =
+    callbackUrl === "/dashboard"
+      ? "/login"
+      : `/login?callbackUrl=${encodeURIComponent(callbackUrl)}`;
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,14 +51,14 @@ export default function RegisterPage() {
         email: normalizedEmail,
         password,
         name: normalizedName,
-        callbackURL: "/dashboard",
+        callbackURL: callbackUrl,
       });
 
       if (error) {
         toast.error(error.message || "Something went wrong");
       } else {
         toast.success("Account created successfully!");
-        router.push("/dashboard");
+        router.push(callbackUrl as any);
       }
     } catch {
       toast.error("An unexpected error occurred");
@@ -62,7 +72,7 @@ export default function RegisterPage() {
     try {
       await signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: callbackUrl,
       });
     } catch {
       toast.error("An unexpected error occurred");
@@ -79,7 +89,7 @@ export default function RegisterPage() {
       panelDescription="Register once to unlock sophisticated features tailored for operators who value precision, speed, and uncompromising aesthetics."
       footerText="Already initialized?"
       footerLinkText="Sign in here"
-      footerLinkHref="/login"
+      footerLinkHref={loginHref}
     >
       <motion.form
         onSubmit={handleRegister}
@@ -176,5 +186,13 @@ export default function RegisterPage() {
         </Button>
       </motion.form>
     </AuthShell>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={null}>
+      <RegisterPageContent />
+    </Suspense>
   );
 }

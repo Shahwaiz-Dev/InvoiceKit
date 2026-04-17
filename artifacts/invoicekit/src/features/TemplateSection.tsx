@@ -21,15 +21,15 @@ export function TemplateSection() {
 
   const handleTemplateSelect = (template: TemplateType) => {
     if (!session && !isGuestTemplate(template)) {
-      router.push(`/register?callbackUrl=${encodeURIComponent(getCallbackUrl(template))}`);
+      router.push(`/register?callbackUrl=${encodeURIComponent(getCallbackUrl(template))}` as any);
       return;
     }
 
-    router.push(getCallbackUrl(template));
+    router.push(getCallbackUrl(template) as any);
   };
 
   const handleAuthCta = (template: TemplateType, mode: "login" | "register") => {
-    router.push(`/${mode}?callbackUrl=${encodeURIComponent(getCallbackUrl(template))}`);
+    router.push(`/${mode}?callbackUrl=${encodeURIComponent(getCallbackUrl(template))}` as any);
   };
 
   return (

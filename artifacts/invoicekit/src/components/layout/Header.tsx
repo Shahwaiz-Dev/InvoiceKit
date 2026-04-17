@@ -20,9 +20,7 @@ export function Header() {
   const router = useRouter();
 
   // Store handler in a ref so the exact same function reference is used for
-  // both addEventListener and removeEventListener — avoids listener leaks.
-  // { passive: true } lets the browser skip waiting for preventDefault(),
-  // improving scroll performance. Rule: client-passive-event-listeners
+  // both addEventListener and removeEventListener, which avoids listener leaks.
   const handleScrollRef = useRef(() => setScrolled(window.scrollY > 80));
   useEffect(() => {
     const handler = handleScrollRef.current;
@@ -48,7 +46,7 @@ export function Header() {
             <span className="ml-2 font-semibold text-lg text-foreground tracking-tight">InvoiceKit</span>
           </Link>
           <div className="hidden sm:flex items-center px-2.5 py-1 rounded-full bg-accent/15 text-accent text-[11px] font-bold uppercase tracking-wider">
-            Free · {session ? "Premium Features" : "No Login Required"}
+            Free · {session ? "All Templates Unlocked" : "Clean Template Free"}
           </div>
         </div>
 
@@ -116,13 +114,13 @@ export function Header() {
                 href="/login"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
-                Login
+                Sign In
               </Link>
               <Link
-                href="/register"
+                href={`/register?callbackUrl=${encodeURIComponent("/editor?template=modern")}`}
                 className="px-4 py-1.5 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary/90 transition-colors"
               >
-                Sign Up
+                Unlock Templates
               </Link>
             </div>
           )}
