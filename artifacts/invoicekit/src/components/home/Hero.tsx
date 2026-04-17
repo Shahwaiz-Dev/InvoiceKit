@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { FileText, Download, CheckCircle2 } from "lucide-react";
 
@@ -21,11 +23,11 @@ export function Hero() {
           </div>
           
           <h1 className="font-serif text-5xl md:text-6xl lg:text-[56px] leading-[1.1] text-foreground mb-6">
-            Professional invoices, downloaded in seconds.
+            Free Professional <span className="text-primary italic">Invoice Generator</span> <span className="text-2xl md:text-3xl block mt-2 text-muted-foreground font-sans font-normal">(No Sign Up Required)</span>
           </h1>
           
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl">
-            Choose from 4 clean templates. Fill in your details. Get a ready-to-send PDF — no signup, no watermarks, no catch.
+            Create and download professional PDF invoices instantly with our free online invoice maker. Perfect for freelancers and small businesses. No account, no watermarks, always free.
           </p>
           
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">

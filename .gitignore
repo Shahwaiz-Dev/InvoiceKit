@@ -47,3 +47,30 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Sensitive info
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+.next/
+out/
+build/
+
+# Tools
+.agents/
+.kilo/
+.replit
+replit.md
+scripts/
+
+# Logs
+*.log
+pnpm-debug.log*
+
+# Other
+.next_old/
+skills-lock.json

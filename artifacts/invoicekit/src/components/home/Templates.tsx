@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { TemplateType } from "@/lib/schema";
@@ -163,7 +165,7 @@ export function Templates({ onSelect }: TemplatesProps) {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-accent text-[12px] font-bold uppercase tracking-widest mb-3 block">Templates</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Choose your template</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Free Professional Invoice Templates</h2>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">

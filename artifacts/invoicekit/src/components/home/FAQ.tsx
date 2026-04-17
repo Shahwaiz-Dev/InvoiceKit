@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Accordion,
   AccordionContent,
@@ -8,19 +10,19 @@ import { motion } from "framer-motion";
 
 export function FAQ() {
   const faqs = [
-    { q: "Is InvoiceKit really free?", a: "Yes, always. No trial, no pro tier." },
-    { q: "Do I need to create an account?", a: "Never. No email, no password." },
-    { q: "Will there be watermarks on my PDF?", a: "None. Zero. Not even a tiny footer." },
-    { q: "Is my data stored anywhere?", a: "No. Everything stays in your browser." },
-    { q: "Can I use my own logo?", a: "Yes, all 4 templates support logo upload." },
-    { q: "What currencies are supported?", a: "USD, GBP, EUR, PKR, CAD, AUD, and more." },
+    { q: "Is this online invoice maker really free?", a: "Yes, InvoiceKit is 100% free. No trial periods, no pro tiers, and no hidden fees." },
+    { q: "Do I need to sign up to use the invoice generator?", a: "No, you never need to create an account. No email or password is required to generate your PDF invoices." },
+    { q: "Will there be watermarks on my PDF invoices?", a: "None at all. We provide professional PDF invoices with zero branding or watermarks." },
+    { q: "Is my business data stored on your servers?", a: "No. Everything stays in your browser's private storage. We don't see or store your client data." },
+    { q: "Can I add my own business logo to the templates?", a: "Yes, all 4 of our professional invoice templates support high-quality logo uploads." },
+    { q: "Which currencies does the invoice maker support?", a: "We support USD, GBP, EUR, PKR, CAD, AUD, and many more for international billing." },
   ];
 
   return (
     <section className="py-24 bg-white px-6">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-[30px] font-bold text-foreground mb-12 text-center tracking-tight">
-          Questions? We've got them covered.
+          Frequently Asked Questions about our Invoice Generator
         </h2>
 
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-4">

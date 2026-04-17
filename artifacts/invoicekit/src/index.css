@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -123,9 +123,9 @@
   --chart-4: 25 5% 45%;
   --chart-5: 0 84% 60%;
 
-  --app-font-sans: 'Inter', sans-serif;
+  --app-font-sans: var(--font-geist-sans), sans-serif;
   --app-font-serif: 'DM Serif Display', serif;
-  --app-font-mono: Menlo, monospace;
+  --app-font-mono: var(--font-geist-mono), monospace;
   --radius: .5rem; /* 8px */
 
   --shadow-2xs: 0px 2px 0px 0px hsl(228 71% 55% / 0.05);
@@ -140,13 +140,13 @@
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 
-  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-primary-border: hsl(var(--sidebar-primary) / 0.8);
+  --sidebar-accent-border: hsl(var(--sidebar-accent) / 0.8);
+  --primary-border: hsl(var(--primary) / 0.8);
+  --secondary-border: hsl(var(--secondary) / 0.8);
+  --muted-border: hsl(var(--muted) / 0.8);
+  --accent-border: hsl(var(--accent) / 0.8);
+  --destructive-border: hsl(var(--destructive) / 0.8);
 }
 
 .dark {

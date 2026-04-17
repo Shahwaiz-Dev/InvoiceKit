@@ -1,22 +1,26 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src/**/*"],
+  "include": ["next-env.d.ts", "app/**/*", "src/**/*", ".next/types/**/*.ts"],
   "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
   "compilerOptions": {
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "lib": ["esnext", "dom", "dom.iterable"],
     "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
     "moduleResolution": "bundler",
-    "types": ["node", "vite/client"],
+    "types": ["node"],
+    "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*", "./app/*"],
+      "@workspace/db": ["../../lib/db/src/index.ts"]
     }
   },
   "references": [
     {
       "path": "../../lib/api-client-react"
+    },
+    {
+      "path": "../../lib/db"
     }
   ]
 }
