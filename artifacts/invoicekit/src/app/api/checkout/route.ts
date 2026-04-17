@@ -16,7 +16,7 @@ export const GET = async (req: Request) => {
 
   const polar = new Polar({
     accessToken: polarAccessToken,
-    server: process.env.NODE_ENV === "production" ? "production" : "sandbox",
+    server: (process.env.POLAR_SERVER as "sandbox" | "production") || (process.env.NODE_ENV === "production" ? "production" : "sandbox"),
   });
 
   const productId = process.env.POLAR_PRODUCT_ID;
