@@ -14,9 +14,13 @@ export const GET = async (req: Request) => {
 
   const { Polar } = await import("@polar-sh/sdk");
 
+  const isSandboxToken = polarAccessToken.startsWith("polar_s_");
+  const isDev = process.env.NODE_ENV !== "production";
+  const server = (process.env.POLAR_SERVER as "sandbox" | "production") || (isSandboxToken || isDev ? "sandbox" : "production");
+
   const polar = new Polar({
     accessToken: polarAccessToken,
-    server: (process.env.POLAR_SERVER as "sandbox" | "production") || (process.env.NODE_ENV === "production" ? "production" : "sandbox"),
+    server,
   });
 
   const productId = process.env.POLAR_PRODUCT_ID;
@@ -47,6 +51,8 @@ export const GET = async (req: Request) => {
     const checkout = await polar.checkouts.create({
       products: [productId],
       successUrl,
+      customerId: (session.user as any).polarCustomerId || undefined,
+      customerEmail: session.user.email,
       metadata: {
         userId: finalUserId,
       },

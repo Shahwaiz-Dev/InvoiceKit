@@ -14,7 +14,7 @@ export const GET = async (req: Request) => {
     }
 
     // Use the SDK directly to get the customer portal using the mapped polarCustomerId
-    const polarCustomerId = session.user.polarCustomerId;
+    const polarCustomerId = (session.user as any).polarCustomerId;
     
     if (!polarCustomerId) {
       return NextResponse.json({ 
@@ -25,10 +25,18 @@ export const GET = async (req: Request) => {
 
     const { Polar } = await import("@polar-sh/sdk");
     
-    // Robust server detection mirroring checkout route
+    // Improved Environment Detection: 
+    // Defaults to sandbox in development unless a production server is specified.
+    // Sandbox tokens (polar_s_) always use the sandbox server.
+    const isSandboxToken = polarAccessToken.startsWith("polar_s_");
+    const isDev = process.env.NODE_ENV !== "production";
+    const server = (process.env.POLAR_SERVER as "sandbox" | "production") || (isSandboxToken || isDev ? "sandbox" : "production");
+
+    console.log(`[POLAR PORTAL] Using server: ${server} (isDev: ${isDev}, isSandboxToken: ${isSandboxToken})`);
+
     const polar = new Polar({
       accessToken: polarAccessToken,
-      server: (process.env.POLAR_SERVER as "sandbox" | "production") || (process.env.NODE_ENV === "production" ? "production" : "sandbox"),
+      server,
     });
 
     try {
@@ -49,7 +57,7 @@ export const GET = async (req: Request) => {
         debug_info: {
           hasCustomerId: !!polarCustomerId,
           nodeEnv: process.env.NODE_ENV,
-          polarServer: (process.env.POLAR_SERVER) || (process.env.NODE_ENV === "production" ? "production" : "sandbox"),
+          polarServer: server,
           hasToken: !!polarAccessToken
         }
       }, { status: 500 });

@@ -24,6 +24,8 @@ export const POST = Webhooks({
                 polarCustomerId: polarCustomerId,
                 subscriptionId: subscriptionId,
                 subscriptionStatus: subscription.status,
+                subscriptionCurrentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd).toISOString() : undefined,
+                subscriptionStartedAt: subscription.startedAt ? new Date(subscription.startedAt).toISOString() : undefined,
               }
             }
           );
@@ -59,6 +61,7 @@ export const POST = Webhooks({
           {
             $set: {
               subscriptionStatus: subscription.status,
+              subscriptionCurrentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd).toISOString() : undefined,
             }
           }
         );
