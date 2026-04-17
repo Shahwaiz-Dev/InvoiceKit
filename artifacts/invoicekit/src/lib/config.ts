@@ -15,7 +15,28 @@ export const INVOICE_TEMPLATES: { value: TemplateType; label: string; descriptio
   { value: "creative", label: "Creative", description: "Bold typography and artistic touches to stand out." },
 ];
 
-export const GUEST_TEMPLATES: TemplateType[] = ["clean", "modern"];
+export const DEFAULT_TEMPLATE: TemplateType = "clean";
+export const GUEST_TEMPLATES: TemplateType[] = [DEFAULT_TEMPLATE];
+
+const TEMPLATE_SET = new Set<TemplateType>(INVOICE_TEMPLATES.map((template) => template.value));
+
+export const isTemplateType = (value: string | null | undefined): value is TemplateType =>
+  typeof value === "string" && TEMPLATE_SET.has(value as TemplateType);
+
+export const isGuestTemplate = (template: TemplateType) => GUEST_TEMPLATES.includes(template);
+
+export const getAvailableTemplates = (isLoggedIn: boolean) =>
+  isLoggedIn
+    ? INVOICE_TEMPLATES
+    : INVOICE_TEMPLATES.filter((template) => isGuestTemplate(template.value));
+
+export const normalizeTemplateForAccess = (
+  value: string | null | undefined,
+  isLoggedIn: boolean,
+): TemplateType => {
+  const template = isTemplateType(value) ? value : DEFAULT_TEMPLATE;
+  return isLoggedIn || isGuestTemplate(template) ? template : DEFAULT_TEMPLATE;
+};
 
 export const CURRENCY_OPTIONS = [
   { value: "USD", label: "USD ($)", symbol: "$" },

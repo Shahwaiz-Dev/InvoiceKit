@@ -1,14 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, LockKeyhole } from "lucide-react";
 import { TemplateType } from "@/lib/schema";
+import { isGuestTemplate } from "@/lib/config";
 
 interface TemplatesProps {
+  isAuthenticated: boolean;
+  isSessionPending: boolean;
+  onRequireAccount: (template: TemplateType, mode: "login" | "register") => void;
   onSelect: (template: TemplateType) => void;
 }
 
-export function Templates({ onSelect }: TemplatesProps) {
+export function Templates({
+  isAuthenticated,
+  isSessionPending,
+  onRequireAccount,
+  onSelect,
+}: TemplatesProps) {
   const templates: {
     id: TemplateType;
     name: string;
@@ -165,46 +174,90 @@ export function Templates({ onSelect }: TemplatesProps) {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-accent text-[12px] font-bold uppercase tracking-widest mb-3 block">Templates</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Choose Your Free Invoice Template</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+            Start Free with Clean. Unlock the Rest with an Account.
+          </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Our <strong>free invoice generator</strong> offers professional designs tailored for freelancers and businesses. Pick an <strong>invoice template</strong> below and start billing in seconds.
+            Guests can jump straight into the <strong>Clean</strong> template and download PDFs instantly. Create a free account to unlock the rest of the <strong>invoice template</strong> library, saved invoices, and email sending.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {templates.map((template) => (
-            <motion.div
-              key={template.id}
-              whileHover={{ y: -4, scale: 1.01 }}
-              className="group bg-white rounded-xl border border-border overflow-hidden transition-colors hover:border-primary shadow-sm"
-            >
-              <div className="p-6 bg-gray-50/50 border-b border-border flex justify-center items-center">
-                <div className="w-[240px] aspect-[3/4] bg-white shadow-md border border-gray-100 overflow-hidden origin-top scale-[0.85] group-hover:scale-[0.87] transition-transform duration-300">
-                  {template.preview}
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground">{template.name}</h3>
-                    <span className="text-sm text-muted-foreground">{template.tag}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    {template.features.map(f => (
-                      <span key={f} className="bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
-                        {f}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <button
-                  onClick={() => onSelect(template.id)}
-                  className="w-full h-12 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+            (() => {
+              const locked = !isAuthenticated && !isGuestTemplate(template.id);
+              const cardClass = locked
+                ? "group bg-white rounded-xl border border-amber-200 overflow-hidden transition-colors hover:border-amber-300 shadow-sm"
+                : "group bg-white rounded-xl border border-border overflow-hidden transition-colors hover:border-primary shadow-sm";
+
+              return (
+                <motion.div
+                  key={template.id}
+                  whileHover={{ y: -4, scale: 1.01 }}
+                  className={cardClass}
                 >
-                  Use This Template <span>&rarr;</span>
-                </button>
-              </div>
-            </motion.div>
+                  <div className="p-6 bg-gray-50/50 border-b border-border flex justify-center items-center relative">
+                    {locked ? (
+                      <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">
+                        <LockKeyhole className="h-3.5 w-3.5" />
+                        Account required
+                      </div>
+                    ) : null}
+                    <div className="w-[240px] aspect-[3/4] bg-white shadow-md border border-gray-100 overflow-hidden origin-top scale-[0.85] group-hover:scale-[0.87] transition-transform duration-300">
+                      {template.preview}
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-4 gap-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground">{template.name}</h3>
+                        <span className="text-sm text-muted-foreground">{template.tag}</span>
+                      </div>
+                      <div className="flex gap-2 flex-wrap justify-end">
+                        {template.features.map((feature) => (
+                          <span key={feature} className="bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {locked ? (
+                      <>
+                        <p className="mb-4 text-sm leading-6 text-muted-foreground">
+                          Create an account to use the <strong>{template.name}</strong> template and keep your invoices, customer details, and premium layouts in sync.
+                        </p>
+                        <div className="flex flex-col gap-3">
+                          <button
+                            onClick={() => onRequireAccount(template.id, "register")}
+                            disabled={isSessionPending}
+                            className="w-full h-12 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                          >
+                            Create Free Account <ArrowRight className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => onRequireAccount(template.id, "login")}
+                            disabled={isSessionPending}
+                            className="w-full h-11 rounded-lg border border-border text-sm font-medium text-foreground hover:bg-muted/40 transition-colors disabled:opacity-60"
+                          >
+                            Already have an account? Sign in
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => onSelect(template.id)}
+                        disabled={isSessionPending}
+                        className="w-full h-12 bg-primary hover:bg-secondary text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+                      >
+                        {template.id === "clean" && !isAuthenticated ? "Use Clean Template" : "Use This Template"}
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })()
           ))}
         </div>
       </div>

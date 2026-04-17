@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
 import { Templates } from "@/components/home/Templates";
 import type { TemplateType } from "@/lib/schema";
+import { isGuestTemplate } from "@/lib/config";
 
 /**
  * Thin client wrapper around the Templates section.
@@ -12,10 +14,30 @@ import type { TemplateType } from "@/lib/schema";
  */
 export function TemplateSection() {
   const router = useRouter();
+  const { data: session, isPending } = useSession();
+
+  const getCallbackUrl = (template: TemplateType) =>
+    `/editor?template=${encodeURIComponent(template)}`;
 
   const handleTemplateSelect = (template: TemplateType) => {
-    router.push(`/editor?template=${template}`);
+    if (!session && !isGuestTemplate(template)) {
+      router.push(`/register?callbackUrl=${encodeURIComponent(getCallbackUrl(template))}`);
+      return;
+    }
+
+    router.push(getCallbackUrl(template));
   };
 
-  return <Templates onSelect={handleTemplateSelect} />;
+  const handleAuthCta = (template: TemplateType, mode: "login" | "register") => {
+    router.push(`/${mode}?callbackUrl=${encodeURIComponent(getCallbackUrl(template))}`);
+  };
+
+  return (
+    <Templates
+      isAuthenticated={Boolean(session)}
+      isSessionPending={isPending}
+      onRequireAccount={handleAuthCta}
+      onSelect={handleTemplateSelect}
+    />
+  );
 }

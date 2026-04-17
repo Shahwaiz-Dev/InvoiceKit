@@ -9,8 +9,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { invoiceSchema, InvoiceData, TemplateType } from "@/lib/schema";
 import { Loader2 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Preview } from "@/components/home/Preview";
+import { useSession } from "@/lib/auth-client";
 
 // Refactored Components & Hooks
 import { EditorSidebar } from "@/features/editor/components/EditorSidebar";
@@ -20,21 +21,31 @@ import { UpsellDialog } from "@/features/editor/components/UpsellDialog";
 import { useInvoiceActions } from "@/features/editor/hooks/use-invoice-actions";
 import { useEditorSync } from "@/features/editor/hooks/use-editor-sync";
 import { getLabels, getDefaultInvoiceData } from "@/features/editor/lib/editor-utils";
-import { INVOICE_TEMPLATES, GUEST_TEMPLATES } from "@/lib/config";
+import {
+  DEFAULT_TEMPLATE,
+  INVOICE_TEMPLATES,
+  getAvailableTemplates,
+  isGuestTemplate,
+  isTemplateType,
+} from "@/lib/config";
 
 function EditorContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { data: authSession, isPending: isSessionPending } = useSession();
   const invoiceId = searchParams.get("id");
+  const requestedTemplate = searchParams.get("template");
 
   // Basic States
   const [template, setTemplate] = useState<TemplateType>(
-    (searchParams.get("template") as TemplateType) ?? "clean"
+    isTemplateType(requestedTemplate) ? requestedTemplate : DEFAULT_TEMPLATE
   );
   const [data, setData] = useState<InvoiceData>(() => getDefaultInvoiceData());
   const deferredData = useDeferredValue(data);
   const [showUpsell, setShowUpsell] = useState(false);
   const [showDraftBanner, setShowDraftBanner] = useState(false);
   const [profileLoaded, setProfileLoaded] = useState(false);
+  const [blockedTemplateLabel, setBlockedTemplateLabel] = useState<string | null>(null);
 
   const labels = useMemo(() => getLabels(template), [template]);
   const { handleDownload, handleSendEmail, isSending } = useInvoiceActions();
@@ -85,6 +96,23 @@ function EditorContent() {
     }
   }, [session, hasDraft]);
 
+  useEffect(() => {
+    if (isSessionPending || authSession || !isTemplateType(requestedTemplate) || isGuestTemplate(requestedTemplate)) {
+      return;
+    }
+
+    const requestedTemplateLabel =
+      INVOICE_TEMPLATES.find((templateOption) => templateOption.value === requestedTemplate)?.label ??
+      requestedTemplate;
+
+    setBlockedTemplateLabel(requestedTemplateLabel);
+    setTemplate(DEFAULT_TEMPLATE);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("template", DEFAULT_TEMPLATE);
+    router.replace(`/editor?${params.toString()}`);
+  }, [authSession, isSessionPending, requestedTemplate, router, searchParams]);
+
   // Pre-fill business profile
   const { data: settingsData } = useQuery<{
     businessName?: string;
@@ -132,11 +160,12 @@ function EditorContent() {
   });
 
   const filteredTemplates = useMemo(() => 
-    session 
-      ? INVOICE_TEMPLATES 
-      : INVOICE_TEMPLATES.filter(t => GUEST_TEMPLATES.includes(t.value)),
+    getAvailableTemplates(Boolean(session)),
     [session]
   );
+
+  const guestAuthHref = `/register?callbackUrl=${encodeURIComponent(`/editor?template=${template}`)}`;
+  const guestLoginHref = `/login?callbackUrl=${encodeURIComponent(`/editor?template=${template}`)}`;
 
   return (
     <div className="fixed inset-0 bg-background flex flex-col overflow-hidden">
@@ -159,6 +188,32 @@ function EditorContent() {
         onSave={form.handleSubmit((v) => saveInvoiceToDB(v, "draft"))}
         templates={filteredTemplates}
       />
+
+      {!isSessionPending && !session ? (
+        <div className="border-b border-amber-200 bg-amber-50/80 px-4 py-3">
+          <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm text-amber-900 md:flex-row md:items-center md:justify-between">
+            <p className="leading-6">
+              {blockedTemplateLabel
+                ? `${blockedTemplateLabel} is available for signed-in users only. You can keep working in Clean right now, or create an account to unlock the full template library.`
+                : "Guests can use the Clean template for free. Create an account to unlock every other template, saved drafts, and email sending."}
+            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={guestLoginHref}
+                className="inline-flex h-10 items-center justify-center rounded-md border border-amber-300 bg-white px-4 text-sm font-medium text-amber-950 transition-colors hover:bg-amber-100"
+              >
+                Sign In
+              </a>
+              <a
+                href={guestAuthHref}
+                className="inline-flex h-10 items-center justify-center rounded-md bg-amber-500 px-4 text-sm font-medium text-white transition-colors hover:bg-amber-600"
+              >
+                Create Free Account
+              </a>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {loadingExisting && (
         <div className="fixed inset-0 z-[100] bg-white/80 backdrop-blur-sm flex items-center justify-center">

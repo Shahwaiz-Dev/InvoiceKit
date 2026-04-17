@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, LayoutTemplate, Save, User, Loader2 } from "lucide-react";
+import { ArrowLeft, LayoutTemplate, Save, User, Loader2, Sparkles } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TemplateType } from "@/lib/schema";
-import { INVOICE_TEMPLATES } from "@/lib/config";
 
 interface EditorHeaderProps {
   template: TemplateType;
@@ -21,6 +20,8 @@ export function EditorHeader({
   onSave,
   templates,
 }: EditorHeaderProps) {
+  const callbackUrl = `/editor?template=${encodeURIComponent(template)}`;
+
   return (
     <header className="h-14 bg-white border-b border-border flex items-center justify-between px-4 shrink-0 z-30">
       <div className="flex items-center gap-3">
@@ -63,9 +64,21 @@ export function EditorHeader({
             </button>
           </>
         ) : (
-          <Link href="/login" className="h-8 px-3 rounded-md border border-border text-sm font-medium text-foreground hover:bg-muted/10 transition-colors">
-            Login to Save
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+              className="hidden sm:flex h-8 px-3 rounded-md border border-border text-sm font-medium text-foreground hover:bg-muted/10 transition-colors items-center"
+            >
+              Sign In
+            </Link>
+            <Link
+              href={`/register?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+              className="h-8 px-3 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors inline-flex items-center gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Unlock All Templates
+            </Link>
+          </div>
         )}
       </div>
     </header>

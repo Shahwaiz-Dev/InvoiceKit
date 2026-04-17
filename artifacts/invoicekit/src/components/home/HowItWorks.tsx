@@ -8,7 +8,7 @@ export function HowItWorks() {
     {
       icon: <MousePointer2 className="w-6 h-6 text-primary" />,
       title: "Select Template",
-      description: "Browse 4 professional invoice templates designed for freelancers and small businesses.",
+      description: "Start instantly with the Clean template, or create an account to unlock the full library of professional layouts.",
       accentClass: "from-primary/15 via-primary/5 to-transparent",
     },
     {
@@ -20,7 +20,7 @@ export function HowItWorks() {
     {
       icon: <Download className="w-6 h-6 text-primary" />,
       title: "Download PDF",
-      description: "Download your professional PDF invoice instantly. No watermark, no account, no sign up required.",
+      description: "Download your professional PDF invoice instantly with no watermark. Create an account whenever you want more templates and saved workflows.",
       accentClass: "from-secondary/20 via-secondary/5 to-transparent",
     },
   ];

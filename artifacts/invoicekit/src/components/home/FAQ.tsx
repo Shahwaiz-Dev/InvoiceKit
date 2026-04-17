@@ -11,10 +11,10 @@ import { motion } from "framer-motion";
 export function FAQ() {
   const faqs = [
     { q: "Is this free invoice generator actually free?", a: "Yes, InvoiceKit is a 100% free invoice generator. No trial periods, no pro tiers, and no hidden fees." },
-    { q: "Do I need to sign up for an invoice generator?", a: "No, you never need to create an account. Our invoice generator free version requires no email or password to generate PDF invoices." },
-    { q: "Can I choose my own invoice template?", a: "Yes, you can select from our collection of professional invoice template designs that fit your business needs." },
+    { q: "Do I need to sign up for an invoice generator?", a: "You can use the Clean template and download PDFs without an account. Create a free account to unlock the rest of the template library, saved invoices, and email sending." },
+    { q: "Can I choose my own invoice template?", a: "Yes. Guests can use the Clean template right away, and signed-in users can access the full collection of professional invoice templates." },
     { q: "Is my business data stored on your servers?", a: "No. Everything stays in your browser's private storage. We don't see or store your client data." },
-    { q: "Can I add my own business logo to the free invoice template?", a: "Yes, every free invoice template we offer supports high-quality logo uploads and customization." },
+    { q: "Can I add my own business logo to the free invoice template?", a: "Yes, the free Clean template supports high-quality logo uploads and customization, and so do the account-only templates." },
     { q: "Which currencies does the invoice maker support?", a: "We support USD, GBP, EUR, PKR, CAD, AUD, and many more for international billing." },
   ];
 

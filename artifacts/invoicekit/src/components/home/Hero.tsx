@@ -1,9 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { FileText, Download, CheckCircle2 } from "lucide-react";
+import { Download, CheckCircle2 } from "lucide-react";
+import { useSession } from "@/lib/auth-client";
 
 export function Hero() {
+  const { data: session } = useSession();
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -18,42 +22,53 @@ export function Hero() {
           <div className="flex items-center gap-2 mb-6">
             <div className="w-2 h-2 rounded-full bg-[#10B981]"></div>
             <span className="text-[13px] uppercase tracking-wider text-muted font-medium">
-              No account needed. Always free.
+              Clean template free. Account unlocks every layout.
             </span>
           </div>
           
           <h1 className="font-serif text-5xl md:text-6xl lg:text-[56px] leading-[1.1] text-foreground mb-6">
-            <span className="text-primary italic">Free Invoice Generator</span> & Professional <span className="text-secondary italic">Invoice Templates</span> <span className="text-2xl md:text-3xl block mt-2 text-muted-foreground font-sans font-normal">(No Sign Up Required)</span>
+            <span className="text-primary italic">Free Invoice Generator</span> with a <span className="text-secondary italic">Clean Template</span> You Can Use Instantly
           </h1>
           
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-xl">
-            Create professional PDF invoices instantly with our <strong>free invoice generator</strong>. Choose an <strong>invoice template</strong>, customize it, and download your <strong>invoice generator free</strong> of charge. No account, no watermarks, always free.
+            Create professional PDF invoices instantly with our <strong>free invoice generator</strong>. Start with the <strong>Clean</strong> template without signing up, then create a free account to unlock the rest of the <strong>invoice template</strong> library, saved invoices, and email sending.
           </p>
           
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <button 
-              onClick={() => scrollTo("templates")}
-              className="h-14 px-8 rounded-full bg-primary hover:bg-secondary text-white font-medium transition-colors flex items-center gap-2"
+            <Link
+              href="/editor?template=clean"
+              className="h-14 px-8 rounded-full bg-primary hover:bg-secondary text-white font-medium transition-colors inline-flex items-center gap-2"
             >
-              Browse Templates <span>&rarr;</span>
-            </button>
+              Use Clean Template <span>&rarr;</span>
+            </Link>
             
-            <button 
-              onClick={() => scrollTo("how-it-works")}
-              className="text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-colors font-medium h-14 px-4"
-            >
-              See how it works &darr;
-            </button>
+            {session ? (
+              <button 
+                onClick={() => scrollTo("templates")}
+                className="text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-colors font-medium h-14 px-4"
+              >
+                Browse all templates &darr;
+              </button>
+            ) : (
+              <Link
+                href={`/register?callbackUrl=${encodeURIComponent("/editor?template=modern")}`}
+                className="h-14 px-4 text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-colors font-medium inline-flex items-center"
+              >
+                Unlock all templates
+              </Link>
+            )}
           </div>
           
           <div className="mt-12 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> 4 Templates</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> Clean template free</span>
+            <span className="hidden sm:inline">&middot;</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> 7 total templates</span>
             <span className="hidden sm:inline">&middot;</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> Instant PDF</span>
             <span className="hidden sm:inline">&middot;</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> No Watermarks</span>
             <span className="hidden sm:inline">&middot;</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> No Login</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> Account unlocks premium layouts</span>
             <span className="hidden sm:inline">&middot;</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4" /> Free Forever</span>
           </div>
