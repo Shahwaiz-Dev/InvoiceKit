@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { invoiceSchema, baseInvoiceSchema } from "@/lib/schema";
 
+export const dynamic = "force-dynamic";
+
 /** Extended schema for POST — adds status + template on top of InvoiceData */
 const postInvoiceSchema = baseInvoiceSchema.extend({
   status: z.enum(["draft", "sent", "paid"]).optional().default("draft"),

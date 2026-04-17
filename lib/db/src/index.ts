@@ -18,14 +18,19 @@ const dbName = process.env.MONGODB_DB_NAME || "invoicekit";
 declare global {
   // eslint-disable-next-line no-var
   var _mongoClientPromise: Promise<MongoClient> | undefined;
+  // eslint-disable-next-line no-var
+  var _mongoClient: MongoClient | undefined;
 }
 
-if (!global._mongoClientPromise) {
-  global._mongoClientPromise = new MongoClient(uri).connect();
+const options = {};
+
+if (!global._mongoClient) {
+  global._mongoClient = new MongoClient(uri, options);
+  global._mongoClientPromise = global._mongoClient.connect();
 }
 
-const connectedClient = await global._mongoClientPromise;
-const db: Db = connectedClient.db(dbName);
-const client: MongoClient = connectedClient;
+const client = global._mongoClient;
+const clientPromise = global._mongoClientPromise;
+const db: Db = client.db(dbName);
 
-export { client, db };
+export { client, clientPromise, db };

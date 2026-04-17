@@ -2,6 +2,8 @@ import { getSession } from "@/lib/auth-session";
 import { db, ObjectId } from "@workspace/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
