@@ -165,7 +165,10 @@ export function Templates({ onSelect }: TemplatesProps) {
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-accent text-[12px] font-bold uppercase tracking-widest mb-3 block">Templates</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Free Professional Invoice Templates</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">Choose Your Free Invoice Template</h2>
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+            Our <strong>free invoice generator</strong> offers professional designs tailored for freelancers and businesses. Pick an <strong>invoice template</strong> below and start billing in seconds.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">

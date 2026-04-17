@@ -8,13 +8,16 @@ import { GeistMono } from "geist/font/mono";
 export const metadata: Metadata = {
   metadataBase: new URL("https://invoicekit.app"),
   title: {
-    default: "InvoiceKit | Free Professional Invoice Generator (No Sign Up)",
+    default: "Free Invoice Generator | Create Professional Invoice Templates Online",
     template: "%s | InvoiceKit",
   },
   description:
-    "Generate professional PDF invoices in seconds with our free online invoice maker. No account required, no watermarks, 100% free for freelancers and small businesses.",
+    "InvoiceKit is a 100% free invoice generator to create professional PDF invoices instantly. Use our free invoice generator with no sign up required. Choose from professional invoice templates and download as PDF.",
   keywords: [
+    "invoice generator",
+    "invoice template",
     "free invoice generator",
+    "invoice generator free",
     "online invoice maker",
     "free invoice generator no sign up",
     "pdf invoice templates",
@@ -48,7 +51,10 @@ export const metadata: Metadata = {
     images: ["/opengraph.jpg"],
   },
   alternates: {
-    canonical: "/",
+    canonical: "https://invoicekit.app",
+    languages: {
+      "en-US": "https://invoicekit.app",
+    },
   },
   robots: {
     index: true,

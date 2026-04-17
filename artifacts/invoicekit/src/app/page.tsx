@@ -3,9 +3,9 @@ import Script from "next/script";
 import HomePage from "@/features/HomePage";
 
 export const metadata: Metadata = {
-  title: "Free Invoice Generator & Online Invoice Maker (No Sign Up)",
+  title: "Free Invoice Generator & Professional Invoice Templates",
   description:
-    "Create professional PDF invoices instantly with our free online invoice maker. Perfect for freelancers and small businesses. No sign-up, no watermarks, 100% free.",
+    "Generate professional PDF invoices with our free invoice generator. Choose a free invoice template, customize, and download instantly. No sign up required, always free.",
 };
 
 export default function Page() {
@@ -21,7 +21,7 @@ export default function Page() {
       priceCurrency: "USD",
     },
     description:
-      "InvoiceKit helps freelancers and small teams generate invoices quickly with reusable templates.",
+      "InvoiceKit is a free invoice generator that allows users to create professional PDF invoices using customizable invoice templates without signing up.",
   };
 
   const faqJsonLd = {
