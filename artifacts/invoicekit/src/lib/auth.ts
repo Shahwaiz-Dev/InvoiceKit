@@ -1,6 +1,13 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { multiSession } from "better-auth/plugins/multi-session";
 import { db } from "@workspace/db";
+
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    if (process.env.NODE_ENV === "production") {
+        throw new Error("Missing Google OAuth environment variables");
+    }
+}
 
 export const auth = betterAuth({
     database: mongodbAdapter(db),
@@ -9,8 +16,8 @@ export const auth = betterAuth({
     },
     socialProviders: {
         google: {
-            clientId: process.env.GOOGLE_CLIENT_ID as string,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
         }
     },
     user: {
@@ -20,6 +27,9 @@ export const auth = betterAuth({
             subscriptionStatus: { type: "string", required: false },
         }
     },
+    plugins: [
+        multiSession()
+    ]
 });
 
 export type Session = typeof auth.$Infer.Session;

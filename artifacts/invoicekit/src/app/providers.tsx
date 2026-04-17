@@ -2,7 +2,6 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode, useState } from "react";
-import { Toaster as DefaultToaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -17,7 +16,6 @@ export function Providers({ children }: ProvidersProps) {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         {children}
-        <DefaultToaster />
         <SonnerToaster position="top-center" richColors />
       </TooltipProvider>
     </QueryClientProvider>

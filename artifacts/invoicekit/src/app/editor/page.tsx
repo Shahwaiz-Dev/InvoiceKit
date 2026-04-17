@@ -2,56 +2,42 @@
 
 export const dynamic = "force-dynamic";
 
-import { useEffect, useRef, useState, useCallback, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense, useDeferredValue, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { invoiceSchema, InvoiceData, TemplateType } from "@/lib/schema";
-import {
-  Loader2,
-  Save,
-  LayoutTemplate,
-  User,
-  ArrowLeft,
-} from "lucide-react";
-import { useSession } from "@/lib/auth-client";
-import { toast } from "sonner";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useLocalDraft } from "@/hooks/use-local-draft";
-import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { Preview } from "@/components/home/Preview";
 
-// Refactored Components
+// Refactored Components & Hooks
 import { EditorSidebar } from "@/features/editor/components/EditorSidebar";
+import { EditorHeader } from "@/features/editor/components/EditorHeader";
 import { DraftBanner } from "@/features/editor/components/DraftBanner";
 import { UpsellDialog } from "@/features/editor/components/UpsellDialog";
 import { useInvoiceActions } from "@/features/editor/hooks/use-invoice-actions";
+import { useEditorSync } from "@/features/editor/hooks/use-editor-sync";
 import { getLabels, getDefaultInvoiceData } from "@/features/editor/lib/editor-utils";
+import { INVOICE_TEMPLATES, GUEST_TEMPLATES } from "@/lib/config";
 
 function EditorContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const { data: session } = useSession();
-  const { saveDraft, loadDraft, clearDraft, hasDraft } = useLocalDraft();
+  const invoiceId = searchParams.get("id");
 
+  // Basic States
   const [template, setTemplate] = useState<TemplateType>(
     (searchParams.get("template") as TemplateType) ?? "clean"
   );
   const [data, setData] = useState<InvoiceData>(() => getDefaultInvoiceData());
+  const deferredData = useDeferredValue(data);
   const [showUpsell, setShowUpsell] = useState(false);
   const [showDraftBanner, setShowDraftBanner] = useState(false);
   const [profileLoaded, setProfileLoaded] = useState(false);
 
-  const labels = getLabels(template);
-  const { handleDownload, handleSendEmail, isSending, isSavingToDb, setIsSavingToDb } = useInvoiceActions();
+  const labels = useMemo(() => getLabels(template), [template]);
+  const { handleDownload, handleSendEmail, isSending } = useInvoiceActions();
 
   const form = useForm<InvoiceData>({
     resolver: zodResolver(invoiceSchema),
@@ -60,7 +46,14 @@ function EditorContent() {
     reValidateMode: "onChange",
   });
 
-  const invoiceId = searchParams.get("id");
+  // Editor Sync logic extracted to hook
+  const { isSavingToDb, saveInvoiceToDB, handleRestoreDraft, hasDraft, session } = useEditorSync({
+    form,
+    template,
+    invoiceId,
+    setData,
+    setTemplate,
+  });
 
   // Load existing invoice if ID is provided
   const { data: existingInvoice, isLoading: loadingExisting } = useQuery<any>({
@@ -85,12 +78,9 @@ function EditorContent() {
     }
   }, [existingInvoice, form]);
 
-  const templateRef = useRef(template);
-  useEffect(() => { templateRef.current = template; }, [template]);
-
   // Check for draft on mount (only for guests)
   useEffect(() => {
-    if (!session && hasDraft()) {
+    if (!session && hasDraft) {
       setShowDraftBanner(true);
     }
   }, [session, hasDraft]);
@@ -129,80 +119,9 @@ function EditorContent() {
     }
   }, [settingsData, profileLoaded, form]);
 
-  // Auto-save draft
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(() => {
-    const subscription = form.watch((val) => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => {
-        setData(val as InvoiceData);
-        if (!session) {
-          saveDraft(val as InvoiceData, template);
-        }
-      }, 120);
-    });
-    return () => {
-      subscription.unsubscribe();
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [form, session, template, saveDraft]);
-
-  const saveInvoiceToDB = useCallback(async (values: InvoiceData, status: "draft" | "sent" = "draft") => {
-    if (!session) return;
-    setIsSavingToDb(true);
-    try {
-      const url = invoiceId ? `/api/invoices/${invoiceId}` : "/api/invoices";
-      const method = invoiceId ? "PATCH" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, template: templateRef.current, status }),
-      });
-
-      if (!response.ok) throw new Error("Failed to save");
-
-      toast.success(status === "sent" ? "Invoice sent & saved" : "Invoice saved to dashboard");
-
-      if (!invoiceId) {
-        router.push("/dashboard");
-      }
-    } catch {
-      toast.error("Failed to save invoice");
-    } finally {
-      setIsSavingToDb(false);
-    }
-  }, [session, invoiceId, router, setIsSavingToDb]);
-
-  const handleRestoreDraft = () => {
-    const draft = loadDraft();
-    if (draft) {
-      form.reset(draft.data);
-      setData(draft.data);
-      setTemplate(draft.template as TemplateType);
-    }
-    setShowDraftBanner(false);
-  };
-
-  const templates: { value: TemplateType; label: string }[] = session
-    ? [
-        { value: "clean", label: "Clean" },
-        { value: "corporate", label: "Corporate" },
-        { value: "minimal", label: "Minimal" },
-        { value: "contractor", label: "Contractor" },
-        { value: "salaries", label: "Salary/Payslip" },
-        { value: "modern", label: "Modern" },
-        { value: "creative", label: "Creative" },
-      ]
-    : [
-        { value: "clean", label: "Clean" },
-        { value: "modern", label: "Modern" },
-      ];
-
   const onDownloadHandler = form.handleSubmit(async (v) => {
-    const success = await handleDownload(v, setData, session, usageData, invoiceId, saveInvoiceToDB);
+    const success = await handleDownload(v, setData, session, usageData ?? null, invoiceId, saveInvoiceToDB);
     if (success) {
-      clearDraft();
       if (!session) setShowUpsell(true);
     }
   });
@@ -212,63 +131,34 @@ function EditorContent() {
     if (session) await saveInvoiceToDB(v, "sent");
   });
 
+  const filteredTemplates = useMemo(() => 
+    session 
+      ? INVOICE_TEMPLATES 
+      : INVOICE_TEMPLATES.filter(t => GUEST_TEMPLATES.includes(t.value)),
+    [session]
+  );
+
   return (
     <div className="fixed inset-0 bg-background flex flex-col overflow-hidden">
       <AnimatePresence>
         {showDraftBanner && (
-          <DraftBanner onRestore={handleRestoreDraft} onDiscard={() => setShowDraftBanner(false)} />
+          <DraftBanner 
+            onRestore={() => { handleRestoreDraft(); setShowDraftBanner(false); }} 
+            onDiscard={() => setShowDraftBanner(false)} 
+          />
         )}
       </AnimatePresence>
 
       {showUpsell && <UpsellDialog onClose={() => setShowUpsell(false)} />}
 
-      <header className="h-14 bg-white border-b border-border flex items-center justify-between px-4 shrink-0 z-30">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors text-sm">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Back</span>
-          </Link>
-          <div className="h-4 w-px bg-border" />
-          <div className="flex items-center gap-1">
-            <LayoutTemplate className="w-4 h-4 text-muted-foreground" />
-            <Select value={template} onValueChange={(v) => setTemplate(v as TemplateType)}>
-              <SelectTrigger className="h-8 text-xs border-0 shadow-none bg-transparent pr-2 pl-1 font-medium gap-1">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {templates.map((t) => (
-                  <SelectItem key={t.value} value={t.value} className="text-sm">
-                    {t.label} Template
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {session ? (
-            <>
-              <Link href="/dashboard" className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <User className="w-4 h-4" />
-                Dashboard
-              </Link>
-              <button
-                onClick={form.handleSubmit((v) => saveInvoiceToDB(v, "draft"))}
-                disabled={isSavingToDb}
-                className="h-8 px-3 rounded-md border border-border text-sm font-medium text-foreground hover:bg-muted/10 transition-colors flex items-center gap-1.5 disabled:opacity-60"
-              >
-                {isSavingToDb ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-                Save
-              </button>
-            </>
-          ) : (
-            <Link href="/login" className="h-8 px-3 rounded-md border border-border text-sm font-medium text-foreground hover:bg-muted/10 transition-colors">
-              Login to Save
-            </Link>
-          )}
-        </div>
-      </header>
+      <EditorHeader
+        template={template}
+        setTemplate={setTemplate}
+        session={session}
+        isSavingToDb={isSavingToDb}
+        onSave={form.handleSubmit((v) => saveInvoiceToDB(v, "draft"))}
+        templates={filteredTemplates}
+      />
 
       {loadingExisting && (
         <div className="fixed inset-0 z-[100] bg-white/80 backdrop-blur-sm flex items-center justify-center">
@@ -287,7 +177,7 @@ function EditorContent() {
             </div>
             <div className="w-[700px] aspect-[1/1.414] bg-white shadow-2xl">
               <div id="print-area" className="w-full h-full">
-                <Preview template={template} data={data} />
+                <Preview template={template} data={deferredData} />
               </div>
             </div>
           </div>

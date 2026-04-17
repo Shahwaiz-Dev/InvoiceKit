@@ -1,5 +1,6 @@
 import { FileText } from "lucide-react";
 import Link from "next/link";
+import { APP_CONFIG } from "@/lib/config";
 
 export function Footer() {
   return (
@@ -9,11 +10,11 @@ export function Footer() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3">
               <FileText className="w-6 h-6 text-white" strokeWidth={2.5} />
-              <span className="font-semibold text-xl tracking-tight">InvoiceKit</span>
+              <span className="font-semibold text-xl tracking-tight">{APP_CONFIG.name}</span>
               <span className="text-white/60 ml-2">&middot; Your go-to <strong>free invoice generator</strong>.</span>
             </div>
             <p className="max-w-md text-white/40 text-[13px] leading-relaxed mt-2">
-              InvoiceKit is an <strong>invoice generator free</strong> of charge, designed to help you find the perfect <strong>invoice template</strong> for your business. Create professional invoices instantly with our <strong>invoice generator</strong>.
+              {APP_CONFIG.name} is an <strong>invoice generator free</strong> of charge, designed to help you find the perfect <strong>invoice template</strong> for your business. Create professional invoices instantly with our <strong>invoice generator</strong>.
             </p>
           </div>
           

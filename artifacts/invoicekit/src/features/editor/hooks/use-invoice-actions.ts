@@ -1,21 +1,26 @@
 import { useState } from "react";
-import { InvoiceData, TemplateType } from "@/lib/schema";
+import { InvoiceData } from "@/lib/schema";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { resolveOklchColor } from "../lib/editor-utils";
 
+interface UsageData {
+  usage: number;
+  limit: number;
+  isPro: boolean;
+}
+
 export function useInvoiceActions() {
   const [isSending, setIsSending] = useState(false);
-  const [isSavingToDb, setIsSavingToDb] = useState(false);
   const router = useRouter();
 
   const handleDownload = async (
     values: InvoiceData,
     setData: (data: InvoiceData) => void,
     session: any,
-    usageData: any,
+    usageData: UsageData | null,
     invoiceId: string | null,
-    saveInvoiceToDB: (values: InvoiceData, status: string) => Promise<string | undefined>
+    saveInvoiceToDB: (values: InvoiceData, status: "draft" | "sent") => Promise<void>
   ) => {
     if (session && usageData) {
       if (usageData.usage >= usageData.limit) {
@@ -28,11 +33,14 @@ export function useInvoiceActions() {
       }
     }
 
-    setData(values);
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    // Small delay to ensure any pending state updates are flushed
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     const element = document.getElementById("print-area");
-    if (!element) return;
+    if (!element) {
+      toast.error("Could not find print area");
+      return;
+    }
 
     const html2pdf = (await import("html2pdf.js")).default;
     const opt = {
@@ -103,6 +111,7 @@ export function useInvoiceActions() {
       return true;
     } catch (error) {
       console.error("PDF generation failed:", error);
+      toast.error("PDF generation failed. Use browser print instead.");
       window.print();
       return false;
     }
@@ -122,7 +131,8 @@ export function useInvoiceActions() {
     }
 
     setIsSending(true);
-    try {
+    
+    const sendPromise = async () => {
       const subtotal = values.lineItems.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0);
       const taxAmount = subtotal * (values.taxRate / 100);
       const discountAmount = subtotal * (values.discount / 100);
@@ -141,23 +151,26 @@ export function useInvoiceActions() {
       });
 
       const result = await response.json();
-      if (response.ok) {
-        toast.success(`Invoice sent to ${values.clientEmail}`);
-      } else {
-        toast.error(result.error || "Failed to send email");
+      if (!response.ok) throw new Error(result.error || "Failed to send email");
+      return result;
+    };
+
+    toast.promise(sendPromise(), {
+      loading: "Sending invoice...",
+      success: () => {
+        setIsSending(false);
+        return `Invoice sent to ${values.clientEmail}`;
+      },
+      error: (err) => {
+        setIsSending(false);
+        return err.message;
       }
-    } catch (error) {
-      toast.error("An unexpected error occurred");
-    } finally {
-      setIsSending(false);
-    }
+    });
   };
 
   return {
     handleDownload,
     handleSendEmail,
     isSending,
-    isSavingToDb,
-    setIsSavingToDb,
   };
 }
