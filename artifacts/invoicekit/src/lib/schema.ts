@@ -40,7 +40,7 @@ export const baseInvoiceSchema = z
 
     taxRate: z.coerce.number().min(0, "Tax rate cannot be negative").max(100, "Tax rate cannot exceed 100%").default(0),
     discount: z.coerce.number().min(0, "Discount cannot be negative").max(100, "Discount cannot exceed 100%").default(0),
-    currency: z.enum(["USD", "GBP", "EUR", "PKR", "CAD", "AUD"]).default("USD"),
+    currency: z.string().length(3, "Use 3-letter code").default("USD"),
 
     notes: z.string().trim().optional(),
   });

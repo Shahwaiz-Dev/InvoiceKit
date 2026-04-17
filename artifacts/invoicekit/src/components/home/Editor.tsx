@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { invoiceSchema, InvoiceData, TemplateType } from "@/lib/schema";
+import { resolveOklchColor } from "@/features/editor/lib/editor-utils";
 import { Preview } from "./Preview";
 import { X, Plus, Download, ChevronDown, ChevronUp, Mail, Loader2 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
@@ -212,19 +213,7 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                 return;
               }
 
-              if (prop === "backgroundColor") {
-                node.style.backgroundColor = value.includes("oklch") ? "#f3f4f6" : "#ffffff";
-                return;
-              }
-
-              if (prop === "color") {
-                node.style.color = "#111827";
-                return;
-              }
-
-              if (prop.includes("border")) {
-                node.style.setProperty(cssProperty, "#e5e7eb");
-              }
+              node.style.setProperty(cssProperty, resolveOklchColor(value));
             });
           });
         },
