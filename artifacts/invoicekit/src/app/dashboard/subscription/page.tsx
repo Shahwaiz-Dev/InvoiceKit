@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { 
   CreditCard, 
@@ -24,7 +25,6 @@ import { Progress } from "@/components/ui/progress";
 import { PLANS, PlanSubTier } from "@/lib/plans";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
 
 type UsageData = {
   usage: number;
@@ -34,7 +34,10 @@ type UsageData = {
   canManageCustomers?: boolean;
 };
 
+type BillingCycle = "monthly" | "yearly";
+
 export default function SubscriptionPage() {
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
   const { data: usage, isLoading } = useQuery<UsageData>({
     queryKey: ["usage"],
     queryFn: async () => {
@@ -64,6 +67,12 @@ export default function SubscriptionPage() {
 
   const currentPlanKey = (usage?.plan || "explorer") as PlanSubTier;
   const currentPlan = PLANS[currentPlanKey];
+
+  const getPlanProductId = (plan: (typeof PLANS)[PlanSubTier]) =>
+    billingCycle === "yearly" ? plan.yearlyProductId : plan.monthlyProductId;
+
+  const getPlanPrice = (plan: (typeof PLANS)[PlanSubTier]) =>
+    billingCycle === "yearly" ? plan.yearlyPrice : plan.monthlyPrice;
 
   if (isLoading) {
     return (
@@ -180,15 +189,40 @@ export default function SubscriptionPage() {
       </div>
 
       <div className="space-y-6">
-        <div>
-          <h3 className="text-2xl font-bold">Compare Plans</h3>
-          <p className="text-muted-foreground text-sm">Choose the right path for your business growth.</p>
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h3 className="text-2xl font-bold">Compare Plans</h3>
+            <p className="text-muted-foreground text-sm">Choose the right path for your business growth.</p>
+          </div>
+          <div className="inline-flex rounded-full border border-slate-200 bg-white p-1 shadow-sm">
+            <Button
+              type="button"
+              variant={billingCycle === "monthly" ? "default" : "ghost"}
+              className="rounded-full px-4"
+              onClick={() => setBillingCycle("monthly")}
+            >
+              Monthly
+            </Button>
+            <Button
+              type="button"
+              variant={billingCycle === "yearly" ? "default" : "ghost"}
+              className="rounded-full px-4"
+              onClick={() => setBillingCycle("yearly")}
+            >
+              Yearly
+            </Button>
+          </div>
         </div>
         
         <div className="grid gap-6 md:grid-cols-3">
           {(Object.keys(PLANS) as PlanSubTier[]).map((planKey) => {
             const plan = PLANS[planKey];
             const isCurrent = currentPlanKey === planKey;
+            const productId = getPlanProductId(plan);
+            const price = getPlanPrice(plan);
+            const periodLabel = billingCycle === "yearly" ? "/yr" : "/mo";
+            const yearlySavings =
+              plan.monthlyPrice > 0 ? plan.monthlyPrice * 12 - plan.yearlyPrice : 0;
             
             return (
               <Card 
@@ -212,9 +246,19 @@ export default function SubscriptionPage() {
                     {planKey === "authority" && "Premium solutions for high-volume businesses and teams."}
                   </CardDescription>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold">${plan.monthlyPrice}</span>
-                    <span className="text-muted-foreground ml-1">/mo</span>
+                    <span className="text-4xl font-bold">${price}</span>
+                    <span className="text-muted-foreground ml-1">{periodLabel}</span>
                   </div>
+                  {billingCycle === "yearly" && yearlySavings > 0 && (
+                    <p className="mt-2 text-xs font-medium text-emerald-600">
+                      Save ${yearlySavings} per year
+                    </p>
+                  )}
+                  {!productId && planKey !== "explorer" && (
+                    <p className="mt-2 text-xs font-medium text-amber-600">
+                      {billingCycle === "yearly" ? "Yearly plan not configured yet" : "Monthly plan not configured yet"}
+                    </p>
+                  )}
                 </CardHeader>
                 <CardContent className="flex-1">
                   <div className="space-y-4">
@@ -236,15 +280,16 @@ export default function SubscriptionPage() {
                     </Button>
                   ) : (
                     <Button 
-                      onClick={() => handleUpgrade(plan.monthlyProductId)}
+                      onClick={() => handleUpgrade(productId)}
                       variant={planKey === "momentum" ? "default" : "outline"}
+                      disabled={planKey !== "explorer" && !productId}
                       className={`w-full group ${
                         planKey === "momentum" 
                           ? "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-200" 
                           : ""
                       }`}
                     >
-                      {planKey === "explorer" ? "Get Started" : "Upgrade Plan"}
+                      {planKey === "explorer" ? "Get Started" : `Upgrade ${billingCycle === "yearly" ? "Yearly" : "Monthly"}`}
                       <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </Button>
                   )}
