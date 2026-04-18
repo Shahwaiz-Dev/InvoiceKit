@@ -90,12 +90,12 @@ function EditorContent() {
     }
   }, [existingInvoice, form]);
 
-  // Check for draft on mount (only for guests)
+  // Check for draft on mount
   useEffect(() => {
-    if (!session && hasDraft) {
+    if (hasDraft && !invoiceId) {
       setShowDraftBanner(true);
     }
-  }, [session, hasDraft]);
+  }, [hasDraft, invoiceId]);
 
   useEffect(() => {
     if (isSessionPending || authSession || !isTemplateType(requestedTemplate) || isGuestTemplate(requestedTemplate)) {

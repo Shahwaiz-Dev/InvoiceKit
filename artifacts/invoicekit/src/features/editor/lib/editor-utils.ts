@@ -167,25 +167,39 @@ export const CURRENCIES = [
   { value: "RON", label: "Romanian Leu (lei)" },
 ];
 
+let resolutionCanvas: HTMLCanvasElement | null = null;
+let resolutionCtx: CanvasRenderingContext2D | null = null;
+
 /**
- * Resolves oklch colors to standard RGB/RGBA strings using a canvas shim.
+ * Resolves modern CSS colors (oklch, oklab, lab, lch, hwb, relative colors)
+ * to standard RGB/RGBA strings using a canvas shim.
  * html2canvas/html2pdf does not support modern color spaces, so we must
  * convert them before cloning the document for printing.
  */
-export const resolveOklchColor = (colorStr: string): string => {
-  if (!colorStr || !colorStr.includes("oklch")) return colorStr;
+export const resolveModernColor = (colorStr: string): string => {
+  if (!colorStr) return colorStr;
+  
+  // Check if the color string contains modern color functions or relative syntax
+  const modernPattern = /(oklch|oklab|lab|lch|hwb|from)/;
+  if (!modernPattern.test(colorStr)) return colorStr;
   if (typeof document === "undefined") return colorStr;
 
   try {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = 1;
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    if (!ctx) return colorStr;
+    if (!resolutionCanvas) {
+      resolutionCanvas = document.createElement("canvas");
+      resolutionCanvas.width = 1;
+      resolutionCanvas.height = 1;
+    }
+    if (!resolutionCtx) {
+      resolutionCtx = resolutionCanvas.getContext("2d", { willReadFrequently: true });
+    }
+    if (!resolutionCtx) return colorStr;
 
-    ctx.fillStyle = colorStr;
-    ctx.fillRect(0, 0, 1, 1);
-    const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+    // Clear previous state
+    resolutionCtx.clearRect(0, 0, 1, 1);
+    resolutionCtx.fillStyle = colorStr;
+    resolutionCtx.fillRect(0, 0, 1, 1);
+    const [r, g, b, a] = resolutionCtx.getImageData(0, 0, 1, 1).data;
     
     // If alpha is 255, return simple rgb, otherwise rgba
     if (a === 255) {
@@ -193,7 +207,7 @@ export const resolveOklchColor = (colorStr: string): string => {
     }
     return `rgba(${r}, ${g}, ${b}, ${parseFloat((a / 255).toFixed(3))})`;
   } catch (e) {
-    console.warn("Failed to resolve oklch color:", colorStr, e);
+    console.warn("Failed to resolve modern color:", colorStr, e);
     return colorStr;
   }
 };

@@ -79,6 +79,7 @@ export function useEditorSync({
         );
 
         if (!invoiceId) {
+          clearDraft();
           router.push("/dashboard");
         }
       } catch {

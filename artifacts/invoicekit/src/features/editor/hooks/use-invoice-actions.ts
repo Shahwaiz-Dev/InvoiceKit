@@ -2,7 +2,7 @@ import { useState } from "react";
 import { InvoiceData } from "@/lib/schema";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { resolveOklchColor } from "../lib/editor-utils";
+import { resolveModernColor } from "../lib/editor-utils";
 
 interface UsageData {
   usage: number;
@@ -54,9 +54,7 @@ export function useInvoiceActions() {
         scrollY: -window.scrollY,
         logging: false,
         onclone: (clonedDoc: Document) => {
-          const elements = clonedDoc.querySelectorAll(
-            '[style*="oklch"], [style*="oklab"], [class*="bg-"], [class*="text-"], [class*="border-"], [class*="font-"]'
-          );
+          const elements = clonedDoc.querySelectorAll("*");
 
           const style = clonedDoc.createElement('style');
           style.innerHTML = `
@@ -72,13 +70,14 @@ export function useInvoiceActions() {
               node.style.letterSpacing = '-0.02em';
             }
 
-            const colorProps = ["color", "backgroundColor", "borderColor", "borderTopColor", "borderBottomColor", "borderLeftColor", "borderRightColor"];
+            const colorProps = ["color", "backgroundColor", "borderColor", "borderTopColor", "borderBottomColor", "borderLeftColor", "borderRightColor", "outlineColor", "fill", "stroke"];
             colorProps.forEach((prop) => {
               const cssProperty = prop.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
               const val = node.style.getPropertyValue(cssProperty) || computedStyle.getPropertyValue(cssProperty);
 
-              if (val && (val.includes("oklab") || val.includes("oklch") || val.includes("from"))) {
-                node.style.setProperty(cssProperty, resolveOklchColor(val));
+              const isModernColor = val && (val.includes("oklch") || val.includes("oklab") || val.includes("lab") || val.includes("lch") || val.includes("hwb") || val.includes("from"));
+              if (isModernColor) {
+                node.style.setProperty(cssProperty, resolveModernColor(val));
               }
             });
           });
@@ -119,8 +118,12 @@ export function useInvoiceActions() {
 
   const handleSendEmail = async (values: InvoiceData, session: any) => {
     if (!session) {
+      const callbackUrl = encodeURIComponent(window.location.pathname + window.location.search);
       toast.error("Please login to send invoices via email", {
-        action: { label: "Login", onClick: () => router.push("/login") },
+        action: { 
+          label: "Login", 
+          onClick: () => router.push(`/login?callbackUrl=${callbackUrl}` as any) 
+        },
       });
       return;
     }

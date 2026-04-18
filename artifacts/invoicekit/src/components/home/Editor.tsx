@@ -4,12 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { invoiceSchema, InvoiceData, TemplateType } from "@/lib/schema";
-import { resolveOklchColor } from "@/features/editor/lib/editor-utils";
+import { resolveModernColor } from "@/features/editor/lib/editor-utils";
 import { Preview } from "./Preview";
 import { X, Plus, Download, ChevronDown, ChevronUp, Mail, Loader2 } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useLocalDraft } from "@/hooks/use-local-draft";
+import { DraftBanner } from "@/features/editor/components/DraftBanner";
 import {
   Form,
   FormControl,
@@ -111,6 +113,8 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
   const [isSending, setIsSending] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
+  const { saveDraft, loadDraft, hasDraft, clearDraft } = useLocalDraft();
+  const [showDraftBanner, setShowDraftBanner] = useState(false);
 
   const form = useForm<InvoiceData>({
     resolver: zodResolver(invoiceSchema),
@@ -131,8 +135,12 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
         clearTimeout(debounceRef.current);
       }
       debounceRef.current = setTimeout(() => {
-        setData(val as InvoiceData);
-      }, 120);
+        const invoiceData = val as InvoiceData;
+        setData(invoiceData);
+        if (!session) {
+          saveDraft(invoiceData, template);
+        }
+      }, 150);
     });
 
     return () => {
@@ -141,7 +149,23 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
         clearTimeout(debounceRef.current);
       }
     };
-  }, [form]);
+  }, [form, session, template, saveDraft]);
+
+  // Check for draft on mount
+  useEffect(() => {
+    if (hasDraft() && isOpen) {
+      setShowDraftBanner(true);
+    }
+  }, [hasDraft, isOpen]);
+
+  const handleRestoreDraft = () => {
+    const draft = loadDraft();
+    if (draft) {
+      form.reset(draft.data);
+      setData(draft.data);
+      setShowDraftBanner(false);
+    }
+  };
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -203,17 +227,26 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
               "borderLeftColor",
               "borderRightColor",
               "outlineColor",
+              "fill",
+              "stroke",
             ];
 
             colorProps.forEach((prop) => {
               const cssProperty = prop.replace(/[A-Z]/g, (m: string) => `-${m.toLowerCase()}`);
               const inlineValue = node.style.getPropertyValue(cssProperty);
               const value = inlineValue || style.getPropertyValue(cssProperty);
-              if (!value || (!value.includes("oklab") && !value.includes("oklch") && !value.includes("from"))) {
-                return;
-              }
+              const isModernColor = value && (
+                value.includes("oklch") || 
+                value.includes("oklab") || 
+                value.includes("lab") || 
+                value.includes("lch") || 
+                value.includes("hwb") || 
+                value.includes("from")
+              );
 
-              node.style.setProperty(cssProperty, resolveOklchColor(value));
+              if (isModernColor) {
+                node.style.setProperty(cssProperty, resolveModernColor(value));
+              }
             });
           });
         },
@@ -235,10 +268,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
 
   const handleSendEmail = async (values: InvoiceData) => {
     if (!session) {
+      const callbackUrl = encodeURIComponent(`/editor?template=${template}`);
       toast.error("Please login to send invoices via email", {
         action: {
           label: "Login",
-          onClick: () => router.push("/login"),
+          onClick: () => router.push(`/login?callbackUrl=${callbackUrl}` as any),
         },
       });
       return;
@@ -300,6 +334,14 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
 
   return (
     <>
+      <AnimatePresence>
+        {showDraftBanner && (
+          <DraftBanner 
+            onRestore={handleRestoreDraft} 
+            onDiscard={() => setShowDraftBanner(false)} 
+          />
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {isOpen && (
           <>
