@@ -127,10 +127,16 @@ function EditorContent() {
     staleTime: 5 * 60_000,
   });
 
-  const { data: usageData } = useQuery<{ usage: number, limit: number, isPro: boolean }>({
+  const { data: usageData } = useQuery<{ usage: number, limit: number, isPro: boolean, canManageCustomers?: boolean }>({
     queryKey: ["usage"],
     queryFn: () => fetch("/api/usage").then((r) => r.json()),
     enabled: !!session,
+  });
+
+  const { data: customers = [] } = useQuery<any[]>({
+    queryKey: ["customers"],
+    queryFn: () => fetch("/api/customers").then((r) => r.json()),
+    enabled: !!session && usageData?.canManageCustomers,
   });
 
   useEffect(() => {
@@ -252,6 +258,8 @@ function EditorContent() {
           onSendEmail={onSendEmailHandler}
           isSending={isSending}
           session={session}
+          customers={customers}
+          canManageCustomers={usageData?.canManageCustomers}
         />
       </div>
     </div>

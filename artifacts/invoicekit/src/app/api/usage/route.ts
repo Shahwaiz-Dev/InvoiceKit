@@ -1,5 +1,6 @@
 import { getSession } from "@/lib/auth-session";
 import { db } from "@workspace/db";
+import { getLimitForPlan } from "@/lib/plans";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -16,7 +17,10 @@ export async function GET() {
   });
 
   const isPro = session.user.subscriptionStatus === "active";
-  const limit = isPro ? 20 : 1;
+  const plan = session.user.subscriptionPlan;
+  
+  const limit = getLimitForPlan(plan);
+  const canManageCustomers = plan === "authority";
 
-  return NextResponse.json({ usage, limit, isPro });
+  return NextResponse.json({ usage, limit, isPro, plan, canManageCustomers });
 }

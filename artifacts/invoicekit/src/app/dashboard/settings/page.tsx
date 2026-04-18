@@ -14,6 +14,7 @@ import {
   Lock,
   AlertTriangle,
   Trash2,
+  UserPlus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
@@ -55,6 +56,9 @@ export default function SettingsPage() {
 
   // Delete Account State
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Billing Cycle State
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
 
   useEffect(() => {
     if (searchParams.get("checkout") === "success") {
@@ -182,92 +186,180 @@ export default function SettingsPage() {
           </Card>
 
           {/* Billing Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <CreditCard className="h-4 w-4" /> Subscription Plan
-              </CardTitle>
-              <CardDescription>
-                Manage your billing and plan details.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {isPro ? (
-                    <Zap className="h-5 w-5 text-amber-500 fill-amber-500" />
-                  ) : (
-                    <CheckCircle2 className="h-5 w-5 text-muted-foreground" />
-                  )}
-                  <span className="font-bold text-lg">
-                    {isPro ? "Pro Plan" : "Free Starter"}
-                  </span>
+          <Card className="md:col-span-2 overflow-hidden border-2 border-primary/5">
+            <CardHeader className="bg-slate-50/50 border-b border-border/50 pb-8">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-1">
+                    <CreditCard className="h-4 w-4" /> Subscription Tiers
+                  </CardTitle>
+                  <CardDescription>
+                    Choose the perfect plan for your business needs.
+                  </CardDescription>
                 </div>
-                <Badge variant="secondary">{isPro ? "$5/mo" : "$0/mo"}</Badge>
+                <div className="flex items-center bg-white border border-border p-1 rounded-full shadow-sm self-start md:self-center">
+                  <button 
+                    onClick={() => setBillingCycle("monthly")}
+                    className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${billingCycle === "monthly" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    Monthly
+                  </button>
+                  <button 
+                    onClick={() => setBillingCycle("yearly")}
+                    className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all flex items-center gap-1.5 ${billingCycle === "yearly" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
+                  >
+                    Yearly
+                    <Badge variant="outline" className="h-4 px-1 bg-emerald-50 text-[10px] text-emerald-700 border-emerald-200">Save 20%</Badge>
+                  </button>
+                </div>
               </div>
-
-              {usageLoading ? (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="h-3 w-3 animate-spin" /> Fetching usage
-                  data...
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Monthly Usage</span>
-                    <span className="font-medium">
-                      {usageData?.usage} / {usageData?.limit} invoices
-                    </span>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x border-b border-border/50">
+                {/* Explorer Plan */}
+                <div className="p-8 space-y-6">
+                  <div className="space-y-2">
+                    <Badge variant="outline" className="uppercase tracking-widest text-[9px] font-bold">Free</Badge>
+                    <h3 className="text-xl font-bold">Explorer</h3>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold tracking-tight">$0</span>
+                      <span className="text-sm text-muted-foreground">/mo</span>
+                    </div>
                   </div>
-                  <Progress
-                    value={
-                      usageData ? (usageData.usage / usageData.limit) * 100 : 0
-                    }
-                    className="h-2"
-                  />
-                  {session?.user &&
-                    (session.user as any).subscriptionCurrentPeriodEnd && (
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                        Next renewal:{" "}
-                        {new Date(
-                          (session.user as any).subscriptionCurrentPeriodEnd,
-                        ).toLocaleDateString(undefined, { dateStyle: "long" })}
-                      </p>
-                    )}
-                </div>
-              )}
-
-              <div className="pt-4">
-                {usageLoading ? (
-                  <div className="h-10 w-full animate-pulse bg-muted rounded-md" />
-                ) : isPro ? (
-                  <Button asChild variant="outline" className="w-full">
-                    <a href="/api/customer-portal">Manage Subscription</a>
+                  <ul className="space-y-3 text-sm text-muted-foreground min-h-[140px]">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                      1 Invoice per month
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                      Basic templates
+                    </li>
+                    <li className="flex items-center gap-2 opacity-50">
+                       <ShieldCheck className="h-4 w-4" />
+                       Standard Support
+                    </li>
+                  </ul>
+                  <Button variant="outline" className="w-full" disabled={!isPro}>
+                    {isPro ? "Downgrade" : "Current Plan"}
                   </Button>
-                ) : (
-                  <div className="space-y-4">
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                        Increased limit (20 invoices)
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                        All premium templates
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                        Advanced analytics
-                      </li>
-                    </ul>
-                    <Button
-                      asChild
-                      className="w-full bg-amber-600 hover:bg-amber-700 font-bold"
-                    >
-                      <a href="/api/checkout">Upgrade to Pro</a>
-                    </Button>
+                </div>
+
+                {/* Momentum Plan */}
+                <div className={`p-8 space-y-6 bg-primary/[0.02] relative ${session?.user.subscriptionPlan === 'momentum' ? 'ring-2 ring-primary ring-inset' : ''}`}>
+                  {session?.user.subscriptionPlan === 'momentum' && (
+                    <div className="absolute top-0 right-0 p-2">
+                      <Badge className="bg-primary text-[10px] uppercase">Current</Badge>
+                    </div>
+                  )}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-primary text-[9px] font-bold uppercase tracking-widest">Growth</Badge>
+                      <Zap className="h-3 w-3 text-amber-500 fill-amber-500" />
+                    </div>
+                    <h3 className="text-xl font-bold">Momentum</h3>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold tracking-tight">
+                        ${billingCycle === "monthly" ? "5" : "50"}
+                      </span>
+                      <span className="text-sm text-muted-foreground">/{billingCycle === "monthly" ? "mo" : "yr"}</span>
+                    </div>
                   </div>
-                )}
+                  <ul className="space-y-3 text-sm text-muted-foreground min-h-[140px]">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-primary" />
+                      20 Invoices per month
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-primary" />
+                      All premium templates
+                    </li>
+                    <li className="flex items-center gap-2 font-medium text-foreground">
+                      <CheckCircle2 className="h-4 w-4 text-primary" />
+                      Advanced Analytics
+                    </li>
+                  </ul>
+                  <Button 
+                    asChild 
+                    className={`w-full font-bold ${session?.user.subscriptionPlan === 'momentum' ? 'bg-primary/10 text-primary hover:bg-primary/20' : ''}`}
+                    variant={session?.user.subscriptionPlan === 'momentum' ? "ghost" : "default"}
+                  >
+                    {session?.user.subscriptionPlan === 'momentum' ? (
+                       <a href="/api/customer-portal">Manage Billing</a>
+                    ) : (
+                       <a href={`/api/checkout?productId=${billingCycle === 'monthly' ? (process.env.NEXT_PUBLIC_POLAR_MOMENTUM_MONTHLY_ID || 'fd50bcbe-fffb-46a1-8ff2-c755e8238b6f') : (process.env.NEXT_PUBLIC_POLAR_MOMENTUM_YEARLY_ID || '')}`}>
+                        {isPro && session?.user.subscriptionPlan !== 'momentum' ? 'Switch to Momentum' : 'Upgrade Now'}
+                       </a>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Authority Plan */}
+                <div className={`p-8 space-y-6 relative ${session?.user.subscriptionPlan === 'authority' ? 'ring-2 ring-emerald-500 ring-inset' : ''}`}>
+                  {session?.user.subscriptionPlan === 'authority' && (
+                    <div className="absolute top-0 right-0 p-2">
+                      <Badge className="bg-emerald-500 text-[10px] uppercase">Current</Badge>
+                    </div>
+                  )}
+                  <div className="space-y-2">
+                    <Badge variant="outline" className="border-emerald-200 text-emerald-700 bg-emerald-50 text-[9px] font-bold uppercase tracking-widest">Enterprise</Badge>
+                    <h3 className="text-xl font-bold">Authority</h3>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold tracking-tight">
+                        ${billingCycle === "monthly" ? "20" : "200"}
+                      </span>
+                      <span className="text-sm text-muted-foreground">/{billingCycle === "monthly" ? "mo" : "yr"}</span>
+                    </div>
+                  </div>
+                  <ul className="space-y-3 text-sm text-muted-foreground min-h-[140px]">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 font-bold" />
+                      200 Invoices per month
+                    </li>
+                    <li className="flex items-center gap-2 font-bold text-foreground">
+                      <UserPlus className="h-4 w-4 text-emerald-600" />
+                      Customer Management
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      Custom Branding
+                    </li>
+                    <li className="flex items-center gap-2 italic">
+                       <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                       Priority Support
+                    </li>
+                  </ul>
+                  <Button 
+                    asChild 
+                    className={`w-full font-bold ${session?.user.subscriptionPlan === 'authority' ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-900 hover:bg-slate-800'}`}
+                    variant={session?.user.subscriptionPlan === 'authority' ? "ghost" : "default"}
+                  >
+                    {session?.user.subscriptionPlan === 'authority' ? (
+                       <a href="/api/customer-portal">Manage Billing</a>
+                    ) : (
+                       <a href={`/api/checkout?productId=${billingCycle === 'monthly' ? (process.env.NEXT_PUBLIC_POLAR_AUTHORITY_MONTHLY_ID || '') : (process.env.NEXT_PUBLIC_POLAR_AUTHORITY_YEARLY_ID || '')}`}>
+                        Upgrade to Authority
+                       </a>
+                    )}
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="px-8 py-4 bg-muted/20 border-t border-border/40 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-6">
+                    <div className="space-y-0.5">
+                        <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-tight">Current Usage</p>
+                        <p className="text-sm font-semibold">{usageData?.usage} / {usageData?.limit} invoices</p>
+                    </div>
+                    <div className="flex-1 min-w-[120px]">
+                        <Progress value={usageData ? (usageData.usage / usageData.limit) * 100 : 0} className="h-2" />
+                    </div>
+                  </div>
+                  {isPro && (
+                      <p className="text-[10px] text-muted-foreground uppercase font-medium">
+                        Renews {new Date((session?.user as any).subscriptionCurrentPeriodEnd).toLocaleDateString(undefined, { dateStyle: 'long' })}
+                      </p>
+                  )}
               </div>
             </CardContent>
           </Card>

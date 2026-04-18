@@ -1,5 +1,6 @@
 import { Webhooks } from "@polar-sh/nextjs";
 import { db, ObjectId } from "@workspace/db";
+import { getPlanFromProductId } from "@/lib/plans";
 
 export const POST = Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,
@@ -14,6 +15,8 @@ export const POST = Webhooks({
         const userId = subscription.metadata?.userId || subscription.customFieldData?.userId;
         const polarCustomerId = subscription.customerId;
         const subscriptionId = subscription.id;
+        const productId = subscription.productId;
+        const plan = getPlanFromProductId(productId);
         
         console.log(`[POLAR WEBHOOK] Extracted userId: ${userId}, customerId: ${polarCustomerId}, subStatus: ${subscription.status}`);
         if (userId) {
@@ -24,6 +27,7 @@ export const POST = Webhooks({
                 polarCustomerId: polarCustomerId,
                 subscriptionId: subscriptionId,
                 subscriptionStatus: subscription.status,
+                subscriptionPlan: plan,
                 subscriptionCurrentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd).toISOString() : undefined,
                 subscriptionStartedAt: subscription.startedAt ? new Date(subscription.startedAt).toISOString() : undefined,
               }
@@ -41,12 +45,16 @@ export const POST = Webhooks({
         
         console.log(`[POLAR WEBHOOK] Order extracted. userId: ${userId}, customerId: ${polarCustomerId}`);
         if (userId) {
+          const productId = order.productId;
+          const plan = getPlanFromProductId(productId);
+          
           await db.collection("user").updateOne(
             { _id: new ObjectId(userId as string) },
             {
               $set: {
                 polarCustomerId: polarCustomerId,
-                subscriptionStatus: "active", // Mark as active pro user for life (or until handled otherwise)
+                subscriptionStatus: "active",
+                subscriptionPlan: plan,
               }
             }
           );
@@ -56,11 +64,13 @@ export const POST = Webhooks({
 
       if (type === "subscription.updated") {
         const subscription = payload.data;
+        const plan = getPlanFromProductId(subscription.productId);
         await db.collection("user").updateOne(
           { subscriptionId: subscription.id },
           {
             $set: {
               subscriptionStatus: subscription.status,
+              subscriptionPlan: plan,
               subscriptionCurrentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd).toISOString() : undefined,
             }
           }

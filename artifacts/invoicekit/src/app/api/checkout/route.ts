@@ -23,9 +23,12 @@ export const GET = async (req: Request) => {
     server,
   });
 
-  const productId = process.env.POLAR_PRODUCT_ID;
+  const { searchParams } = new URL(req.url);
+  const queryProductId = searchParams.get("productId");
+
+  const productId = queryProductId || process.env.POLAR_PRODUCT_ID;
   if (!productId) {
-    return NextResponse.json({ error: "Missing POLAR_PRODUCT_ID in environment" }, { status: 500 });
+    return NextResponse.json({ error: "Missing Product ID" }, { status: 400 });
   }
 
   // Use the public URL (ngrok/production) — url.origin resolves to the internal server address (0.0.0.0)

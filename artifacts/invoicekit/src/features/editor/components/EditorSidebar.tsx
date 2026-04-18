@@ -20,6 +20,8 @@ interface EditorSidebarProps {
   onSendEmail: () => void;
   isSending: boolean;
   session: any;
+  customers?: any[];
+  canManageCustomers?: boolean;
 }
 
 export function EditorSidebar({
@@ -31,6 +33,8 @@ export function EditorSidebar({
   onSendEmail,
   isSending,
   session,
+  customers = [],
+  canManageCustomers = false,
 }: EditorSidebarProps) {
   return (
     <motion.div
@@ -63,7 +67,12 @@ export function EditorSidebar({
             </FormSectionWrapper>
 
             <FormSectionWrapper title={labels.clientSection}>
-              <ClientSection form={form} labels={labels} />
+              <ClientSection 
+                form={form} 
+                labels={labels} 
+                customers={customers} 
+                canManageCustomers={canManageCustomers} 
+              />
             </FormSectionWrapper>
 
             <FormSectionWrapper title={labels.invoiceInfo}>

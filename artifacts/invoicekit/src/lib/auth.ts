@@ -32,6 +32,7 @@ export const auth = betterAuth({
       polarCustomerId: { type: "string", required: false },
       subscriptionId: { type: "string", required: false },
       subscriptionStatus: { type: "string", required: false },
+      subscriptionPlan: { type: "string", required: false },
       subscriptionCurrentPeriodEnd: { type: "string", required: false },
       subscriptionStartedAt: { type: "string", required: false },
     },
