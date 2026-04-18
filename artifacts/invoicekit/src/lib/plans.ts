@@ -33,7 +33,7 @@ export const PLANS: Record<PlanSubTier, PlanConfig> = {
       "Advanced analytics",
       "Priority email support",
     ],
-    monthlyProductId: process.env.POLAR_MOMENTUM_MONTHLY_ID || process.env.POLAR_PRODUCT_ID, // fallback to existing ID
+    monthlyProductId: process.env.POLAR_MOMENTUM_MONTHLY_ID,
     yearlyProductId: process.env.POLAR_MOMENTUM_YEARLY_ID,
     monthlyPrice: 5,
     yearlyPrice: 50,

@@ -125,7 +125,7 @@ export default function DashboardPage() {
                         <Progress value={usageData ? (usageData.usage / usageData.limit) * 100 : 0} className="h-2" />
                         {!usageData?.isPro && (
                             <Button asChild size="sm" variant="default" className="w-full bg-amber-600 hover:bg-amber-700">
-                                <Link href="/dashboard/settings">Upgrade to Pro</Link>
+                                <Link href="/dashboard/subscription">Upgrade to Pro</Link>
                             </Button>
                         )}
                     </div>

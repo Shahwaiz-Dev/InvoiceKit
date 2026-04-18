@@ -26,7 +26,7 @@ export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const queryProductId = searchParams.get("productId");
 
-  const productId = queryProductId || process.env.POLAR_PRODUCT_ID;
+  const productId = queryProductId || process.env.POLAR_MOMENTUM_MONTHLY_ID;
   if (!productId) {
     return NextResponse.json({ error: "Missing Product ID" }, { status: 400 });
   }
@@ -50,6 +50,24 @@ export const GET = async (req: Request) => {
       }
     }
 
+    const product = await polar.products.get({ id: productId });
+    if (!product.isRecurring) {
+      return NextResponse.json(
+        {
+          error: "Selected Polar product is not a subscription",
+          details:
+            "Polar creates orders for one-time products. Use a recurring Polar product ID for subscription plans.",
+          product: {
+            id: product.id,
+            name: product.name,
+            isRecurring: product.isRecurring,
+            recurringInterval: product.recurringInterval,
+          },
+        },
+        { status: 400 },
+      );
+    }
+
     // Polar SDK: `products` is an array of product ID strings
     const checkout = await polar.checkouts.create({
       products: [productId],
@@ -68,11 +86,10 @@ export const GET = async (req: Request) => {
       error: "Failed to create checkout session", 
       details: error?.message || error?.details || String(error),
       debug_info: {
-        productId: process.env.POLAR_PRODUCT_ID ? "Set (ends in " + process.env.POLAR_PRODUCT_ID.slice(-4) + ")" : "Missing",
+        requestedProductId: productId ? "Set (ends in " + productId.slice(-4) + ")" : "Missing",
         nodeEnv: process.env.NODE_ENV,
         hasToken: !!process.env.POLAR_ACCESS_TOKEN
       }
     }, { status: 500 });
   }
 };
-

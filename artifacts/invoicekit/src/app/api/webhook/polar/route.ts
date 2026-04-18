@@ -41,24 +41,18 @@ export const POST = Webhooks({
         const order = payload.data;
         const userId = order.metadata?.userId || order.customFieldData?.userId;
         const polarCustomerId = order.customerId;
-        // Orders don't have subscriptionId, so we can use order.id or null
         
         console.log(`[POLAR WEBHOOK] Order extracted. userId: ${userId}, customerId: ${polarCustomerId}`);
         if (userId) {
-          const productId = order.productId;
-          const plan = getPlanFromProductId(productId);
-          
           await db.collection("user").updateOne(
             { _id: new ObjectId(userId as string) },
             {
               $set: {
                 polarCustomerId: polarCustomerId,
-                subscriptionStatus: "active",
-                subscriptionPlan: plan,
               }
             }
           );
-          console.log(`[POLAR WEBHOOK] Successfully updated user ${userId} in MongoDB via Order`);
+          console.log(`[POLAR WEBHOOK] Recorded customer mapping for user ${userId} via Order`);
         }
       }
 

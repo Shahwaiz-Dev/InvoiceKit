@@ -186,182 +186,29 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          {/* Billing Summary */}
-          <Card className="md:col-span-2 overflow-hidden border-2 border-primary/5">
-            <CardHeader className="bg-slate-50/50 border-b border-border/50 pb-8">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-1">
-                    <CreditCard className="h-4 w-4" /> Subscription Tiers
-                  </CardTitle>
-                  <CardDescription>
-                    Choose the perfect plan for your business needs.
-                  </CardDescription>
-                </div>
-                <div className="flex items-center bg-white border border-border p-1 rounded-full shadow-sm self-start md:self-center">
-                  <button 
-                    onClick={() => setBillingCycle("monthly")}
-                    className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all ${billingCycle === "monthly" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
-                  >
-                    Monthly
-                  </button>
-                  <button 
-                    onClick={() => setBillingCycle("yearly")}
-                    className={`px-4 py-1.5 text-xs font-semibold rounded-full transition-all flex items-center gap-1.5 ${billingCycle === "yearly" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
-                  >
-                    Yearly
-                    <Badge variant="outline" className="h-4 px-1 bg-emerald-50 text-[10px] text-emerald-700 border-emerald-200">Save 20%</Badge>
-                  </button>
-                </div>
-              </div>
+          {/* Subscription Link */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                <Zap className="h-4 w-4" /> Subscription Plan
+              </CardTitle>
+              <CardDescription>
+                View your current plan and available upgrades.
+              </CardDescription>
             </CardHeader>
-            <CardContent className="p-0">
-              <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x border-b border-border/50">
-                {/* Explorer Plan */}
-                <div className="p-8 space-y-6">
-                  <div className="space-y-2">
-                    <Badge variant="outline" className="uppercase tracking-widest text-[9px] font-bold">Free</Badge>
-                    <h3 className="text-xl font-bold">Explorer</h3>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold tracking-tight">$0</span>
-                      <span className="text-sm text-muted-foreground">/mo</span>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 text-sm text-muted-foreground min-h-[140px]">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                      1 Invoice per month
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                      Basic templates
-                    </li>
-                    <li className="flex items-center gap-2 opacity-50">
-                       <ShieldCheck className="h-4 w-4" />
-                       Standard Support
-                    </li>
-                  </ul>
-                  <Button variant="outline" className="w-full" disabled={!isPro}>
-                    {isPro ? "Downgrade" : "Current Plan"}
-                  </Button>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-4 rounded-lg border border-slate-100 bg-slate-50/50">
+                <div className="space-y-1">
+                  <p className="font-semibold text-lg capitalize">{usageData?.plan || "Explorer"}</p>
+                  <p className="text-xs text-muted-foreground">{usageData?.usage} / {usageData?.limit} invoices used this month</p>
                 </div>
-
-                {/* Momentum Plan */}
-                <div className={`p-8 space-y-6 bg-primary/[0.02] relative ${user?.subscriptionPlan === 'momentum' ? 'ring-2 ring-primary ring-inset' : ''}`}>
-                  {user?.subscriptionPlan === 'momentum' && (
-                    <div className="absolute top-0 right-0 p-2">
-                      <Badge className="bg-primary text-[10px] uppercase">Current</Badge>
-                    </div>
-                  )}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-primary text-[9px] font-bold uppercase tracking-widest">Growth</Badge>
-                      <Zap className="h-3 w-3 text-amber-500 fill-amber-500" />
-                    </div>
-                    <h3 className="text-xl font-bold">Momentum</h3>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold tracking-tight">
-                        ${billingCycle === "monthly" ? "5" : "50"}
-                      </span>
-                      <span className="text-sm text-muted-foreground">/{billingCycle === "monthly" ? "mo" : "yr"}</span>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 text-sm text-muted-foreground min-h-[140px]">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary" />
-                      20 Invoices per month
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary" />
-                      All premium templates
-                    </li>
-                    <li className="flex items-center gap-2 font-medium text-foreground">
-                      <CheckCircle2 className="h-4 w-4 text-primary" />
-                      Advanced Analytics
-                    </li>
-                  </ul>
-                  <Button 
-                    asChild 
-                    className={`w-full font-bold ${user?.subscriptionPlan === 'momentum' ? 'bg-primary/10 text-primary hover:bg-primary/20' : ''}`}
-                    variant={user?.subscriptionPlan === 'momentum' ? "ghost" : "default"}
-                  >
-                    {user?.subscriptionPlan === 'momentum' ? (
-                       <a href="/api/customer-portal">Manage Billing</a>
-                    ) : (
-                       <a href={`/api/checkout?productId=${billingCycle === 'monthly' ? (process.env.NEXT_PUBLIC_POLAR_MOMENTUM_MONTHLY_ID || 'fd50bcbe-fffb-46a1-8ff2-c755e8238b6f') : (process.env.NEXT_PUBLIC_POLAR_MOMENTUM_YEARLY_ID || '')}`}>
-                        {isPro && user?.subscriptionPlan !== 'momentum' ? 'Switch to Momentum' : 'Upgrade Now'}
-                       </a>
-                    )}
-                  </Button>
-                </div>
-
-                {/* Authority Plan */}
-                <div className={`p-8 space-y-6 relative ${user?.subscriptionPlan === 'authority' ? 'ring-2 ring-emerald-500 ring-inset' : ''}`}>
-                  {user?.subscriptionPlan === 'authority' && (
-                    <div className="absolute top-0 right-0 p-2">
-                      <Badge className="bg-emerald-500 text-[10px] uppercase">Current</Badge>
-                    </div>
-                  )}
-                  <div className="space-y-2">
-                    <Badge variant="outline" className="border-emerald-200 text-emerald-700 bg-emerald-50 text-[9px] font-bold uppercase tracking-widest">Enterprise</Badge>
-                    <h3 className="text-xl font-bold">Authority</h3>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold tracking-tight">
-                        ${billingCycle === "monthly" ? "20" : "200"}
-                      </span>
-                      <span className="text-sm text-muted-foreground">/{billingCycle === "monthly" ? "mo" : "yr"}</span>
-                    </div>
-                  </div>
-                  <ul className="space-y-3 text-sm text-muted-foreground min-h-[140px]">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600 font-bold" />
-                      200 Invoices per month
-                    </li>
-                    <li className="flex items-center gap-2 font-bold text-foreground">
-                      <UserPlus className="h-4 w-4 text-emerald-600" />
-                      Customer Management
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                      Custom Branding
-                    </li>
-                    <li className="flex items-center gap-2 italic">
-                       <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                       Priority Support
-                    </li>
-                  </ul>
-                  <Button 
-                    asChild 
-                    className={`w-full font-bold ${user?.subscriptionPlan === 'authority' ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-900 hover:bg-slate-800'}`}
-                    variant={user?.subscriptionPlan === 'authority' ? "ghost" : "default"}
-                  >
-                    {user?.subscriptionPlan === 'authority' ? (
-                       <a href="/api/customer-portal">Manage Billing</a>
-                    ) : (
-                       <a href={`/api/checkout?productId=${billingCycle === 'monthly' ? (process.env.NEXT_PUBLIC_POLAR_AUTHORITY_MONTHLY_ID || '') : (process.env.NEXT_PUBLIC_POLAR_AUTHORITY_YEARLY_ID || '')}`}>
-                        Upgrade to Authority
-                       </a>
-                    )}
-                  </Button>
-                </div>
+                {usageData?.isPro && <Zap className="h-5 w-5 text-amber-500 fill-amber-500" />}
               </div>
-              
-              <div className="px-8 py-4 bg-muted/20 border-t border-border/40 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex items-center gap-6">
-                    <div className="space-y-0.5">
-                        <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-tight">Current Usage</p>
-                        <p className="text-sm font-semibold">{usageData?.usage} / {usageData?.limit} invoices</p>
-                    </div>
-                    <div className="flex-1 min-w-[120px]">
-                        <Progress value={usageData ? (usageData.usage / usageData.limit) * 100 : 0} className="h-2" />
-                    </div>
-                  </div>
-                  {isPro && (
-                      <p className="text-[10px] text-muted-foreground uppercase font-medium">
-                        Renews {new Date(user?.subscriptionCurrentPeriodEnd).toLocaleDateString(undefined, { dateStyle: 'long' })}
-                      </p>
-                  )}
-              </div>
+              <Button asChild variant="outline" className="w-full">
+                <Link href="/dashboard/subscription">
+                  View Subscription Details
+                </Link>
+              </Button>
             </CardContent>
           </Card>
 

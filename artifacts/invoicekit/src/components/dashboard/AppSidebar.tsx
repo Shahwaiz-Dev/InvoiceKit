@@ -8,6 +8,7 @@ import {
   Settings,
   Plus,
   User,
+  CreditCard,
 } from "lucide-react";
 
 import {
@@ -56,6 +57,11 @@ const data = {
       title: "Customers",
       url: "/dashboard/customers",
       icon: User,
+    },
+    {
+      title: "Subscription",
+      url: "/dashboard/subscription",
+      icon: CreditCard,
     },
     {
       title: "Settings",
