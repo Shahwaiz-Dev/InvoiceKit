@@ -24,7 +24,7 @@ export function useEditorSync({
 }: UseEditorSyncProps) {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
-  const { saveDraft, loadDraft, hasDraft } = useLocalDraft();
+  const { saveDraft, loadDraft, clearDraft, hasDraft } = useLocalDraft();
   const [isSavingToDb, setIsSavingToDb] = useState(false);
   const router = useRouter();
   
@@ -88,7 +88,7 @@ export function useEditorSync({
         setIsSavingToDb(false);
       }
     },
-    [session, invoiceId, router, queryClient]
+    [session, invoiceId, router, queryClient, clearDraft]
   );
 
   const handleRestoreDraft = useCallback(() => {
