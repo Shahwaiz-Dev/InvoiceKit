@@ -7,6 +7,7 @@ import {
   Building2,
   Settings,
   Plus,
+  User,
 } from "lucide-react";
 
 import {

@@ -58,7 +58,8 @@ export const PLANS: Record<PlanSubTier, PlanConfig> = {
 /**
  * Gets the plan key for a given Polar Product ID
  */
-export function getPlanFromProductId(productId: string): PlanSubTier | null {
+export function getPlanFromProductId(productId: string | null | undefined): PlanSubTier | null {
+  if (!productId) return null;
   for (const [key, config] of Object.entries(PLANS)) {
     if (config.monthlyProductId === productId || config.yearlyProductId === productId) {
       return key as PlanSubTier;

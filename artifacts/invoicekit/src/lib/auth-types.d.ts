@@ -5,7 +5,12 @@ declare module "better-auth" {
         polarCustomerId?: string;
         subscriptionId?: string;
         subscriptionStatus?: string;
+        subscriptionPlan?: string;
         subscriptionCurrentPeriodEnd?: string;
         subscriptionStartedAt?: string;
+    }
+
+    interface Session {
+        user: User;
     }
 }

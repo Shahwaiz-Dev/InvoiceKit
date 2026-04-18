@@ -5,7 +5,8 @@ export const authClient = createAuthClient({
     baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "http://localhost:3000",
     plugins: [
         multiSession()
-    ]
+    ],
+    inferAdditionalFields: true
 });
 
 export const { useSession, signIn, signUp, signOut } = authClient;

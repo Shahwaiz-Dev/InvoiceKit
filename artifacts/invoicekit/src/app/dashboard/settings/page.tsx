@@ -45,6 +45,7 @@ import {
 
 export default function SettingsPage() {
   const { data: session } = useSession();
+  const user = session?.user as any;
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -150,13 +151,13 @@ export default function SettingsPage() {
             <CardContent className="space-y-6">
               <div className="flex items-center gap-4 p-4 rounded-lg bg-slate-50 border border-slate-100">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xl">
-                  {session?.user.name?.charAt(0) || "U"}
+                  {user?.name?.charAt(0) || "U"}
                 </div>
                 <div>
-                  <p className="font-semibold">{session?.user.name}</p>
+                  <p className="font-semibold">{user?.name}</p>
                   <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                     <Mail className="h-3 w-3" />
-                    {session?.user.email}
+                    {user?.email}
                   </div>
                 </div>
               </div>
@@ -176,8 +177,8 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span>Account created</span>
                   <span>
-                    {session?.user.createdAt
-                      ? new Date(session.user.createdAt).toLocaleDateString()
+                    {user?.createdAt
+                      ? new Date(user.createdAt).toLocaleDateString()
                       : "N/A"}
                   </span>
                 </div>
@@ -246,8 +247,8 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Momentum Plan */}
-                <div className={`p-8 space-y-6 bg-primary/[0.02] relative ${session?.user.subscriptionPlan === 'momentum' ? 'ring-2 ring-primary ring-inset' : ''}`}>
-                  {session?.user.subscriptionPlan === 'momentum' && (
+                <div className={`p-8 space-y-6 bg-primary/[0.02] relative ${user?.subscriptionPlan === 'momentum' ? 'ring-2 ring-primary ring-inset' : ''}`}>
+                  {user?.subscriptionPlan === 'momentum' && (
                     <div className="absolute top-0 right-0 p-2">
                       <Badge className="bg-primary text-[10px] uppercase">Current</Badge>
                     </div>
@@ -281,22 +282,22 @@ export default function SettingsPage() {
                   </ul>
                   <Button 
                     asChild 
-                    className={`w-full font-bold ${session?.user.subscriptionPlan === 'momentum' ? 'bg-primary/10 text-primary hover:bg-primary/20' : ''}`}
-                    variant={session?.user.subscriptionPlan === 'momentum' ? "ghost" : "default"}
+                    className={`w-full font-bold ${user?.subscriptionPlan === 'momentum' ? 'bg-primary/10 text-primary hover:bg-primary/20' : ''}`}
+                    variant={user?.subscriptionPlan === 'momentum' ? "ghost" : "default"}
                   >
-                    {session?.user.subscriptionPlan === 'momentum' ? (
+                    {user?.subscriptionPlan === 'momentum' ? (
                        <a href="/api/customer-portal">Manage Billing</a>
                     ) : (
                        <a href={`/api/checkout?productId=${billingCycle === 'monthly' ? (process.env.NEXT_PUBLIC_POLAR_MOMENTUM_MONTHLY_ID || 'fd50bcbe-fffb-46a1-8ff2-c755e8238b6f') : (process.env.NEXT_PUBLIC_POLAR_MOMENTUM_YEARLY_ID || '')}`}>
-                        {isPro && session?.user.subscriptionPlan !== 'momentum' ? 'Switch to Momentum' : 'Upgrade Now'}
+                        {isPro && user?.subscriptionPlan !== 'momentum' ? 'Switch to Momentum' : 'Upgrade Now'}
                        </a>
                     )}
                   </Button>
                 </div>
 
                 {/* Authority Plan */}
-                <div className={`p-8 space-y-6 relative ${session?.user.subscriptionPlan === 'authority' ? 'ring-2 ring-emerald-500 ring-inset' : ''}`}>
-                  {session?.user.subscriptionPlan === 'authority' && (
+                <div className={`p-8 space-y-6 relative ${user?.subscriptionPlan === 'authority' ? 'ring-2 ring-emerald-500 ring-inset' : ''}`}>
+                  {user?.subscriptionPlan === 'authority' && (
                     <div className="absolute top-0 right-0 p-2">
                       <Badge className="bg-emerald-500 text-[10px] uppercase">Current</Badge>
                     </div>
@@ -331,10 +332,10 @@ export default function SettingsPage() {
                   </ul>
                   <Button 
                     asChild 
-                    className={`w-full font-bold ${session?.user.subscriptionPlan === 'authority' ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-900 hover:bg-slate-800'}`}
-                    variant={session?.user.subscriptionPlan === 'authority' ? "ghost" : "default"}
+                    className={`w-full font-bold ${user?.subscriptionPlan === 'authority' ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-slate-900 hover:bg-slate-800'}`}
+                    variant={user?.subscriptionPlan === 'authority' ? "ghost" : "default"}
                   >
-                    {session?.user.subscriptionPlan === 'authority' ? (
+                    {user?.subscriptionPlan === 'authority' ? (
                        <a href="/api/customer-portal">Manage Billing</a>
                     ) : (
                        <a href={`/api/checkout?productId=${billingCycle === 'monthly' ? (process.env.NEXT_PUBLIC_POLAR_AUTHORITY_MONTHLY_ID || '') : (process.env.NEXT_PUBLIC_POLAR_AUTHORITY_YEARLY_ID || '')}`}>
@@ -357,7 +358,7 @@ export default function SettingsPage() {
                   </div>
                   {isPro && (
                       <p className="text-[10px] text-muted-foreground uppercase font-medium">
-                        Renews {new Date((session?.user as any).subscriptionCurrentPeriodEnd).toLocaleDateString(undefined, { dateStyle: 'long' })}
+                        Renews {new Date(user?.subscriptionCurrentPeriodEnd).toLocaleDateString(undefined, { dateStyle: 'long' })}
                       </p>
                   )}
               </div>
