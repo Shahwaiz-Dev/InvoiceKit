@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useSession, authClient } from "@/lib/auth-client";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   CreditCard,
   CheckCircle2,
@@ -68,10 +69,11 @@ export default function SettingsPage() {
     }
   }, [searchParams]);
 
-  const { data: usageData, isLoading: usageLoading } = useQuery<{
+  const { data: usageData } = useQuery<{
     usage: number;
     limit: number;
     isPro: boolean;
+    plan?: string | null;
   }>({
     queryKey: ["usage"],
     queryFn: () => fetch("/api/usage").then((r) => r.json()),

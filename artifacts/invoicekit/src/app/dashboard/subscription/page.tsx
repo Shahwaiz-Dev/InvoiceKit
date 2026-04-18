@@ -6,8 +6,6 @@ import {
   Check, 
   Zap, 
   ArrowUpRight, 
-  Building2, 
-  User, 
   Info,
   Clock,
   Sparkles
@@ -23,14 +21,21 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { COLORS } from "@/lib/constants";
 import { PLANS, PlanSubTier } from "@/lib/plans";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
+type UsageData = {
+  usage: number;
+  limit: number;
+  isPro: boolean;
+  plan?: string | null;
+  canManageCustomers?: boolean;
+};
+
 export default function SubscriptionPage() {
-  const { data: usage, isLoading } = useQuery({
+  const { data: usage, isLoading } = useQuery<UsageData>({
     queryKey: ["usage"],
     queryFn: async () => {
       const res = await fetch("/api/usage");
@@ -124,9 +129,8 @@ export default function SubscriptionPage() {
                   <span>{usage?.usage} / {usage?.limit} Invoices</span>
                 </div>
                 <Progress 
-                  value={(usage?.usage / usage?.limit) * 100} 
+                  value={usage?.limit ? (usage.usage / usage.limit) * 100 : 0}
                   className="h-2 bg-white/20"
-                  indicatorClassName="bg-white"
                 />
               </div>
               <div className="flex items-center text-xs text-white/70">

@@ -3,6 +3,7 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "@/lib/auth-client";
+import type { Route } from "next";
 import Link from "next/link";
 import {
   FileText,
@@ -93,6 +94,8 @@ export default function DashboardPage() {
       .slice(0, 5);
   }, [invoices]);
 
+  const subscriptionHref = "/dashboard/subscription" as Route;
+
   return (
     <>
       <DashboardHeader 
@@ -125,7 +128,7 @@ export default function DashboardPage() {
                         <Progress value={usageData ? (usageData.usage / usageData.limit) * 100 : 0} className="h-2" />
                         {!usageData?.isPro && (
                             <Button asChild size="sm" variant="default" className="w-full bg-amber-600 hover:bg-amber-700">
-                                <Link href="/dashboard/subscription">Upgrade to Pro</Link>
+                                <Link href={subscriptionHref}>Upgrade to Pro</Link>
                             </Button>
                         )}
                     </div>
