@@ -41,6 +41,12 @@ export const GET = async (req: Request) => {
   const baseUrl = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || `http://localhost:3000`;
   const successUrl = `${baseUrl}/dashboard/settings?checkout=success`;
   try {
+    const hasActiveSubscription = session.user.subscriptionStatus === "active";
+    const currentPlan = session.user.subscriptionPlan as PlanSubTier | null | undefined;
+    if (hasActiveSubscription && queryPlan && currentPlan && currentPlan !== queryPlan) {
+      return NextResponse.redirect(`${baseUrl}/api/customer-portal`);
+    }
+
     let finalUserId = "";
     if (typeof session.user.id === "string") {
       finalUserId = session.user.id;

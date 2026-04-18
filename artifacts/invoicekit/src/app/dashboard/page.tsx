@@ -74,7 +74,7 @@ export default function DashboardPage() {
     enabled: !!session,
   });
 
-  const { data: usageData } = useQuery<{ usage: number, limit: number, isPro: boolean }>({
+  const { data: usageData } = useQuery<{ usage: number, limit: number, isPro: boolean, usageWindowLabel?: string }>({
     queryKey: ["usage"],
     queryFn: () => fetch("/api/usage").then((r) => r.json()),
     enabled: !!session,
@@ -121,7 +121,7 @@ export default function DashboardPage() {
                             {usageData?.isPro && <Zap className="h-4 w-4 text-amber-500 fill-amber-500" />}
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            You have sent {usageData?.usage || 0} out of {usageData?.limit || 0} invoices this month.
+                            You have sent {usageData?.usage || 0} out of {usageData?.limit || 0} invoices this {usageData?.usageWindowLabel || "month"}.
                         </p>
                     </div>
                     <div className="flex flex-col gap-2 min-w-[200px]">

@@ -74,6 +74,7 @@ export default function SettingsPage() {
     limit: number;
     isPro: boolean;
     plan?: string | null;
+    usageWindowLabel?: string;
   }>({
     queryKey: ["usage"],
     queryFn: () => fetch("/api/usage").then((r) => r.json()),
@@ -202,7 +203,9 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between p-4 rounded-lg border border-slate-100 bg-slate-50/50">
                 <div className="space-y-1">
                   <p className="font-semibold text-lg capitalize">{usageData?.plan || "Explorer"}</p>
-                  <p className="text-xs text-muted-foreground">{usageData?.usage} / {usageData?.limit} invoices used this month</p>
+                  <p className="text-xs text-muted-foreground">
+                    {usageData?.usage} / {usageData?.limit} invoices used this {usageData?.usageWindowLabel || "month"}
+                  </p>
                 </div>
                 {usageData?.isPro && <Zap className="h-5 w-5 text-amber-500 fill-amber-500" />}
               </div>

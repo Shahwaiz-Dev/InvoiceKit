@@ -32,7 +32,20 @@ type UsageData = {
   isPro: boolean;
   plan?: string | null;
   canManageCustomers?: boolean;
+  resetAt?: string;
+  usageWindowLabel?: string;
 };
+
+function formatResetLabel(resetAt?: string) {
+  if (!resetAt) return "Resets at the end of your current period";
+  const date = new Date(resetAt);
+  if (Number.isNaN(date.getTime())) return "Resets at the end of your current period";
+  return `Resets on ${date.toLocaleDateString(undefined, {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  })}`;
+}
 
 export default function SubscriptionPage() {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
@@ -58,6 +71,11 @@ export default function SubscriptionPage() {
   const handleUpgrade = (planKey: PlanSubTier) => {
     if (planKey === "explorer") {
       toast.error("You are already on the free plan.");
+      return;
+    }
+    if (usage?.isPro && currentPlanKey !== "explorer" && currentPlanKey !== planKey) {
+      toast.loading("Opening billing portal to change your plan...");
+      window.location.href = "/api/customer-portal";
       return;
     }
     window.location.href = `/api/checkout?plan=${planKey}&billingCycle=${billingCycle}`;
@@ -129,7 +147,9 @@ export default function SubscriptionPage() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium">Monthly Usage</span>
+                  <span className="font-medium">
+                    {usage?.usageWindowLabel === "billing period" ? "Billing Period Usage" : "Monthly Usage"}
+                  </span>
                   <span>{usage?.usage} / {usage?.limit} Invoices</span>
                 </div>
                 <Progress 
@@ -139,7 +159,7 @@ export default function SubscriptionPage() {
               </div>
               <div className="flex items-center text-xs text-white/70">
                 <Clock className="mr-1 h-3 w-3" />
-                Resets on the 1st of next month
+                {formatResetLabel(usage?.resetAt)}
               </div>
             </div>
           </CardContent>
@@ -277,7 +297,11 @@ export default function SubscriptionPage() {
                           : ""
                       }`}
                     >
-                      {planKey === "explorer" ? "Get Started" : `Upgrade ${billingCycle === "yearly" ? "Yearly" : "Monthly"}`}
+                      {planKey === "explorer"
+                        ? "Get Started"
+                        : usage?.isPro && currentPlanKey !== "explorer" && currentPlanKey !== planKey
+                          ? "Change Plan"
+                          : `Upgrade ${billingCycle === "yearly" ? "Yearly" : "Monthly"}`}
                       <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </Button>
                   )}

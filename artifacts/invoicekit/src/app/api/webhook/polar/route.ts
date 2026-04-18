@@ -28,6 +28,7 @@ export const POST = Webhooks({
                 subscriptionId: subscriptionId,
                 subscriptionStatus: subscription.status,
                 subscriptionPlan: plan,
+                subscriptionCurrentPeriodStart: subscription.currentPeriodStart ? new Date(subscription.currentPeriodStart).toISOString() : undefined,
                 subscriptionCurrentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd).toISOString() : undefined,
                 subscriptionStartedAt: subscription.startedAt ? new Date(subscription.startedAt).toISOString() : undefined,
               }
@@ -65,6 +66,7 @@ export const POST = Webhooks({
             $set: {
               subscriptionStatus: subscription.status,
               subscriptionPlan: plan,
+              subscriptionCurrentPeriodStart: subscription.currentPeriodStart ? new Date(subscription.currentPeriodStart).toISOString() : undefined,
               subscriptionCurrentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd).toISOString() : undefined,
             }
           }

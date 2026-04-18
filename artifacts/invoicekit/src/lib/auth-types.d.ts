@@ -6,6 +6,7 @@ declare module "better-auth" {
         subscriptionId?: string;
         subscriptionStatus?: string;
         subscriptionPlan?: string;
+        subscriptionCurrentPeriodStart?: string;
         subscriptionCurrentPeriodEnd?: string;
         subscriptionStartedAt?: string;
     }

@@ -7,20 +7,53 @@ export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ usage: 0, limit: 0, isPro: false });
 
+  const isPro = session.user.subscriptionStatus === "active";
+  const currentPeriodStart = session.user.subscriptionCurrentPeriodStart
+    ? new Date(session.user.subscriptionCurrentPeriodStart)
+    : null;
+  const currentPeriodEnd = session.user.subscriptionCurrentPeriodEnd
+    ? new Date(session.user.subscriptionCurrentPeriodEnd)
+    : null;
+  const startedAt = session.user.subscriptionStartedAt
+    ? new Date(session.user.subscriptionStartedAt)
+    : null;
+
   const startOfMonth = new Date();
   startOfMonth.setDate(1);
   startOfMonth.setHours(0, 0, 0, 0);
 
+  const usagePeriodStart =
+    isPro && currentPeriodStart && !Number.isNaN(currentPeriodStart.getTime())
+      ? currentPeriodStart
+      : isPro && startedAt && !Number.isNaN(startedAt.getTime())
+        ? startedAt
+        : startOfMonth;
+
   const usage = await db.collection("invoices").countDocuments({
     userId: session.user.id,
-    createdAt: { $gte: startOfMonth },
+    createdAt: { $gte: usagePeriodStart },
   });
 
-  const isPro = session.user.subscriptionStatus === "active";
   const plan = session.user.subscriptionPlan;
-  
   const limit = getLimitForPlan(plan);
   const canManageCustomers = plan === "authority";
 
-  return NextResponse.json({ usage, limit, isPro, plan, canManageCustomers });
+  const nextMonth = new Date(startOfMonth);
+  nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+  const resetAt =
+    isPro && currentPeriodEnd && !Number.isNaN(currentPeriodEnd.getTime())
+      ? currentPeriodEnd.toISOString()
+      : nextMonth.toISOString();
+  const usageWindowLabel = isPro ? "billing period" : "month";
+
+  return NextResponse.json({
+    usage,
+    limit,
+    isPro,
+    plan,
+    canManageCustomers,
+    resetAt,
+    usageWindowLabel,
+  });
 }
