@@ -5,6 +5,7 @@
  */
 
 export type PlanSubTier = "explorer" | "momentum" | "authority";
+export type BillingCycle = "monthly" | "yearly";
 
 export interface PlanConfig {
   name: string;
@@ -66,6 +67,18 @@ export function getPlanFromProductId(productId: string | null | undefined): Plan
     }
   }
   return null;
+}
+
+/**
+ * Gets the configured Polar product ID for a plan/billing cycle combination
+ */
+export function getProductIdForPlan(
+  plan: PlanSubTier,
+  billingCycle: BillingCycle,
+): string | undefined {
+  const config = PLANS[plan];
+  if (!config) return undefined;
+  return billingCycle === "yearly" ? config.yearlyProductId : config.monthlyProductId;
 }
 
 /**

@@ -1,4 +1,5 @@
 import { getSession } from "@/lib/auth-session";
+import { getProductIdForPlan, type BillingCycle, type PlanSubTier } from "@/lib/plans";
 import { NextResponse } from "next/server";
 
 export const GET = async (req: Request) => {
@@ -25,8 +26,13 @@ export const GET = async (req: Request) => {
 
   const { searchParams } = new URL(req.url);
   const queryProductId = searchParams.get("productId");
+  const queryPlan = searchParams.get("plan") as PlanSubTier | null;
+  const queryBillingCycle = searchParams.get("billingCycle") as BillingCycle | null;
 
-  const productId = queryProductId || process.env.POLAR_MOMENTUM_MONTHLY_ID;
+  const productId =
+    queryProductId ||
+    (queryPlan ? getProductIdForPlan(queryPlan, queryBillingCycle === "yearly" ? "yearly" : "monthly") : undefined) ||
+    process.env.POLAR_MOMENTUM_MONTHLY_ID;
   if (!productId) {
     return NextResponse.json({ error: "Missing Product ID" }, { status: 400 });
   }

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { PLANS, PlanSubTier } from "@/lib/plans";
+import { PLANS, type BillingCycle, PlanSubTier } from "@/lib/plans";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -33,8 +33,6 @@ type UsageData = {
   plan?: string | null;
   canManageCustomers?: boolean;
 };
-
-type BillingCycle = "monthly" | "yearly";
 
 export default function SubscriptionPage() {
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
@@ -57,19 +55,16 @@ export default function SubscriptionPage() {
     }
   };
 
-  const handleUpgrade = (productId?: string) => {
-    if (!productId) {
-      toast.error("This plan is not available for direct upgrade yet.");
+  const handleUpgrade = (planKey: PlanSubTier) => {
+    if (planKey === "explorer") {
+      toast.error("You are already on the free plan.");
       return;
     }
-    window.location.href = `/api/checkout?productId=${productId}`;
+    window.location.href = `/api/checkout?plan=${planKey}&billingCycle=${billingCycle}`;
   };
 
   const currentPlanKey = (usage?.plan || "explorer") as PlanSubTier;
   const currentPlan = PLANS[currentPlanKey];
-
-  const getPlanProductId = (plan: (typeof PLANS)[PlanSubTier]) =>
-    billingCycle === "yearly" ? plan.yearlyProductId : plan.monthlyProductId;
 
   const getPlanPrice = (plan: (typeof PLANS)[PlanSubTier]) =>
     billingCycle === "yearly" ? plan.yearlyPrice : plan.monthlyPrice;
@@ -218,7 +213,6 @@ export default function SubscriptionPage() {
           {(Object.keys(PLANS) as PlanSubTier[]).map((planKey) => {
             const plan = PLANS[planKey];
             const isCurrent = currentPlanKey === planKey;
-            const productId = getPlanProductId(plan);
             const price = getPlanPrice(plan);
             const periodLabel = billingCycle === "yearly" ? "/yr" : "/mo";
             const yearlySavings =
@@ -254,11 +248,6 @@ export default function SubscriptionPage() {
                       Save ${yearlySavings} per year
                     </p>
                   )}
-                  {!productId && planKey !== "explorer" && (
-                    <p className="mt-2 text-xs font-medium text-amber-600">
-                      {billingCycle === "yearly" ? "Yearly plan not configured yet" : "Monthly plan not configured yet"}
-                    </p>
-                  )}
                 </CardHeader>
                 <CardContent className="flex-1">
                   <div className="space-y-4">
@@ -280,9 +269,8 @@ export default function SubscriptionPage() {
                     </Button>
                   ) : (
                     <Button 
-                      onClick={() => handleUpgrade(productId)}
+                      onClick={() => handleUpgrade(planKey)}
                       variant={planKey === "momentum" ? "default" : "outline"}
-                      disabled={planKey !== "explorer" && !productId}
                       className={`w-full group ${
                         planKey === "momentum" 
                           ? "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-200" 
