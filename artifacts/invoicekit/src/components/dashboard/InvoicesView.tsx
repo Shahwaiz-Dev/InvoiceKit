@@ -248,12 +248,12 @@ export function InvoicesView({ initialInvoices }: InvoicesViewProps) {
                     const total = calcTotal(inv);
                     return (
                       <tr key={inv._id} className="hover:bg-muted/5 transition-colors group">
-                        <td className="px-6 py-4 font-medium">{inv.invoiceNumber}</td>
+                        <td className="px-6 py-4 font-medium font-mono">{inv.invoiceNumber}</td>
                         <td className="px-6 py-4">
                           <div className="font-medium text-foreground">{inv.clientName}</div>
                           <div className="text-xs text-muted-foreground">{inv.clientEmail}</div>
                         </td>
-                        <td className="px-6 py-4 font-semibold">
+                        <td className="px-6 py-4 font-semibold font-mono">
                           {formatCurrency(total, inv.currency || "USD")}
                         </td>
                         <td className="px-6 py-4">

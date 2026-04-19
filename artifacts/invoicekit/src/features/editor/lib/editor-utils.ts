@@ -2,6 +2,26 @@ import { InvoiceData, TemplateType } from "@/lib/schema";
 
 export const MAX_LOGO_SIZE_BYTES = 2 * 1024 * 1024;
 
+export const getNextInvoiceNumber = (lastNumber: string): string => {
+  if (!lastNumber) return "INV-001";
+  
+  // Find the last group of digits in the string
+  const match = lastNumber.match(/^(.*?)(\d+)([^\d]*)$/);
+  
+  if (!match) {
+    // If no digits found, just append -001
+    return `${lastNumber}-001`;
+  }
+  
+  const [_, prefix, numStr, suffix] = match;
+  const nextNum = parseInt(numStr, 10) + 1;
+  
+  // Preserve leading zeros
+  const paddedNum = nextNum.toString().padStart(numStr.length, "0");
+  
+  return `${prefix}${paddedNum}${suffix}`;
+};
+
 export const toInputDate = (date: Date) => {
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, "0");
@@ -171,17 +191,11 @@ let resolutionCanvas: HTMLCanvasElement | null = null;
 let resolutionCtx: CanvasRenderingContext2D | null = null;
 
 /**
- * Resolves modern CSS colors (oklch, oklab, lab, lch, hwb, relative colors)
- * to standard RGB/RGBA strings using a canvas shim.
- * html2canvas/html2pdf does not support modern color spaces, so we must
- * convert them before cloning the document for printing.
+ * Resolves a single modern CSS color (oklch, oklab, lab, lch, hwb) 
+ * to standard RGB/RGBA using a canvas shim.
  */
-export const resolveModernColor = (colorStr: string): string => {
+const resolveSingleModernColor = (colorStr: string): string => {
   if (!colorStr) return colorStr;
-  
-  // Check if the color string contains modern color functions or relative syntax
-  const modernPattern = /(oklch|oklab|lab|lch|hwb|from)/;
-  if (!modernPattern.test(colorStr)) return colorStr;
   if (typeof document === "undefined") return colorStr;
 
   try {
@@ -197,17 +211,57 @@ export const resolveModernColor = (colorStr: string): string => {
 
     // Clear previous state
     resolutionCtx.clearRect(0, 0, 1, 1);
+    
+    // We try to set the fillStyle. If the browser supports it, it will work.
+    // If not, fillStyle will remain its previous value (or default).
+    const prevFillStyle = resolutionCtx.fillStyle;
     resolutionCtx.fillStyle = colorStr;
+    
+    // If setting fillStyle failed (invalid color for this browser's canvas), return original
+    if (resolutionCtx.fillStyle === prevFillStyle && colorStr !== prevFillStyle) {
+      return colorStr;
+    }
+
     resolutionCtx.fillRect(0, 0, 1, 1);
     const [r, g, b, a] = resolutionCtx.getImageData(0, 0, 1, 1).data;
     
-    // If alpha is 255, return simple rgb, otherwise rgba
     if (a === 255) {
       return `rgb(${r}, ${g}, ${b})`;
     }
     return `rgba(${r}, ${g}, ${b}, ${parseFloat((a / 255).toFixed(3))})`;
   } catch (e) {
-    console.warn("Failed to resolve modern color:", colorStr, e);
     return colorStr;
+  }
+};
+
+/**
+ * Resolves modern CSS colors (oklch, oklab, lab, lch, hwb, relative colors)
+ * to standard RGB/RGBA strings. Handles complex strings like gradients and shadows.
+ * html2canvas/html2pdf does not support modern color spaces, so we must
+ * convert them before cloning the document for printing.
+ */
+export const resolveModernColor = (value: string): string => {
+  if (!value) return value;
+  
+  // Check if the string contains modern color functions
+  const modernPattern = /(oklch|oklab|lab|lch|hwb|from|color-mix)/;
+  if (!modernPattern.test(value)) return value;
+  if (typeof document === "undefined") return value;
+
+  try {
+    // Regex to find color functions: oklch(...), oklab(...), color-mix(...), etc.
+    // Handles one level of nested parentheses (like var() or nested color functions)
+    const colorRegex = /(oklch|oklab|lab|lch|hwb|color-mix)\((?:[^()]+|\([^()]*\))*\)/g;
+    
+    // If it's a simple color string (just the function), resolve it directly
+    if (value.match(/^(oklch|oklab|lab|lch|hwb|color-mix)\([^)]+\)$/)) {
+      return resolveSingleModernColor(value);
+    }
+
+    // If it's a complex string (gradient, box-shadow), replace all occurrences
+    return value.replace(colorRegex, (match) => resolveSingleModernColor(match));
+  } catch (e) {
+    console.warn("Failed to resolve modern color:", value, e);
+    return value;
   }
 };

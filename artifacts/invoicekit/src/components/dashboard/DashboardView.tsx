@@ -148,7 +148,7 @@ export function DashboardView({ initialInvoices, initialUsage, userName }: Dashb
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(stats.billed, "USD")}</div>
+              <div className="text-2xl font-bold font-mono">{formatCurrency(stats.billed, "USD")}</div>
               <p className="text-xs text-muted-foreground">Lifetime across all invoices</p>
             </CardContent>
           </Card>
@@ -158,7 +158,7 @@ export function DashboardView({ initialInvoices, initialUsage, userName }: Dashb
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
+              <div className="text-2xl font-bold font-mono">{stats.total}</div>
               <p className="text-xs text-muted-foreground">Active records in database</p>
             </CardContent>
           </Card>
@@ -168,7 +168,7 @@ export function DashboardView({ initialInvoices, initialUsage, userName }: Dashb
               <Send className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.sent}</div>
+              <div className="text-2xl font-bold font-mono">{stats.sent}</div>
               <p className="text-xs text-muted-foreground">Awaiting payment</p>
             </CardContent>
           </Card>
@@ -178,7 +178,7 @@ export function DashboardView({ initialInvoices, initialUsage, userName }: Dashb
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.paid}</div>
+              <div className="text-2xl font-bold font-mono">{stats.paid}</div>
               <p className="text-xs text-muted-foreground">Successfully collected</p>
             </CardContent>
           </Card>
@@ -218,13 +218,13 @@ export function DashboardView({ initialInvoices, initialUsage, userName }: Dashb
                                         <FileText className="h-5 w-5" />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-medium tracking-tight">{inv.invoiceNumber}</p>
+                                        <p className="text-sm font-medium tracking-tight font-mono">{inv.invoiceNumber}</p>
                                         <p className="text-xs text-muted-foreground">{inv.clientName}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-6">
                                     <div className="text-right hidden sm:block">
-                                        <p className="text-sm font-bold">{formatCurrency(calcTotal(inv), inv.currency || "USD")}</p>
+                                        <p className="text-sm font-bold font-mono">{formatCurrency(calcTotal(inv), inv.currency || "USD")}</p>
                                         <p className="text-[10px] text-muted-foreground uppercase">{inv.status}</p>
                                     </div>
                                     <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />

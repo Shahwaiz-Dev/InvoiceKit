@@ -21,7 +21,7 @@ import { DraftBanner } from "@/features/editor/components/DraftBanner";
 import { UpsellDialog } from "@/features/editor/components/UpsellDialog";
 import { useInvoiceActions } from "@/features/editor/hooks/use-invoice-actions";
 import { useEditorSync } from "@/features/editor/hooks/use-editor-sync";
-import { getLabels, getDefaultInvoiceData } from "@/features/editor/lib/editor-utils";
+import { getLabels, getDefaultInvoiceData, getNextInvoiceNumber } from "@/features/editor/lib/editor-utils";
 import {
   DEFAULT_TEMPLATE,
   INVOICE_TEMPLATES,
@@ -141,6 +141,27 @@ function EditorContent() {
     queryFn: () => fetch("/api/customers").then((r) => r.json()),
     enabled: !!session && usageData?.canManageCustomers,
   });
+
+  // Smart Invoice Numbering
+  const { data: lastNumberData } = useQuery<{ lastNumber: string | null }>({
+    queryKey: ["last-invoice-number"],
+    queryFn: () => fetch("/api/invoices/last-number").then((r) => r.json()),
+    enabled: !!session && !invoiceId, // Only for new invoices
+    staleTime: Infinity, // Only need it once per session/mount
+  });
+
+  useEffect(() => {
+    if (lastNumberData && lastNumberData.lastNumber && !invoiceId) {
+      const nextNumber = getNextInvoiceNumber(lastNumberData.lastNumber);
+      const current = form.getValues("invoiceNumber");
+      
+      // Only update if it's still the default 'INV-001'
+      if (current === "INV-001") {
+        form.setValue("invoiceNumber", nextNumber);
+        setData((prev) => ({ ...prev, invoiceNumber: nextNumber }));
+      }
+    }
+  }, [lastNumberData, invoiceId, form]);
 
   useEffect(() => {
     if (settingsData && !profileLoaded) {

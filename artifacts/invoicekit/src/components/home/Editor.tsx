@@ -229,6 +229,11 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
               "outlineColor",
               "fill",
               "stroke",
+              "boxShadow",
+              "background",
+              "backgroundImage",
+              "border",
+              "outline"
             ];
 
             colorProps.forEach((prop) => {
@@ -241,7 +246,8 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
                 value.includes("lab") || 
                 value.includes("lch") || 
                 value.includes("hwb") || 
-                value.includes("from")
+                value.includes("from") ||
+                value.includes("color-mix")
               );
 
               if (isModernColor) {

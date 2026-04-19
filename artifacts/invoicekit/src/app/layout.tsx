@@ -77,7 +77,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body suppressHydrationWarning className="font-sans antialiased">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          {/* Preload/warm-up for fonts used in invoices and dashboard numbers */}
+          <div className="font-mono invisible h-0 w-0 overflow-hidden" aria-hidden="true">.</div>
+        </Providers>
       </body>
     </html>
   );

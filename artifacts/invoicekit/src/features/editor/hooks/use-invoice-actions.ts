@@ -70,12 +70,28 @@ export function useInvoiceActions() {
               node.style.letterSpacing = '-0.02em';
             }
 
-            const colorProps = ["color", "backgroundColor", "borderColor", "borderTopColor", "borderBottomColor", "borderLeftColor", "borderRightColor", "outlineColor", "fill", "stroke"];
+            const colorProps = [
+              "color", 
+              "backgroundColor", 
+              "borderColor", 
+              "borderTopColor", 
+              "borderBottomColor", 
+              "borderLeftColor", 
+              "borderRightColor", 
+              "outlineColor", 
+              "fill", 
+              "stroke",
+              "boxShadow",
+              "background",
+              "backgroundImage",
+              "border",
+              "outline"
+            ];
             colorProps.forEach((prop) => {
               const cssProperty = prop.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
               const val = node.style.getPropertyValue(cssProperty) || computedStyle.getPropertyValue(cssProperty);
 
-              const isModernColor = val && (val.includes("oklch") || val.includes("oklab") || val.includes("lab") || val.includes("lch") || val.includes("hwb") || val.includes("from"));
+              const isModernColor = val && (val.includes("oklch") || val.includes("oklab") || val.includes("lab") || val.includes("lch") || val.includes("hwb") || val.includes("from") || val.includes("color-mix"));
               if (isModernColor) {
                 node.style.setProperty(cssProperty, resolveModernColor(val));
               }
