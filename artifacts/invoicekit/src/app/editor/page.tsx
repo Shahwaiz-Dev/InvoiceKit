@@ -120,6 +120,9 @@ function EditorContent() {
     businessEmail?: string;
     businessAddress?: string;
     logoUrl?: string;
+    taxId?: string;
+    website?: string;
+    phone?: string;
   } | null>({
     queryKey: ["settings"],
     queryFn: () => fetch("/api/settings").then((r) => (r.ok ? r.json() : null)),
@@ -149,6 +152,9 @@ function EditorContent() {
         businessEmail: settingsData.businessEmail || current.businessEmail,
         businessAddress: settingsData.businessAddress || current.businessAddress,
         logoUrl: settingsData.logoUrl || current.logoUrl,
+        taxId: settingsData.taxId || current.taxId,
+        website: settingsData.website || current.website,
+        phone: settingsData.phone || current.phone,
       });
       setData(form.getValues());
     }

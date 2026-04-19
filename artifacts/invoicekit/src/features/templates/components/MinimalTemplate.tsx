@@ -21,6 +21,9 @@ export function MinimalTemplate({ data }: TemplateProps) {
           <div className="font-medium text-lg mb-1">{data.businessName || "Your Name"}</div>
           <div className="font-sans text-sm text-muted-foreground whitespace-pre-wrap">{data.businessAddress}</div>
           <div className="font-sans text-sm text-muted-foreground mt-1">{data.businessEmail}</div>
+          {data.phone && <div className="font-sans text-xs text-muted-foreground mt-1">{data.phone}</div>}
+          {data.website && <div className="font-sans text-xs text-muted-foreground mt-1">{data.website}</div>}
+          {data.taxId && <div className="font-sans text-xs text-muted-foreground mt-1">Tax ID: {data.taxId}</div>}
         </div>
         <div>
           <div className="text-muted-foreground font-sans text-xs uppercase tracking-widest mb-4">To</div>

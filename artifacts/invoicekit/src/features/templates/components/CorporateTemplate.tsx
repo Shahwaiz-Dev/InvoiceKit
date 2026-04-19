@@ -20,6 +20,9 @@ export function CorporateTemplate({ data }: TemplateProps) {
           <div>
             <div className="font-bold text-xl">{data.businessName || "Your Business Name"}</div>
             <div className="text-white/80 text-sm">{data.businessEmail}</div>
+            {data.phone && <div className="text-white/80 text-xs">{data.phone}</div>}
+            {data.website && <div className="text-white/80 text-xs">{data.website}</div>}
+            {data.taxId && <div className="text-white/80 text-xs mt-1">Tax ID: {data.taxId}</div>}
           </div>
         </div>
         <div className="text-right">

@@ -23,6 +23,9 @@ export const baseInvoiceSchema = z
     businessEmail: optionalEmail,
     businessAddress: z.string().trim().optional(),
     logoUrl: z.string().optional(),
+    taxId: z.string().trim().optional(),
+    website: z.string().trim().optional(),
+    phone: z.string().trim().optional(),
 
     clientName: z.string().trim().min(2, "Client name is required"),
     clientEmail: optionalEmail,

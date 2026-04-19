@@ -20,6 +20,10 @@ export function CreativeTemplate({ data }: TemplateProps) {
             <div className="text-xs font-black uppercase tracking-[0.3em] opacity-80 mb-2">Invoice Issue</div>
             <div className="text-5xl font-black tracking-tighter leading-none italic uppercase">{data.businessName || "Creative Co"}</div>
             <div className="text-sm font-medium opacity-90">{data.businessEmail}</div>
+            <div className="text-[10px] opacity-70 whitespace-pre-wrap">{data.businessAddress}</div>
+            {data.phone && <div className="text-[10px] opacity-70">{data.phone}</div>}
+            {data.website && <div className="text-[10px] opacity-70">{data.website}</div>}
+            {data.taxId && <div className="text-[10px] font-black opacity-80 mt-1 uppercase tracking-widest">Tax ID: {data.taxId}</div>}
           </div>
           <div className="text-right">
             <div className="text-4xl font-black italic">#{data.invoiceNumber || "001"}</div>

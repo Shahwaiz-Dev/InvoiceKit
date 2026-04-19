@@ -19,6 +19,9 @@ type SettingsForm = {
   businessEmail: string;
   businessAddress: string;
   logoUrl: string;
+  taxId?: string;
+  website?: string;
+  phone?: string;
 };
 
 const EMPTY_FORM: SettingsForm = {
@@ -53,6 +56,9 @@ export default function SettingsPage() {
         businessEmail: settingsData.businessEmail || "",
         businessAddress: settingsData.businessAddress || "",
         logoUrl: settingsData.logoUrl || "",
+        taxId: settingsData.taxId || "",
+        website: settingsData.website || "",
+        phone: settingsData.phone || "",
       });
     }
   }, [settingsData]);
@@ -171,6 +177,38 @@ export default function SettingsPage() {
                       placeholder="hello@acme.com"
                     />
                   </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="taxId">Tax ID / VAT</Label>
+                    <Input
+                      id="taxId"
+                      value={form.taxId}
+                      onChange={(e) => setForm((f) => ({ ...f, taxId: e.target.value }))}
+                      placeholder="Tax-123"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      value={form.phone}
+                      onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                      placeholder="+1 (555) 000"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label htmlFor="website">Website</Label>
+                  <Input
+                    id="website"
+                    type="url"
+                    value={form.website}
+                    onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))}
+                    placeholder="https://acme.com"
+                  />
                 </div>
 
                 <div className="space-y-1.5">

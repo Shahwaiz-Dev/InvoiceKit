@@ -16,6 +16,10 @@ export function ModernTemplate({ data }: TemplateProps) {
             <div className="text-4xl font-black tracking-tighter text-indigo-600 mb-4">INVOICE</div>
             <div className="font-bold text-lg">{data.businessName || "Your Company"}</div>
             <p className="text-xs text-slate-500 whitespace-pre-wrap">{data.businessAddress}</p>
+            <p className="text-xs text-indigo-500 font-medium">{data.businessEmail}</p>
+            {data.phone && <p className="text-[10px] text-slate-400">{data.phone}</p>}
+            {data.website && <p className="text-[10px] text-slate-400">{data.website}</p>}
+            {data.taxId && <p className="text-[10px] text-slate-400 uppercase font-black mt-1">Tax ID: {data.taxId}</p>}
           </div>
           <div className="text-right">
             {data.logoUrl && <img src={data.logoUrl} alt="Logo" className="max-h-12 ml-auto mb-4" />}

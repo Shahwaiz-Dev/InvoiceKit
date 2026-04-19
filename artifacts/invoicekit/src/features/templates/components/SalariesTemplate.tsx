@@ -18,6 +18,9 @@ export function SalariesTemplate({ data }: TemplateProps) {
         <div className="text-right">
           <div className="font-bold text-lg">{data.businessName || "Employer Name"}</div>
           <div className="text-slate-500 text-xs">{data.businessEmail}</div>
+          {data.phone && <div className="text-slate-500 text-[10px]">{data.phone}</div>}
+          {data.website && <div className="text-slate-500 text-[10px]">{data.website}</div>}
+          {data.taxId && <div className="text-slate-500 text-[10px] mt-1">Tax ID: {data.taxId}</div>}
         </div>
       </div>
 

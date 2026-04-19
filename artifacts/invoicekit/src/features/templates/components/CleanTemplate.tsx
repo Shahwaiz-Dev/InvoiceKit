@@ -20,6 +20,9 @@ export function CleanTemplate({ data }: TemplateProps) {
           <div className="font-bold text-lg mb-1">{data.businessName || "Your Business Name"}</div>
           <div className="text-muted-foreground text-sm whitespace-pre-wrap">{data.businessAddress}</div>
           <div className="text-muted-foreground text-sm">{data.businessEmail}</div>
+          {data.phone && <div className="text-muted-foreground text-sm">{data.phone}</div>}
+          {data.website && <div className="text-muted-foreground text-sm">{data.website}</div>}
+          {data.taxId && <div className="text-muted-foreground text-sm mt-1">Tax ID: {data.taxId}</div>}
         </div>
         <div className="text-right">
           <div className="text-3xl font-serif text-primary mb-2">INVOICE</div>

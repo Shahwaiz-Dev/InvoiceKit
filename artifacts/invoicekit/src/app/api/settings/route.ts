@@ -11,7 +11,7 @@ const ALLOWED_MIME_TYPES = new Set([
   "image/gif",
 ]);
 
-const ALLOWED_FIELDS = ["businessName", "businessEmail", "businessAddress", "logoUrl"] as const;
+const ALLOWED_FIELDS = ["businessName", "businessEmail", "businessAddress", "logoUrl", "taxId", "website", "phone"] as const;
 
 export async function GET() {
   const session = await getSession();

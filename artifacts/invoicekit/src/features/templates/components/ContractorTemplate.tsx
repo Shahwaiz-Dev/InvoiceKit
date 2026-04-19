@@ -16,6 +16,9 @@ export function ContractorTemplate({ data }: TemplateProps) {
           <div className="font-bold text-xl">{data.businessName || "Your Name"}</div>
           <div className="text-muted-foreground mt-1 text-sm whitespace-pre-wrap">{data.businessAddress}</div>
           <div className="text-muted-foreground text-sm">{data.businessEmail}</div>
+          {data.phone && <div className="text-muted-foreground text-xs">{data.phone}</div>}
+          {data.website && <div className="text-muted-foreground text-xs">{data.website}</div>}
+          {data.taxId && <div className="text-muted-foreground text-xs mt-1">Tax ID: {data.taxId}</div>}
         </div>
         <div className="text-right space-y-2 text-sm bg-gray-50 p-4 rounded-lg">
           <div className="flex justify-between gap-6">
