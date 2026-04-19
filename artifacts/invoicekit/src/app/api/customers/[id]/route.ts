@@ -1,6 +1,7 @@
 import { getSession } from "@/lib/auth-session";
 import { db, ObjectId } from "@workspace/db";
 import { NextResponse } from "next/server";
+import { safeObjectId } from "@/lib/server-utils";
 
 export async function DELETE(
   req: Request,
@@ -11,8 +12,13 @@ export async function DELETE(
 
   const { id } = await params;
 
+  const customerObjectId = safeObjectId(id);
+  if (!customerObjectId) {
+    return NextResponse.json({ error: "Invalid customer ID" }, { status: 400 });
+  }
+
   const result = await db.collection("customers").deleteOne({
-    _id: new ObjectId(id),
+    _id: customerObjectId,
     userId: session.user.id,
   });
 

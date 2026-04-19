@@ -1,3 +1,4 @@
+import "server-only";
 import { MongoClient, Db, ObjectId } from "mongodb";
 export { ObjectId, MongoClient, Db };
 

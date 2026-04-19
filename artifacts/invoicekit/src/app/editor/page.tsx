@@ -139,7 +139,7 @@ function EditorContent() {
   const { data: customers = [] } = useQuery<any[]>({
     queryKey: ["customers"],
     queryFn: () => fetch("/api/customers").then((r) => r.json()),
-    enabled: !!session && usageData?.canManageCustomers,
+    enabled: !!session && (session.user as any).subscriptionPlan === "authority",
   });
 
   // Smart Invoice Numbering

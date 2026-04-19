@@ -3,6 +3,7 @@ import { db } from "@workspace/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { invoiceSchema, baseInvoiceSchema } from "@/lib/schema";
+import { getLimitForPlan } from "@/lib/plans";
 
 export const dynamic = "force-dynamic";
 
@@ -56,13 +57,13 @@ export async function POST(req: Request) {
     createdAt: { $gte: startOfMonth },
   });
 
-  const isPro = session.user.subscriptionStatus === "active";
-  const limit = isPro ? 20 : 1;
+  const limit = getLimitForPlan(session.user.subscriptionPlan);
+  const isCapped = invoiceCount >= limit;
 
-  if (invoiceCount >= limit) {
+  if (isCapped) {
     return NextResponse.json(
-        { error: "Monthly invoice limit reached. Please upgrade to Pro." },
-        { status: 403 }
+      { error: `Monthly invoice limit reached (${limit}). Please upgrade for more.` },
+      { status: 403 },
     );
   }
 

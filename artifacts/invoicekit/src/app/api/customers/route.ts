@@ -1,6 +1,7 @@
 import { getSession } from "@/lib/auth-session";
 import { db, ObjectId } from "@workspace/db";
 import { NextResponse } from "next/server";
+import { safeObjectId } from "@/lib/server-utils";
 
 export async function GET() {
   const session = await getSession();
@@ -42,8 +43,12 @@ export async function POST(req: Request) {
   };
 
   if (_id) {
+    const customerObjectId = safeObjectId(_id);
+    if (!customerObjectId) {
+      return NextResponse.json({ error: "Invalid customer ID" }, { status: 400 });
+    }
     await db.collection("customers").updateOne(
-      { _id: new ObjectId(_id), userId: session.user.id },
+      { _id: customerObjectId, userId: session.user.id },
       { $set: customerData }
     );
     return NextResponse.json({ success: true, message: "Customer updated" });

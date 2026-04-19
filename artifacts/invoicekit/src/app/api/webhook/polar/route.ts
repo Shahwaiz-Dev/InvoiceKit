@@ -1,6 +1,7 @@
 import { Webhooks } from "@polar-sh/nextjs";
 import { db, ObjectId } from "@workspace/db";
 import { getPlanFromProductId } from "@/lib/plans";
+import { safeObjectId } from "@/lib/server-utils";
 
 export const POST = Webhooks({
   webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,
@@ -18,10 +19,11 @@ export const POST = Webhooks({
         const productId = subscription.productId;
         const plan = getPlanFromProductId(productId);
         
+        const userObjectId = safeObjectId(userId as string);
         console.log(`[POLAR WEBHOOK] Extracted userId: ${userId}, customerId: ${polarCustomerId}, subStatus: ${subscription.status}`);
-        if (userId) {
+        if (userObjectId) {
           await db.collection("user").updateOne(
-            { _id: new ObjectId(userId as string) },
+            { _id: userObjectId },
             {
               $set: {
                 polarCustomerId: polarCustomerId,
@@ -43,10 +45,11 @@ export const POST = Webhooks({
         const userId = order.metadata?.userId || order.customFieldData?.userId;
         const polarCustomerId = order.customerId;
         
+        const userObjectId = safeObjectId(userId as string);
         console.log(`[POLAR WEBHOOK] Order extracted. userId: ${userId}, customerId: ${polarCustomerId}`);
-        if (userId) {
+        if (userObjectId) {
           await db.collection("user").updateOne(
-            { _id: new ObjectId(userId as string) },
+            { _id: userObjectId },
             {
               $set: {
                 polarCustomerId: polarCustomerId,
