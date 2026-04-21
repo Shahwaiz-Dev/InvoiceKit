@@ -100,13 +100,9 @@ export async function POST(req: Request) {
         userId: { $in: userIdVariants },
       });
       
-      const deletedUser = userObjectId
-        ? await db.collection("user").deleteOne({ _id: userObjectId })
-        : null;
-        
-      if (!deletedUser || deletedUser.deletedCount === 0) {
-        await db.collection("user").deleteOne({ _id: normalizedUserId });
-      }
+      await db.collection("user").deleteOne({
+        _id: { $in: userIdVariants } as any,
+      });
     }
 
     console.log(

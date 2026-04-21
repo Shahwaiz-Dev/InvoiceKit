@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useInView, Variant } from "framer-motion"
+import { motion, useInView, Variants } from "framer-motion"
 import { useRef } from "react"
 import { cn } from "@/lib/utils"
 
@@ -8,10 +8,7 @@ interface TimelineContentProps {
   children: React.ReactNode
   animationNum: number
   timelineRef: React.RefObject<HTMLElement | null>
-  customVariants?: {
-    hidden: Variant
-    visible: Variant | ((i: number) => Variant)
-  }
+  customVariants?: Variants
   className?: string
   as?: React.ElementType
 }
@@ -26,7 +23,7 @@ export function TimelineContent({
 }: TimelineContentProps) {
   const isInView = useInView(timelineRef, { once: true, margin: "-100px" })
 
-  const defaultVariants = {
+  const defaultVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i: number) => ({
       opacity: 1,
