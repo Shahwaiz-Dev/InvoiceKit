@@ -58,8 +58,16 @@ export function useInvoiceActions() {
 
           const style = clonedDoc.createElement('style');
           style.innerHTML = `
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-            * { font-family: 'Inter', system-ui, -apple-system, sans-serif !important; }
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Great+Vibes&family=Pacifico&family=Dancing+Script:wght@400;700&display=swap');
+            
+            * :not(.signature-font) { 
+              font-family: 'Inter', system-ui, -apple-system, sans-serif !important; 
+            }
+            
+            .signature-font {
+              /* Ensure signature fonts are preserved */
+              font-family: inherit !important;
+            }
           `;
           clonedDoc.head.appendChild(style);
 

@@ -1,5 +1,6 @@
 import { InvoiceData } from "@/lib/schema";
 import { getTemplateUtils } from "../lib/template-utils";
+import { SignatureBlock } from "./SignatureBlock";
 
 interface TemplateProps {
   data: InvoiceData;
@@ -92,12 +93,17 @@ export function CleanTemplate({ data }: TemplateProps) {
         </div>
       </div>
 
-      {data.notes && (
-        <div className="mt-12 pt-8 border-t border-border">
-          <div className="font-bold text-sm text-muted-foreground uppercase tracking-wider mb-2">Notes / Terms</div>
-          <div className="text-sm whitespace-pre-wrap">{data.notes}</div>
+      <div className="flex justify-between items-end mt-12 pt-8 border-t border-border">
+        <div className="flex-1 mr-8">
+          {data.notes && (
+            <>
+              <div className="font-bold text-sm text-muted-foreground uppercase tracking-wider mb-2">Notes / Terms</div>
+              <div className="text-sm whitespace-pre-wrap">{data.notes}</div>
+            </>
+          )}
         </div>
-      )}
+        <SignatureBlock signature={data.signature} />
+      </div>
     </div>
   );
 }

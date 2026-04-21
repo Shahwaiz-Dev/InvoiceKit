@@ -9,6 +9,7 @@ import { InvoiceInfoSection } from "./sections/InvoiceInfoSection";
 import { LineItemsSection } from "./sections/LineItemsSection";
 import { FinancialsSection } from "./sections/FinancialsSection";
 import { NotesSection } from "./sections/NotesSection";
+import { SignatureSection } from "./sections/SignatureSection";
 import { FormSectionWrapper } from "./FormSectionWrapper";
 
 interface EditorSidebarProps {
@@ -89,6 +90,10 @@ export function EditorSidebar({
 
             <FormSectionWrapper title={labels.notesSection} defaultOpen={false}>
               <NotesSection form={form} labels={labels} />
+            </FormSectionWrapper>
+
+            <FormSectionWrapper title="Signature" defaultOpen={false}>
+              <SignatureSection form={form} />
             </FormSectionWrapper>
           </form>
         </Form>
