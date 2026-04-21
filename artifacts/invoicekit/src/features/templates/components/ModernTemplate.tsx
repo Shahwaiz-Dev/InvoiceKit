@@ -1,5 +1,6 @@
 import { InvoiceData } from "@/lib/schema";
 import { getTemplateUtils } from "../lib/template-utils";
+import { SignatureBlock } from "./SignatureBlock";
 
 interface TemplateProps {
   data: InvoiceData;
@@ -85,10 +86,11 @@ export function ModernTemplate({ data }: TemplateProps) {
                   <span className="font-mono">-{formatCurrency(discountAmount)}</span>
                 </div>
               )}
-              <div className="flex justify-between items-center bg-indigo-600 text-white p-5 rounded-2xl shadow-lg shadow-indigo-600/20 mt-6">
+              <div className="flex justify-between items-center bg-indigo-600 text-white p-5 rounded-2xl shadow-lg shadow-indigo-600/20 mt-6 mb-8">
                 <span className="text-xs font-black uppercase tracking-widest opacity-80">Total Amount</span>
                 <span className="text-2xl font-black">{formatCurrency(total)}</span>
               </div>
+              <SignatureBlock signature={data.signature} />
             </div>
           </div>
         </div>

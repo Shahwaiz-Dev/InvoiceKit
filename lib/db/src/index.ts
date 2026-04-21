@@ -23,7 +23,13 @@ declare global {
   var _mongoClient: MongoClient | undefined;
 }
 
-const options = {};
+const options = {
+  maxPoolSize: 10,
+  minPoolSize: 2,
+  maxIdleTimeMS: 30000,
+  connectTimeoutMS: 5000,
+  socketTimeoutMS: 30000,
+};
 
 if (!global._mongoClient) {
   global._mongoClient = new MongoClient(uri, options);

@@ -1,5 +1,6 @@
 import { InvoiceData } from "@/lib/schema";
 import { getTemplateUtils } from "../lib/template-utils";
+import { SignatureBlock } from "./SignatureBlock";
 
 interface TemplateProps {
   data: InvoiceData;
@@ -78,10 +79,11 @@ export function CreativeTemplate({ data }: TemplateProps) {
               <div className="flex justify-between gap-20"><span>Subtotal</span> <span className="text-slate-900 italic">{formatCurrency(subtotal)}</span></div>
               {data.taxRate > 0 && <div className="flex justify-between gap-20"><span>Tax ({data.taxRate}%)</span> <span className="text-fuchsia-600 italic">+{formatCurrency(tax)}</span></div>}
               {data.discount > 0 && <div className="flex justify-between gap-20"><span>Discount ({data.discount}%)</span> <span className="text-cyan-600 italic">-{formatCurrency(discountAmount)}</span></div>}
-              <div className="flex justify-between text-sm py-4 border-t border-slate-100 text-slate-900">
+              <div className="flex justify-between text-sm py-4 border-t border-slate-100 text-slate-900 mb-6">
                 <span>Grand Total</span>
                 <span className="text-2xl font-black italic bg-gradient-to-r from-fuchsia-600 to-indigo-600 bg-clip-text text-transparent">{formatCurrency(total)}</span>
               </div>
+              <SignatureBlock signature={data.signature} />
             </div>
           </div>
         </div>

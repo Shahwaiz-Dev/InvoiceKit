@@ -46,6 +46,12 @@ export const baseInvoiceSchema = z
     currency: z.string().length(3, "Use 3-letter code").default("USD"),
 
     notes: z.string().trim().optional(),
+    signature: z
+      .object({
+        text: z.string().trim().optional(),
+        font: z.string().optional(),
+      })
+      .optional(),
   });
 
 export const invoiceSchema = baseInvoiceSchema.refine((data) => data.dueDate >= data.issueDate, {

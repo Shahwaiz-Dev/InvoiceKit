@@ -116,7 +116,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        
+
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
             <SidebarMenu>
@@ -161,13 +161,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 sideOffset={4}
               >
                 <DropdownMenuItem asChild>
-                    <Link href="/dashboard/settings" className="w-full cursor-pointer">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Account Settings
-                    </Link>
+                  <Link href="/dashboard/settings" className="w-full cursor-pointer">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Account Settings
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   onClick={() => signOut({ fetchOptions: { onSuccess: () => { window.location.href = "/" } } })}
                   className="text-destructive focus:text-destructive cursor-pointer"
                 >

@@ -1,15 +1,35 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import Script from "next/script";
 import "./globals.css";
 import { Providers } from "./providers";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Great_Vibes, Pacifico, Dancing_Script } from "next/font/google";
+
+const greatVibes = Great_Vibes({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-signature-1",
+});
+
+const pacifico = Pacifico({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-signature-2",
+});
+
+const dancingScript = Dancing_Script({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-signature-3",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://invoicekit.app"),
   title: {
     default: "Free Invoice Generator | Create Professional Invoice Templates Online",
-    template: "%s | InvoiceKit",
+    template: "%s | Professional Invoice Templates | InvoiceKit",
   },
   description:
     "InvoiceKit is a free invoice generator for creating professional PDF invoices instantly. Use the Clean template without signing up, then create an account to unlock the full template library.",
@@ -74,9 +94,36 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://invoicekit.app",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Templates",
+        item: "https://invoicekit.app/templates",
+      },
+    ],
+  };
+
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable} ${greatVibes.variable} ${pacifico.variable} ${dancingScript.variable}`}
+    >
       <body suppressHydrationWarning className="font-sans antialiased">
+        <Script
+          id="breadcrumb-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
         <Providers>
           {children}
           {/* Preload/warm-up for fonts used in invoices and dashboard numbers */}
