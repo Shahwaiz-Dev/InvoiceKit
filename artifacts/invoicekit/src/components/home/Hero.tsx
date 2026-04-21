@@ -34,10 +34,10 @@ export function Hero() {
             Create professional PDF invoices instantly with our <strong>free invoice generator</strong>. Start with the <strong>Clean</strong> template without signing up, then create a free account to unlock the rest of the <strong>invoice template</strong> library, saved invoices, and email sending.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4">
             <Link
               href="/editor?template=clean"
-              className="h-14 px-8 rounded-full bg-primary hover:bg-secondary text-white font-medium transition-colors inline-flex items-center gap-2"
+              className="w-full sm:w-auto h-14 px-8 rounded-full bg-primary hover:bg-primary/90 text-white font-bold transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
             >
               Use Clean Template <span>&rarr;</span>
             </Link>
@@ -45,16 +45,16 @@ export function Hero() {
             {session ? (
               <button 
                 onClick={() => scrollTo("templates")}
-                className="text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-colors font-medium h-14 px-4"
+                className="w-full sm:w-auto h-14 px-8 rounded-full border border-border bg-white/50 backdrop-blur-sm hover:bg-white text-foreground font-medium transition-all flex items-center justify-center gap-2"
               >
-                Browse all templates &darr;
+                Browse All Templates &darr;
               </button>
             ) : (
               <Link
                 href={`/register?callbackUrl=${encodeURIComponent("/editor?template=modern")}`}
-                className="h-14 px-4 text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-colors font-medium inline-flex items-center"
+                className="w-full sm:w-auto h-14 px-8 rounded-full border border-border bg-white/50 backdrop-blur-sm hover:bg-white text-foreground font-medium transition-all flex items-center justify-center gap-2"
               >
-                Unlock all templates
+                Unlock All Templates
               </Link>
             )}
           </div>

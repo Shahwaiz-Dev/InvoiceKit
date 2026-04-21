@@ -3,11 +3,11 @@ import { db, ObjectId } from "@workspace/db";
 import { getPlanFromProductId } from "@/lib/plans";
 import { safeObjectId } from "@/lib/server-utils";
 import { handleApiError, badRequestResponse } from "@/lib/api-errors";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const webhookSecret = process.env.POLAR_WEBHOOK_SECRET;
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   if (!webhookSecret) {
     console.error("[POLAR WEBHOOK] Missing POLAR_WEBHOOK_SECRET environment variable");
     return NextResponse.json({ error: "Webhook configuration error" }, { status: 500 });
