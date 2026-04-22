@@ -16,7 +16,6 @@ interface EditorSidebarProps {
   form: UseFormReturn<InvoiceData>;
   template: string;
   labels: any;
-  onClose: () => void;
   onDownload: () => void;
   onSendEmail: () => void;
   isSending: boolean;
@@ -29,7 +28,6 @@ export function EditorSidebar({
   form,
   template,
   labels,
-  onClose,
   onDownload,
   onSendEmail,
   isSending,
@@ -52,12 +50,7 @@ export function EditorSidebar({
           </div>
           <span className="font-semibold text-foreground capitalize">{template} Template</span>
         </div>
-        <button
-          onClick={onClose}
-          className="text-accent hover:text-accent/80 text-sm font-medium transition-colors"
-        >
-          &times; Change Template
-        </button>
+
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 bg-background">
