@@ -92,7 +92,7 @@ export async function POST(req: Request) {
           </p>
           <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 32px 0;" />
           <p style="color: #9ca3af; font-size: 12px; text-align: center;">
-            Sent via <a href="https://invoicekit.app" style="color: #4f46e5; text-decoration: none;">InvoiceKit</a>
+            Sent via <a href="https://www.invoice-sync.com" style="color: #4f46e5; text-decoration: none;">InvoiceKit</a>
           </p>
         </div>
       `,

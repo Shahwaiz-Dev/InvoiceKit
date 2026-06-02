@@ -21,42 +21,42 @@ describe("sitemap", () => {
 
   it("includes the homepage with highest priority", () => {
     const entries = sitemap();
-    const home = entries.find((e) => e.url === "https://invoicekit.app");
+    const home = entries.find((e) => e.url === "https://www.invoice-sync.com");
     expect(home).toBeDefined();
     expect(home?.priority).toBe(1.0);
   });
 
   it("includes the /templates route", () => {
     const entries = sitemap();
-    const templatesPage = entries.find((e) => e.url === "https://invoicekit.app/templates");
+    const templatesPage = entries.find((e) => e.url === "https://www.invoice-sync.com/templates");
     expect(templatesPage).toBeDefined();
     expect(templatesPage?.priority).toBe(0.9);
   });
 
   it("includes the /about route", () => {
     const entries = sitemap();
-    const about = entries.find((e) => e.url === "https://invoicekit.app/about");
+    const about = entries.find((e) => e.url === "https://www.invoice-sync.com/about");
     expect(about).toBeDefined();
     expect(about?.priority).toBe(0.7);
   });
 
   it("includes the /contact route", () => {
     const entries = sitemap();
-    const contact = entries.find((e) => e.url === "https://invoicekit.app/contact");
+    const contact = entries.find((e) => e.url === "https://www.invoice-sync.com/contact");
     expect(contact).toBeDefined();
     expect(contact?.priority).toBe(0.7);
   });
 
   it("includes the /editor route", () => {
     const entries = sitemap();
-    const editor = entries.find((e) => e.url === "https://invoicekit.app/editor");
+    const editor = entries.find((e) => e.url === "https://www.invoice-sync.com/editor");
     expect(editor).toBeDefined();
   });
 
   it("includes /privacy and /terms with low priority", () => {
     const entries = sitemap();
-    const privacy = entries.find((e) => e.url === "https://invoicekit.app/privacy");
-    const terms = entries.find((e) => e.url === "https://invoicekit.app/terms");
+    const privacy = entries.find((e) => e.url === "https://www.invoice-sync.com/privacy");
+    const terms = entries.find((e) => e.url === "https://www.invoice-sync.com/terms");
     expect(privacy).toBeDefined();
     expect(terms).toBeDefined();
     expect(privacy?.priority).toBe(0.3);
@@ -65,20 +65,20 @@ describe("sitemap", () => {
 
   it("generates dynamic /templates/[slug] routes for all mocked templates", () => {
     const entries = sitemap();
-    expect(entries.find((e) => e.url === "https://invoicekit.app/templates/clean")).toBeDefined();
-    expect(entries.find((e) => e.url === "https://invoicekit.app/templates/modern")).toBeDefined();
-    expect(entries.find((e) => e.url === "https://invoicekit.app/templates/contractor")).toBeDefined();
+    expect(entries.find((e) => e.url === "https://www.invoice-sync.com/templates/clean")).toBeDefined();
+    expect(entries.find((e) => e.url === "https://www.invoice-sync.com/templates/modern")).toBeDefined();
+    expect(entries.find((e) => e.url === "https://www.invoice-sync.com/templates/contractor")).toBeDefined();
   });
 
   it("sets dynamic template routes with priority 0.8", () => {
     const entries = sitemap();
-    const templateEntry = entries.find((e) => e.url === "https://invoicekit.app/templates/clean");
+    const templateEntry = entries.find((e) => e.url === "https://www.invoice-sync.com/templates/clean");
     expect(templateEntry?.priority).toBe(0.8);
   });
 
   it("sets dynamic template routes with monthly changeFrequency", () => {
     const entries = sitemap();
-    const templateEntry = entries.find((e) => e.url === "https://invoicekit.app/templates/clean");
+    const templateEntry = entries.find((e) => e.url === "https://www.invoice-sync.com/templates/clean");
     expect(templateEntry?.changeFrequency).toBe("monthly");
   });
 
@@ -104,7 +104,7 @@ describe("sitemap", () => {
 
   it("homepage has weekly changeFrequency (high-traffic page)", () => {
     const entries = sitemap();
-    const home = entries.find((e) => e.url === "https://invoicekit.app");
+    const home = entries.find((e) => e.url === "https://www.invoice-sync.com");
     expect(home?.changeFrequency).toBe("weekly");
   });
 });

@@ -26,7 +26,7 @@ const dancingScript = Dancing_Script({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://invoicekit.app"),
+  metadataBase: new URL("https://www.invoice-sync.com"),
   title: {
     default: "Free Invoice Generator | Create Professional Invoice Templates Online",
     template: "%s | Professional Invoice Templates | InvoiceKit",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     description:
       "Create and download professional PDF invoices instantly. Start with the Clean template for free and unlock the full library with an account.",
     type: "website",
-    url: "https://invoicekit.app",
+    url: "https://www.invoice-sync.com",
     siteName: "InvoiceKit",
     images: [
       {
@@ -71,9 +71,9 @@ export const metadata: Metadata = {
     images: ["/opengraph.jpg"],
   },
   alternates: {
-    canonical: "https://invoicekit.app",
+    canonical: "https://www.invoice-sync.com",
     languages: {
-      "en-US": "https://invoicekit.app",
+      "en-US": "https://www.invoice-sync.com",
     },
   },
   robots: {
@@ -102,13 +102,13 @@ export default function RootLayout({
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://invoicekit.app",
+        item: "https://www.invoice-sync.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Templates",
-        item: "https://invoicekit.app/templates",
+        item: "https://www.invoice-sync.com/templates",
       },
     ],
   };
