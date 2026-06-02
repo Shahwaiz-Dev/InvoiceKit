@@ -7,12 +7,12 @@ export const metadata: Metadata = {
   description:
     "Generate professional PDF invoices instantly with our free invoice generator. Choose from multiple professional templates, no watermarks, and zero sign-up required. Secure, fast, and easy to use.",
   alternates: {
-    canonical: "https://invoicekit.app",
+    canonical: "https://www.invoice-sync.com",
   },
   openGraph: {
     title: "100% Free Invoice Generator | InvoiceKit",
     description: "Create and download professional invoices in seconds. No sign-up, no hidden fees, and zero watermarks.",
-    url: "https://invoicekit.app",
+    url: "https://www.invoice-sync.com",
     siteName: "InvoiceKit",
     locale: "en_US",
     type: "website",
@@ -87,13 +87,31 @@ export default function Page() {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: "https://invoicekit.app",
+        item: "https://www.invoice-sync.com",
       },
     ],
   };
 
+  const webSiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    url: "https://www.invoice-sync.com",
+    name: "InvoiceKit",
+    description: "Free professional invoice generator",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://www.invoice-sync.com/templates?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <>
+      <Script
+        id="website-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
+      />
       <Script
         id="software-jsonld"
         type="application/ld+json"

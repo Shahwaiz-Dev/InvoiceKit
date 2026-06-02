@@ -2,7 +2,7 @@ import { TemplateType } from "./schema";
 
 export const APP_CONFIG = {
   name: "InvoiceKit",
-  baseUrl: process.env.NEXT_PUBLIC_APP_URL || "https://invoicekit.app",
+  baseUrl: process.env.NEXT_PUBLIC_APP_URL || "https://www.invoice-sync.com",
 };
 
 export const INVOICE_TEMPLATES: { value: TemplateType; label: string; description: string }[] = [

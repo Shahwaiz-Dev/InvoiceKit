@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
   // @ts-ignore
   allowedDevOrigins: [
     'nonilluminatingly-masterless-khalilah.ngrok-free.dev',
-    'localhost:3000'
+    'www.invoice-sync.com'
   ],
   async headers() {
     return [

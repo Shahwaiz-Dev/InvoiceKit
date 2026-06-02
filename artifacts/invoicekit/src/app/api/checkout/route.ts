@@ -38,7 +38,7 @@ export const GET = async (req: Request) => {
   }
 
   // Use the public URL (ngrok/production) — url.origin resolves to the internal server address (0.0.0.0)
-  const baseUrl = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || `http://localhost:3000`;
+  const baseUrl = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_BETTER_AUTH_URL || `https://www.invoice-sync.com`;
   const successUrl = `${baseUrl}/dashboard/settings?checkout=success`;
   try {
     const hasActiveSubscription = session.user.subscriptionStatus === "active";

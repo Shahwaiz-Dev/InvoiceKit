@@ -56,6 +56,11 @@ export default function TemplatePage({ params }: Props) {
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
     },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "1250",
+    },
   };
 
   return (

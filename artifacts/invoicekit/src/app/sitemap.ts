@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { TEMPLATES_SEO } from "@/lib/templates-seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://invoicekit.app";
+  const baseUrl = "https://www.invoice-sync.com";
   const now = new Date();
 
   // Static routes
