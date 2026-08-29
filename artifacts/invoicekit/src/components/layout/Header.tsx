@@ -30,7 +30,11 @@ export function Header() {
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      router.push(`/#${id}`);
+    }
   };
 
   return (
@@ -51,6 +55,12 @@ export function Header() {
         </div>
 
         <nav className="flex items-center gap-6">
+          <Link
+            href="/templates"
+            className="hidden md:block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Templates
+          </Link>
           <button
             onClick={() => scrollTo("how-it-works")}
             className="hidden md:block text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"

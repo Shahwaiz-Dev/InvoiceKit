@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Script from "next/script";
 import "./globals.css";
 import { Providers } from "./providers";
 import { GeistSans } from "geist/font/sans";
@@ -94,36 +93,12 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.invoice-sync.com",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Templates",
-        item: "https://www.invoice-sync.com/templates",
-      },
-    ],
-  };
-
   return (
     <html
       lang="en"
       className={`${GeistSans.variable} ${GeistMono.variable} ${greatVibes.variable} ${pacifico.variable} ${dancingScript.variable}`}
     >
       <body suppressHydrationWarning className="font-sans antialiased">
-        <Script
-          id="breadcrumb-jsonld"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-        />
         <Providers>
           {children}
           {/* Preload/warm-up for fonts used in invoices and dashboard numbers */}

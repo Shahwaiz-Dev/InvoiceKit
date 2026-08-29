@@ -18,32 +18,47 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <h4 className="text-white font-medium text-sm">Product</h4>
+            <h3 className="text-white font-medium text-sm">Templates</h3>
             <ul className="flex flex-col gap-2">
               <li>
-                <Link href={"/templates" as any} className="text-white/40 hover:text-white transition-colors text-xs">
-                  Invoice Templates
+                <Link href="/templates" className="text-white/40 hover:text-white transition-colors text-xs">
+                  All Templates
                 </Link>
               </li>
               <li>
-                <Link href={"/editor" as any} className="text-white/40 hover:text-white transition-colors text-xs">
-                  Invoice Editor
+                <Link href="/templates/clean" className="text-white/40 hover:text-white transition-colors text-xs">
+                  Clean Template
+                </Link>
+              </li>
+              <li>
+                <Link href="/templates/contractor" className="text-white/40 hover:text-white transition-colors text-xs">
+                  Contractor Template
+                </Link>
+              </li>
+              <li>
+                <Link href="/templates/corporate" className="text-white/40 hover:text-white transition-colors text-xs">
+                  Corporate Template
                 </Link>
               </li>
             </ul>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h4 className="text-white font-medium text-sm">Company</h4>
+            <h3 className="text-white font-medium text-sm">Company</h3>
             <ul className="flex flex-col gap-2">
               <li>
-                <Link href={"/about" as any} className="text-white/40 hover:text-white transition-colors text-xs">
+                <Link href="/about" className="text-white/40 hover:text-white transition-colors text-xs">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href={"/contact" as any} className="text-white/40 hover:text-white transition-colors text-xs">
+                <Link href="/contact" className="text-white/40 hover:text-white transition-colors text-xs">
                   Contact Support
+                </Link>
+              </li>
+              <li>
+                <Link href="/editor" className="text-white/40 hover:text-white transition-colors text-xs">
+                  Invoice Editor
                 </Link>
               </li>
             </ul>

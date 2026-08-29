@@ -20,6 +20,15 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+  const organizationLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "InvoiceKit",
+    url: "https://www.invoice-sync.com",
+    logo: "https://www.invoice-sync.com/favicon.svg",
+    description: "Free professional invoice generator for freelancers, contractors, and small businesses.",
+  };
+
   const softwareLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -31,11 +40,6 @@ export default function Page() {
       price: "0",
       priceCurrency: "USD",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "1250",
-    },
     description:
       "InvoiceKit is a professional-grade free invoice generator that lets anyone create PDF invoices with zero watermarks.",
   };
@@ -46,48 +50,51 @@ export default function Page() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "Is InvoiceKit really free?",
+        name: "Is this free invoice generator actually free?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, InvoiceKit is 100% free with no trial periods, hidden fees, or pro tiers for basic generation.",
+          text: "Yes, InvoiceKit is a 100% free invoice generator. No trial periods, no pro tiers, and no hidden fees.",
         },
       },
       {
         "@type": "Question",
-        name: "Do I need to create an account to make an invoice?",
+        name: "Do I need to sign up for an invoice generator?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "No account is required to generate invoices using our Clean template. You can download your PDF instantly.",
+          text: "You can use the Clean template and download PDFs without an account. Create a free account to unlock the rest of the template library, saved invoices, and email sending.",
         },
       },
       {
         "@type": "Question",
-        name: "Will there be watermarks on my PDF invoices?",
+        name: "Can I choose my own invoice template?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Absolutely not. Every invoice generated with InvoiceKit is watermark-free, regardless of which template you choose.",
+          text: "Yes. Guests can use the Clean template right away, and signed-in users can access the full collection of professional invoice templates.",
         },
       },
       {
         "@type": "Question",
-        name: "What file format are the invoices?",
+        name: "Is my business data stored on your servers?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "All invoices are generated as high-quality, print-ready PDF documents.",
+          text: "No. Everything stays in your browser's private storage. We don't see or store your client data.",
         },
       },
-    ],
-  };
-
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
       {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.invoice-sync.com",
+        "@type": "Question",
+        name: "Can I add my own business logo to the free invoice template?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes, the free Clean template supports high-quality logo uploads and customization, and so do the account-only templates.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Which currencies does the invoice maker support?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "We support USD, GBP, EUR, PKR, CAD, AUD, and many more for international billing.",
+        },
       },
     ],
   };
@@ -98,15 +105,15 @@ export default function Page() {
     url: "https://www.invoice-sync.com",
     name: "InvoiceKit",
     description: "Free professional invoice generator",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://www.invoice-sync.com/templates?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
   };
 
   return (
     <>
+      <Script
+        id="organization-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
+      />
       <Script
         id="website-jsonld"
         type="application/ld+json"
@@ -121,11 +128,6 @@ export default function Page() {
         id="faq-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <Script
-        id="breadcrumb-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       <HomePage />
     </>

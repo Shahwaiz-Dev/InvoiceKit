@@ -8,22 +8,43 @@ import Script from "next/script";
 import type { Metadata } from "next";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const template = TEMPLATES_SEO.find((t) => t.slug === params.slug);
+  const { slug } = await params;
+  const template = TEMPLATES_SEO.find((t) => t.slug === slug);
   if (!template) return {};
+
+  const pageUrl = `https://www.invoice-sync.com/templates/${slug}`;
 
   return {
     title: template.title,
     description: template.description,
     keywords: template.keywords,
+    alternates: {
+      canonical: pageUrl,
+    },
     openGraph: {
-      title: template.title,
+      title: `${template.name} | Free Invoice Template`,
       description: template.description,
+      url: pageUrl,
       type: "website",
-      images: [`/templates/${params.slug}-preview.jpg`],
+      siteName: "InvoiceKit",
+      images: [
+        {
+          url: "/opengraph.jpg",
+          width: 1200,
+          height: 630,
+          alt: `${template.name} - Free Professional Invoice Template`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${template.name} | Free Invoice Template`,
+      description: template.description,
+      images: ["/opengraph.jpg"],
     },
   };
 }
@@ -34,41 +55,68 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function TemplatePage({ params }: Props) {
-  const template = TEMPLATES_SEO.find((t) => t.slug === params.slug);
+export default async function TemplatePage({ params }: Props) {
+  const { slug } = await params;
+  const template = TEMPLATES_SEO.find((t) => t.slug === slug);
 
   if (!template) {
     notFound();
   }
 
-  const productJsonLd = {
+  const pageUrl = `https://www.invoice-sync.com/templates/${slug}`;
+
+  const softwareJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Product",
-    name: template.name,
+    "@type": "SoftwareApplication",
+    name: `${template.name} - InvoiceKit`,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    url: pageUrl,
     description: template.description,
-    brand: {
-      "@type": "Brand",
-      name: "InvoiceKit",
-    },
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "1250",
-    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.invoice-sync.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Templates",
+        item: "https://www.invoice-sync.com/templates",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: template.name,
+        item: pageUrl,
+      },
+    ],
   };
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
       <Script
-        id="product-jsonld"
+        id="template-software-jsonld"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
+      />
+      <Script
+        id="template-breadcrumb-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <Header />
 
@@ -77,7 +125,9 @@ export default function TemplatePage({ params }: Props) {
         <section className="py-24 px-6 bg-secondary/5 overflow-hidden">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <nav className="flex gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground mb-8">
+              <nav aria-label="Breadcrumb" className="flex gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground mb-8">
+                <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+                <span>/</span>
                 <Link href="/templates" className="hover:text-primary transition-colors">Templates</Link>
                 <span>/</span>
                 <span className="text-secondary">{template.name}</span>
@@ -151,7 +201,7 @@ export default function TemplatePage({ params }: Props) {
         {/* SEO Content Section */}
         <section className="py-24 px-6 bg-secondary/5">
           <div className="max-w-4xl mx-auto prose prose-secondary">
-            <h2 className="text-3xl font-bold mb-8">Why choice the {template.name}?</h2>
+            <h2 className="text-3xl font-bold mb-8">Why choose the {template.name}?</h2>
             <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
               <p>
                 In today's competitive landscape, your invoice is often the final touchpoint you have with a client. 

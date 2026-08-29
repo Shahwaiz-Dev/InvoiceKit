@@ -1,11 +1,36 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CheckCircle2, ShieldCheck, Users2, Zap } from "lucide-react";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About Us",
   description: "Learn about the mission behind InvoiceKit - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
+  alternates: {
+    canonical: "https://www.invoice-sync.com/about",
+  },
+  openGraph: {
+    title: "About Us | InvoiceKit",
+    description: "Learn about the mission behind InvoiceKit - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
+    url: "https://www.invoice-sync.com/about",
+    siteName: "InvoiceKit",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph.jpg",
+        width: 1200,
+        height: 630,
+        alt: "About InvoiceKit",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Us | InvoiceKit",
+    description: "Learn about the mission behind InvoiceKit - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
+    images: ["/opengraph.jpg"],
+  },
 };
 
 export default function AboutPage() {
@@ -84,18 +109,18 @@ export default function AboutPage() {
               Join thousands of freelancers who trust InvoiceKit for their professional billing needs.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a
+              <Link
                 href="/editor"
                 className="px-8 py-4 bg-primary text-secondary font-semibold rounded-full hover:bg-primary/90 transition-all text-center"
               >
                 Create Free Invoice
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/register"
                 className="px-8 py-4 bg-secondary text-white font-semibold rounded-full hover:bg-secondary/90 transition-all text-center"
               >
                 Create Free Account
-              </a>
+              </Link>
             </div>
           </div>
         </section>

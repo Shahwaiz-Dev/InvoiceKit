@@ -47,10 +47,18 @@ describe("sitemap", () => {
     expect(contact?.priority).toBe(0.7);
   });
 
-  it("includes the /editor route", () => {
+  it("excludes noindexed /editor route", () => {
     const entries = sitemap();
     const editor = entries.find((e) => e.url === "https://www.invoice-sync.com/editor");
-    expect(editor).toBeDefined();
+    expect(editor).toBeUndefined();
+  });
+
+  it("excludes auth /login and /register routes", () => {
+    const entries = sitemap();
+    const login = entries.find((e) => e.url === "https://www.invoice-sync.com/login");
+    const register = entries.find((e) => e.url === "https://www.invoice-sync.com/register");
+    expect(login).toBeUndefined();
+    expect(register).toBeUndefined();
   });
 
   it("includes /privacy and /terms with low priority", () => {
@@ -92,14 +100,14 @@ describe("sitemap", () => {
   it("all entries have the baseUrl prefix", () => {
     const entries = sitemap();
     for (const entry of entries) {
-      expect(entry.url).toMatch(/^https:\/\/invoicekit\.app/);
+      expect(entry.url).toMatch(/^https:\/\/www\.invoice-sync\.com/);
     }
   });
 
   it("total count matches static routes + template routes", () => {
     const entries = sitemap();
-    // 9 static routes + 3 mock templates = 12
-    expect(entries.length).toBe(12);
+    // 6 static routes + 3 mock templates = 9
+    expect(entries.length).toBe(9);
   });
 
   it("homepage has weekly changeFrequency (high-traffic page)", () => {

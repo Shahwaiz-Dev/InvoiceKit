@@ -3,6 +3,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Mail, MessageSquare, Phone, MapPin } from "lucide-react";
+import Link from "next/link";
 
 export default function ContactPage() {
   return (
@@ -67,9 +68,9 @@ export default function ContactPage() {
                 <p className="text-white/60 text-sm leading-relaxed mb-6 relative z-10">
                   Check our FAQ page for instant answers to questions about watermark-free PDFs, account setup, and template customization.
                 </p>
-                <a href="/#faq" className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all relative z-10">
+                <Link href="/#faq" className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all relative z-10">
                   View FAQ <span className="text-lg">→</span>
-                </a>
+                </Link>
               </div>
             </div>
 

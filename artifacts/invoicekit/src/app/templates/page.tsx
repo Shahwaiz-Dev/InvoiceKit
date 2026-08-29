@@ -8,6 +8,30 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Professional Invoice Templates",
   description: "Browse our library of high-quality, free invoice templates. Choose from Clean, Contractor, Creative, and more. Generate professional PDFs instantly.",
+  alternates: {
+    canonical: "https://www.invoice-sync.com/templates",
+  },
+  openGraph: {
+    title: "Professional Invoice Templates | InvoiceKit",
+    description: "Browse our library of high-quality, free invoice templates. Generate professional PDFs instantly.",
+    url: "https://www.invoice-sync.com/templates",
+    siteName: "InvoiceKit",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph.jpg",
+        width: 1200,
+        height: 630,
+        alt: "InvoiceKit Professional Invoice Templates",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Professional Invoice Templates | InvoiceKit",
+    description: "Browse our library of high-quality, free invoice templates. Generate professional PDFs instantly.",
+    images: ["/opengraph.jpg"],
+  },
 };
 
 export default function TemplatesHub() {
@@ -24,7 +48,7 @@ export default function TemplatesHub() {
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Find the perfect design for your business. All our templates are meticulously crafted to be professional, 
-              <strong>free to download</strong>, and fully customizable with our <strong>free invoice generator</strong>.
+              <strong> free to download</strong>, and fully customizable with our <strong>free invoice generator</strong>.
             </p>
           </div>
         </section>
@@ -32,6 +56,13 @@ export default function TemplatesHub() {
         {/* Templates Grid */}
         <section className="py-24 px-6 bg-white">
           <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-foreground mb-4">Choose Your Ideal Invoice Layout</h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Select a template below to start editing immediately or view full template specifications.
+              </p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {TEMPLATES_SEO.map((template) => (
                 <div 
@@ -42,13 +73,17 @@ export default function TemplatesHub() {
                     <FileText className="w-8 h-8 text-secondary group-hover:text-primary transition-colors" />
                   </div>
                   
-                  <h3 className="text-2xl font-bold mb-4">{template.name}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-8 flex-1">
+                  <h3 className="text-2xl font-bold mb-2">
+                    <Link href={`/templates/${template.slug}`} className="hover:text-primary transition-colors">
+                      {template.name}
+                    </Link>
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-1">
                     {template.description.slice(0, 120)}...
                   </p>
 
                   <div className="space-y-4">
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    <div className="flex flex-wrap gap-2 mb-4">
                       {template.features.slice(0, 2).map((feature, i) => (
                         <span key={i} className="px-3 py-1 bg-secondary/5 text-[10px] font-bold uppercase tracking-widest text-secondary/60 rounded-full">
                           {feature}
@@ -56,12 +91,18 @@ export default function TemplatesHub() {
                       ))}
                     </div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2.5">
                       <Link
                         href={`/editor?template=${template.slug}`}
-                        className="flex items-center justify-center px-6 py-4 bg-secondary text-white text-sm font-bold rounded-xl hover:bg-secondary/90 transition-all shadow-lg shadow-secondary/10"
+                        className="flex items-center justify-center px-6 py-3.5 bg-secondary text-white text-sm font-bold rounded-xl hover:bg-secondary/90 transition-all shadow-lg shadow-secondary/10"
                       >
                         Try This Template
+                      </Link>
+                      <Link
+                        href={`/templates/${template.slug}`}
+                        className="flex items-center justify-center gap-1 text-xs font-semibold text-muted-foreground hover:text-primary transition-colors py-1.5"
+                      >
+                        View Template Details <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
                   </div>
