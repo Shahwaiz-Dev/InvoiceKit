@@ -33,8 +33,15 @@ export function useInvoiceActions() {
       }
     }
 
-    // Small delay to ensure any pending state updates are flushed
+    // Small delay to ensure any pending state updates are flushed and fonts are ready
     await new Promise((resolve) => setTimeout(resolve, 100));
+    try {
+      if (typeof document !== "undefined" && document.fonts) {
+        await document.fonts.ready;
+      }
+    } catch {
+      // Ignore font readiness errors
+    }
 
     const element = document.getElementById("print-area");
     if (!element) {
@@ -46,31 +53,74 @@ export function useInvoiceActions() {
     const opt = {
       margin: 0,
       filename: `invoice-${values.invoiceNumber || "001"}.pdf`,
-      image: { type: "jpeg" as const, quality: 1.0 },
+      image: { type: "jpeg" as const, quality: 0.98 },
       html2canvas: {
-        scale: 3,
+        scale: 2,
         useCORS: true,
         letterRendering: true,
-        scrollY: -window.scrollY,
+        scrollY: 0,
+        scrollX: 0,
+        windowWidth: 794,
         logging: false,
         onclone: (clonedDoc: Document) => {
-          const elements = clonedDoc.querySelectorAll("*");
-
           const style = clonedDoc.createElement('style');
           style.innerHTML = `
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Great+Vibes&family=Pacifico&family=Dancing+Script:wght@400;700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=Great+Vibes&family=Pacifico&family=Dancing+Script:wght@400;700&family=Roboto+Mono:wght@400;500;700&display=swap');
             
-            * :not(.signature-font) { 
-              font-family: 'Inter', system-ui, -apple-system, sans-serif !important; 
+            :root, html, body {
+              --font-signature-1: 'Great Vibes', cursive !important;
+              --font-signature-2: 'Pacifico', cursive !important;
+              --font-signature-3: 'Dancing Script', cursive !important;
+              --app-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              --font-geist-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              --app-font-serif: 'DM Serif Display', Georgia, serif !important;
+              --font-serif: 'DM Serif Display', Georgia, serif !important;
+              --app-font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+              --font-geist-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+              --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
             }
-            
-            .signature-font {
-              /* Ensure signature fonts are preserved */
-              font-family: inherit !important;
+
+            .font-serif {
+              font-family: 'DM Serif Display', Georgia, serif !important;
+            }
+
+            .font-mono {
+              font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+            }
+
+            .font-sans {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
             }
           `;
           clonedDoc.head.appendChild(style);
 
+          // Handle signatures explicitly
+          const sigElements = clonedDoc.querySelectorAll(".signature-font");
+          sigElements.forEach((el) => {
+            const node = el as HTMLElement;
+            const sigFont = node.getAttribute("data-sigfont") || "";
+            if (sigFont.includes("signature-1") || sigFont.toLowerCase().includes("great vibes")) {
+              node.style.setProperty("font-family", "'Great Vibes', cursive", "important");
+            } else if (sigFont.includes("signature-2") || sigFont.toLowerCase().includes("pacifico")) {
+              node.style.setProperty("font-family", "'Pacifico', cursive", "important");
+            } else if (sigFont.includes("signature-3") || sigFont.toLowerCase().includes("dancing script")) {
+              node.style.setProperty("font-family", "'Dancing Script', cursive", "important");
+            } else if (sigFont) {
+              node.style.setProperty("font-family", `${sigFont}, cursive`, "important");
+            }
+          });
+
+          // Fix any background-clip text for html2canvas compatibility
+          const gradientTexts = clonedDoc.querySelectorAll(".bg-clip-text, [class*='bg-clip-text']");
+          gradientTexts.forEach((el) => {
+            const node = el as HTMLElement;
+            node.style.webkitBackgroundClip = "initial";
+            node.style.backgroundClip = "initial";
+            node.style.color = "#c026d3";
+            node.style.backgroundImage = "none";
+          });
+
+          const elements = clonedDoc.querySelectorAll("*");
           elements.forEach((el) => {
             const node = el as HTMLElement;
             const computedStyle = window.getComputedStyle(node);
@@ -108,9 +158,13 @@ export function useInvoiceActions() {
 
           const printArea = clonedDoc.getElementById("print-area");
           if (printArea) {
-            printArea.style.width = "210mm";
-            printArea.style.height = "297mm";
+            printArea.style.width = "794px";
+            printArea.style.minHeight = "1123px";
+            printArea.style.height = "auto";
             printArea.style.transform = "none";
+            printArea.style.margin = "0";
+            printArea.style.boxSizing = "border-box";
+            printArea.style.fontSize = "14px";
           }
 
           const heavyEffects = clonedDoc.querySelectorAll(".blur-\\[120px\\], .absolute.rounded-full.opacity-20, .shadow-xl, .shadow-2xl");
