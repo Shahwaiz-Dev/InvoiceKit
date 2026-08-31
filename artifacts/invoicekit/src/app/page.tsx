@@ -3,14 +3,14 @@ import Script from "next/script";
 import HomePage from "@/features/HomePage";
 
 export const metadata: Metadata = {
-  title: "Free Invoice Generator | Create Professional Invoice Templates Online",
+  title: "Free Invoice Generator (No Sign-Up) | Instant PDF Invoice Maker",
   description:
-    "Generate professional PDF invoices instantly with our free invoice generator. Choose from multiple professional templates, no watermarks, and zero sign-up required. Secure, fast, and easy to use.",
+    "Create and download professional PDF invoices in seconds with zero sign-up required. 100% free in-browser invoice maker, no watermarks, instant PDF export, and multiple professional templates.",
   alternates: {
     canonical: "https://www.invoice-sync.com",
   },
   openGraph: {
-    title: "100% Free Invoice Generator | InvoiceKit",
+    title: "Free Invoice Generator (No Sign-Up) | InvoiceKit",
     description: "Create and download professional invoices in seconds. No sign-up, no hidden fees, and zero watermarks.",
     url: "https://www.invoice-sync.com",
     siteName: "InvoiceKit",

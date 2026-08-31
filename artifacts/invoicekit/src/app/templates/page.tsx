@@ -3,7 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { TEMPLATES_SEO } from "@/lib/templates-seo";
 import Link from "next/link";
 import { FileText, ArrowRight } from "lucide-react";
-import type { Metadata } from "next";
+import type { Metadata, Route } from "next";
 
 export const metadata: Metadata = {
   title: "Professional Invoice Templates",
@@ -74,7 +74,7 @@ export default function TemplatesHub() {
                   </div>
                   
                   <h3 className="text-2xl font-bold mb-2">
-                    <Link href={`/templates/${template.slug}`} className="hover:text-primary transition-colors">
+                    <Link href={`/templates/${template.slug}` as Route} className="hover:text-primary transition-colors">
                       {template.name}
                     </Link>
                   </h3>
@@ -93,13 +93,13 @@ export default function TemplatesHub() {
 
                     <div className="flex flex-col gap-2.5">
                       <Link
-                        href={`/editor?template=${template.slug}`}
+                        href={`/editor?template=${template.editorTheme || template.slug}` as Route}
                         className="flex items-center justify-center px-6 py-3.5 bg-secondary text-white text-sm font-bold rounded-xl hover:bg-secondary/90 transition-all shadow-lg shadow-secondary/10"
                       >
                         Try This Template
                       </Link>
                       <Link
-                        href={`/templates/${template.slug}`}
+                        href={`/templates/${template.slug}` as Route}
                         className="flex items-center justify-center gap-1 text-xs font-semibold text-muted-foreground hover:text-primary transition-colors py-1.5"
                       >
                         View Template Details <ArrowRight className="w-3.5 h-3.5" />
