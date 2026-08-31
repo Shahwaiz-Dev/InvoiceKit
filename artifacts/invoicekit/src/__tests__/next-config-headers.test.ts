@@ -16,7 +16,7 @@ async function getSecurityHeaders() {
         {
           key: "Content-Security-Policy",
           value:
-            "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.google.com https://*.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://*.googleusercontent.com https://*.polar.sh https://avatar.vercel.sh; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.google.com https://*.polar.sh https://www.invoice-sync.com https://*.vercel.app; frame-src 'self' https://*.polar.sh; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;",
+            "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.google.com https://*.gstatic.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https://*.googleusercontent.com https://*.polar.sh https://avatar.vercel.sh; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.google.com https://*.polar.sh https://www.invoice-sync.com https://*.vercel.app https://cloudflareinsights.com https://*.cloudflareinsights.com; frame-src 'self' https://*.polar.sh; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;",
         },
         {
           key: "X-Frame-Options",
