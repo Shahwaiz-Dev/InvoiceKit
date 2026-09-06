@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Form } from "@/components/ui/form";
-import { Download, Mail, Loader2 } from "lucide-react";
+import { Download, Mail, Loader2, Layers, Users, FileText, SlidersHorizontal } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { InvoiceData } from "@/lib/schema";
 import { BusinessSection } from "./sections/BusinessSection";
@@ -11,6 +12,7 @@ import { FinancialsSection } from "./sections/FinancialsSection";
 import { NotesSection } from "./sections/NotesSection";
 import { SignatureSection } from "./sections/SignatureSection";
 import { FormSectionWrapper } from "./FormSectionWrapper";
+import { cn } from "@/lib/utils";
 
 interface EditorSidebarProps {
   form: UseFormReturn<InvoiceData>;
@@ -22,6 +24,8 @@ interface EditorSidebarProps {
   session: any;
   customers?: any[];
   canManageCustomers?: boolean;
+  className?: string;
+  mode?: "full" | "embedded";
 }
 
 export function EditorSidebar({
@@ -34,90 +38,167 @@ export function EditorSidebar({
   session,
   customers = [],
   canManageCustomers = false,
+  className,
+  mode = "full",
 }: EditorSidebarProps) {
+  const [activeTab, setActiveTab] = useState<"items" | "parties" | "details" | "all">("items");
+
   return (
     <motion.div
-      initial={{ x: "100%" }}
+      initial={false}
       animate={{ x: 0 }}
-      exit={{ x: "100%" }}
-      transition={{ type: "spring", damping: 25, stiffness: 200 }}
-      className="w-full lg:w-[45%] h-full bg-white border-l border-border flex flex-col shadow-2xl print:hidden"
+      className={cn(
+        "w-full lg:w-[420px] xl:w-[460px] shrink-0 h-full bg-white border-l border-slate-200/80 flex flex-col shadow-none print:hidden",
+        className
+      )}
     >
-      <div className="h-16 px-6 border-b border-border flex justify-between items-center bg-white shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary font-bold text-xs uppercase">
-            {template.substring(0, 2)}
-          </div>
-          <span className="font-semibold text-foreground capitalize">{template} Template</span>
+      {/* Sleek Top Status Bar */}
+      <div className="h-11 px-4 border-b border-slate-200/80 flex justify-between items-center bg-white shrink-0">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          <span className="font-semibold text-xs text-slate-800 capitalize">{template} Template</span>
         </div>
-
+        <span className="text-[11px] font-medium text-blue-600 bg-blue-50/80 px-2 py-0.5 rounded-full border border-blue-100">
+          Live Sync
+        </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6 bg-background">
+      {/* Segmented Tab Navigation to Eliminate Form Overwhelm */}
+      <div className="px-3 py-2 bg-slate-50/60 border-b border-slate-200/80 shrink-0">
+        <div className="grid grid-cols-4 gap-1 p-1 bg-slate-200/60 rounded-lg text-xs font-medium text-slate-600">
+          <button
+            type="button"
+            onClick={() => setActiveTab("items")}
+            className={cn(
+              "py-1.5 px-1.5 rounded-md transition-all flex items-center justify-center gap-1",
+              activeTab === "items"
+                ? "bg-white text-slate-900 shadow-xs font-semibold"
+                : "hover:text-slate-900 hover:bg-white/40"
+            )}
+          >
+            <Layers className="w-3.5 h-3.5 text-blue-600" />
+            <span>Items</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("parties")}
+            className={cn(
+              "py-1.5 px-1.5 rounded-md transition-all flex items-center justify-center gap-1",
+              activeTab === "parties"
+                ? "bg-white text-slate-900 shadow-xs font-semibold"
+                : "hover:text-slate-900 hover:bg-white/40"
+            )}
+          >
+            <Users className="w-3.5 h-3.5 text-blue-600" />
+            <span>Parties</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("details")}
+            className={cn(
+              "py-1.5 px-1.5 rounded-md transition-all flex items-center justify-center gap-1",
+              activeTab === "details"
+                ? "bg-white text-slate-900 shadow-xs font-semibold"
+                : "hover:text-slate-900 hover:bg-white/40"
+            )}
+          >
+            <FileText className="w-3.5 h-3.5 text-blue-600" />
+            <span>Details</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("all")}
+            className={cn(
+              "py-1.5 px-1.5 rounded-md transition-all flex items-center justify-center gap-1",
+              activeTab === "all"
+                ? "bg-white text-slate-900 shadow-xs font-semibold"
+                : "hover:text-slate-900 hover:bg-white/40"
+            )}
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
+            <span>All</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4 sm:p-5 bg-slate-50/30">
         <Form {...form}>
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <FormSectionWrapper title={labels.businessSection}>
-              <BusinessSection form={form} labels={labels} />
-            </FormSectionWrapper>
+          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            {/* Tab 1: Items & Financials */}
+            {(activeTab === "items" || activeTab === "all") && (
+              <>
+                <FormSectionWrapper title={labels.lineItemsSection} defaultOpen={true}>
+                  <LineItemsSection form={form} labels={labels} />
+                </FormSectionWrapper>
 
-            <FormSectionWrapper title={labels.clientSection}>
-              <ClientSection 
-                form={form} 
-                labels={labels} 
-                customers={customers} 
-                canManageCustomers={canManageCustomers} 
-              />
-            </FormSectionWrapper>
+                <FormSectionWrapper title="Tax, Discount & Currency" defaultOpen={activeTab === "items"}>
+                  <FinancialsSection form={form} labels={labels} />
+                </FormSectionWrapper>
+              </>
+            )}
 
-            <FormSectionWrapper title={labels.invoiceInfo}>
-              <InvoiceInfoSection form={form} labels={labels} />
-            </FormSectionWrapper>
+            {/* Tab 2: Parties (From & To) */}
+            {(activeTab === "parties" || activeTab === "all") && (
+              <>
+                <FormSectionWrapper title={labels.businessSection} defaultOpen={true}>
+                  <BusinessSection form={form} labels={labels} />
+                </FormSectionWrapper>
 
-            <FormSectionWrapper title={labels.lineItemsSection}>
-              <LineItemsSection form={form} labels={labels} />
-            </FormSectionWrapper>
+                <FormSectionWrapper title={labels.clientSection} defaultOpen={true}>
+                  <ClientSection 
+                    form={form} 
+                    labels={labels} 
+                    customers={customers} 
+                    canManageCustomers={canManageCustomers} 
+                  />
+                </FormSectionWrapper>
+              </>
+            )}
 
-            <FormSectionWrapper title="Tax, Discount & Currency" defaultOpen={false}>
-              <FinancialsSection form={form} labels={labels} />
-            </FormSectionWrapper>
+            {/* Tab 3: Invoice Info & Notes */}
+            {(activeTab === "details" || activeTab === "all") && (
+              <>
+                <FormSectionWrapper title={labels.invoiceInfo} defaultOpen={true}>
+                  <InvoiceInfoSection form={form} labels={labels} />
+                </FormSectionWrapper>
 
-            <FormSectionWrapper title={labels.notesSection} defaultOpen={false}>
-              <NotesSection form={form} labels={labels} />
-            </FormSectionWrapper>
+                <FormSectionWrapper title={labels.notesSection} defaultOpen={true}>
+                  <NotesSection form={form} labels={labels} />
+                </FormSectionWrapper>
 
-            <FormSectionWrapper title="Signature" defaultOpen={false}>
-              <SignatureSection form={form} />
-            </FormSectionWrapper>
+                <FormSectionWrapper title="Signature" defaultOpen={false}>
+                  <SignatureSection form={form} />
+                </FormSectionWrapper>
+              </>
+            )}
           </form>
         </Form>
       </div>
 
-      <div className="p-6 bg-white border-t border-border shrink-0 flex flex-col gap-3">
-        <div className="grid grid-cols-2 gap-3">
+      {/* Action Footer */}
+      <div className="p-3.5 sm:p-4 bg-white border-t border-slate-200/80 shrink-0 flex flex-col gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={onDownload}
-            className="h-[52px] bg-accent/10 hover:bg-accent/20 text-accent font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="h-10 sm:h-11 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/90 font-medium text-xs sm:text-sm rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-2xs"
           >
-            <Download className="w-5 h-5" /> Download
+            <Download className="w-4 h-4 text-blue-600" /> Download PDF
           </button>
           <button
             type="button"
             onClick={onSendEmail}
             disabled={isSending}
-            className="h-[52px] bg-accent hover:bg-accent/90 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-accent/20 disabled:opacity-70"
+            className="h-10 sm:h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs sm:text-sm rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-xs disabled:opacity-70"
           >
             {isSending ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <Mail className="w-5 h-5" />
+              <Mail className="w-4 h-4" />
             )}
-            Send to Email
+            Send Email
           </button>
         </div>
-        <p className="text-xs text-muted-foreground text-center">
-          {session ? "Premium features active." : "Login to send invoices to email."}
-        </p>
       </div>
     </motion.div>
   );

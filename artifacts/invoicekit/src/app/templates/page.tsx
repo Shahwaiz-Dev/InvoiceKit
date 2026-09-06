@@ -2,7 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { TEMPLATES_SEO } from "@/lib/templates-seo";
 import Link from "next/link";
-import { FileText, ArrowRight } from "lucide-react";
+import { FileText, ArrowRight, Check } from "lucide-react";
 import type { Metadata, Route } from "next";
 
 export const metadata: Metadata = {
@@ -36,30 +36,34 @@ export const metadata: Metadata = {
 
 export default function TemplatesHub() {
   return (
-    <div className="min-h-screen bg-background flex flex-col font-sans">
+    <div className="min-h-screen bg-white flex flex-col font-sans">
       <Header />
 
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="py-20 px-6 bg-secondary/5 border-b border-secondary/10">
+      <main className="flex-1 pt-16">
+        {/* Hero Section on White Canvas */}
+        <section className="py-20 px-6 bg-white border-b border-[#e1e9f0]">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Professional <span className="text-primary italic">Invoice Templates</span>
+            <span className="text-[13px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
+              Layout Directory
+            </span>
+            <h1 className="text-4xl md:text-5xl font-semibold text-[#091135] tracking-[0.512px] mb-4">
+              Professional Invoice Templates
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Find the perfect design for your business. All our templates are meticulously crafted to be professional, 
-              <strong> free to download</strong>, and fully customizable with our <strong>free invoice generator</strong>.
+            <p className="text-base sm:text-lg text-[#36394a] leading-relaxed max-w-2xl mx-auto tracking-[0.128px]">
+              Engineered with architectural discipline. Each layout compiles cleanly to standard vector print format with zero intrusive watermarks.
             </p>
           </div>
         </section>
 
-        {/* Templates Grid */}
-        <section className="py-24 px-6 bg-white">
-          <div className="max-w-7xl mx-auto">
+        {/* Templates Grid on Lavender Wash */}
+        <section className="py-24 px-6 bg-[#f5f3ff]">
+          <div className="max-w-[1200px] mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-foreground mb-4">Choose Your Ideal Invoice Layout</h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Select a template below to start editing immediately or view full template specifications.
+              <h2 className="text-2xl sm:text-3xl font-semibold text-[#091135] tracking-[0.512px]">
+                Choose Your Architectural Layout
+              </h2>
+              <p className="text-[#36394a] text-sm max-w-lg mx-auto mt-2">
+                Select an invoice template to initialize the interactive browser editor.
               </p>
             </div>
 
@@ -67,42 +71,42 @@ export default function TemplatesHub() {
               {TEMPLATES_SEO.map((template) => (
                 <div 
                   key={template.slug} 
-                  className="group flex flex-col p-8 rounded-3xl border border-secondary/10 bg-white hover:border-primary/20 hover:shadow-2xl hover:shadow-secondary/5 transition-all"
+                  className="flex flex-col p-7 rounded-xl border border-[#e1e9f0] bg-white transition-all hover:border-[#b1bbcd] shadow-none"
                 >
-                  <div className="mb-6 bg-secondary/5 w-16 h-16 rounded-2xl flex items-center justify-center group-hover:bg-primary/10 transition-colors">
-                    <FileText className="w-8 h-8 text-secondary group-hover:text-primary transition-colors" />
+                  <div className="mb-5 bg-[#f5f3ff] border border-[#e1e9f0] w-12 h-12 rounded-lg flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-[#0f77ff]" />
                   </div>
                   
-                  <h3 className="text-2xl font-bold mb-2">
-                    <Link href={`/templates/${template.slug}` as Route} className="hover:text-primary transition-colors">
+                  <h3 className="text-xl font-semibold text-[#091135] mb-2">
+                    <Link href={`/templates/${template.slug}` as Route} className="hover:text-[#0f77ff] transition-colors">
                       {template.name}
                     </Link>
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-1">
+                  <p className="text-[#36394a] text-sm leading-relaxed mb-6 flex-1">
                     {template.description.slice(0, 120)}...
                   </p>
 
-                  <div className="space-y-4">
-                    <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="space-y-4 pt-4 border-t border-[#e1e9f0]">
+                    <div className="flex flex-wrap gap-1.5 mb-2">
                       {template.features.slice(0, 2).map((feature, i) => (
-                        <span key={i} className="px-3 py-1 bg-secondary/5 text-[10px] font-bold uppercase tracking-widest text-secondary/60 rounded-full">
+                        <span key={i} className="px-2.5 py-1 bg-[#f5f3ff] text-[11px] font-medium text-[#091135] rounded-full border border-[#e1e9f0]">
                           {feature}
                         </span>
                       ))}
                     </div>
 
-                    <div className="flex flex-col gap-2.5">
+                    <div className="flex flex-col gap-2">
                       <Link
                         href={`/editor?template=${template.editorTheme || template.slug}` as Route}
-                        className="flex items-center justify-center px-6 py-3.5 bg-secondary text-white text-sm font-bold rounded-xl hover:bg-secondary/90 transition-all shadow-lg shadow-secondary/10"
+                        className="flex items-center justify-center px-4 py-2.5 bg-[#127ee3] text-white text-sm font-medium rounded-lg hover:bg-[#0f77ff] transition-all"
                       >
-                        Try This Template
+                        Launch in Editor
                       </Link>
                       <Link
                         href={`/templates/${template.slug}` as Route}
-                        className="flex items-center justify-center gap-1 text-xs font-semibold text-muted-foreground hover:text-primary transition-colors py-1.5"
+                        className="flex items-center justify-center gap-1 text-xs font-medium text-[#36394a] hover:text-[#091135] transition-colors py-1"
                       >
-                        View Template Details <ArrowRight className="w-3.5 h-3.5" />
+                        Inspect Specifications <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
                   </div>
@@ -112,22 +116,28 @@ export default function TemplatesHub() {
           </div>
         </section>
 
-        {/* Trust Section */}
-        <section className="py-20 px-6 bg-secondary text-white text-center">
+        {/* Verification / Trust Section on White */}
+        <section className="py-20 px-6 bg-white border-t border-[#e1e9f0] text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">Why use our invoice templates?</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              <div>
-                <div className="text-primary text-3xl font-bold mb-2">100%</div>
-                <p className="text-white/40 text-sm">Free to use forever</p>
+            <span className="text-[12px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
+              System Guarantees
+            </span>
+            <h2 className="text-2xl font-semibold text-[#091135] mb-8">Why professionals choose our templates</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="p-5 rounded-xl border border-[#e1e9f0] bg-[#f5f3ff]/40">
+                <div className="text-[#0f77ff] text-2xl font-bold font-mono mb-1">100%</div>
+                <p className="text-[#091135] font-medium text-sm">Free to export</p>
+                <p className="text-xs text-[#36394a] mt-1">Clean template is unrestricted</p>
               </div>
-              <div>
-                <div className="text-primary text-3xl font-bold mb-2">Zero</div>
-                <p className="text-white/40 text-sm">Watermarks on PDFs</p>
+              <div className="p-5 rounded-xl border border-[#e1e9f0] bg-[#f5f3ff]/40">
+                <div className="text-[#0f77ff] text-2xl font-bold font-mono mb-1">0</div>
+                <p className="text-[#091135] font-medium text-sm">Watermarks</p>
+                <p className="text-xs text-[#36394a] mt-1">Crisp unbranded PDF export</p>
               </div>
-              <div>
-                <div className="text-primary text-3xl font-bold mb-2">No</div>
-                <p className="text-white/40 text-sm">Sign-up required for Clean</p>
+              <div className="p-5 rounded-xl border border-[#e1e9f0] bg-[#f5f3ff]/40">
+                <div className="text-[#0f77ff] text-2xl font-bold font-mono mb-1">Local</div>
+                <p className="text-[#091135] font-medium text-sm">Browser execution</p>
+                <p className="text-xs text-[#36394a] mt-1">Client records remain private</p>
               </div>
             </div>
           </div>

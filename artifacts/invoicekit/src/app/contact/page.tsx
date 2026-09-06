@@ -2,125 +2,131 @@
 
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Mail, MessageSquare, Phone, MapPin } from "lucide-react";
+import { Mail, MessageSquare, MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-export default function ContactPage() {
+export function ContactPage() {
   return (
-    <div className="min-h-screen bg-background flex flex-col font-sans">
+    <div className="min-h-screen bg-white flex flex-col font-sans">
       <Header />
 
-      <main className="flex-1">
-        {/* Header Section */}
-        <section className="py-20 px-6 bg-secondary/5 text-center">
+      <main className="flex-1 pt-16">
+        {/* Header Section on White Canvas */}
+        <section className="py-20 px-6 bg-white border-b border-[#e1e9f0] text-center">
           <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Get in Touch</h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Have questions about using our <strong>invoice template</strong> library or need help with the <strong>free invoice generator</strong>? We're here to help.
+            <span className="text-[13px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
+              Direct Communication
+            </span>
+            <h1 className="text-4xl md:text-5xl font-semibold text-[#091135] tracking-[0.512px] mb-4">
+              Get in Touch
+            </h1>
+            <p className="text-base sm:text-lg text-[#36394a] leading-relaxed max-w-xl mx-auto tracking-[0.128px]">
+              Have questions regarding PDF rendering, commercial layout support, or account workflows? We respond promptly.
             </p>
           </div>
         </section>
 
-        <section className="py-24 px-6">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {/* Content on Lavender Wash */}
+        <section className="py-24 px-6 bg-[#f5f3ff]">
+          <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Contact Info */}
-            <div className="space-y-8">
-              <div>
-                <h2 className="text-2xl font-bold mb-8">Contact Information</h2>
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-secondary/5 transition-colors group">
-                    <div className="bg-primary/10 p-3 rounded-lg text-primary group-hover:bg-primary group-hover:text-secondary transition-all">
-                      <Mail className="w-5 h-5" />
+            <div className="space-y-6">
+              <div className="bg-white rounded-xl border border-[#e1e9f0] p-6">
+                <h2 className="text-lg font-semibold text-[#091135] mb-6">Channels</h2>
+                <div className="space-y-5">
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-9 h-9 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0] flex items-center justify-center text-[#0f77ff] shrink-0">
+                      <Mail className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="font-semibold text-sm mb-1 uppercase tracking-wider text-muted-foreground">Email Us</p>
-                      <a href="mailto:support@invoicekit.app" className="text-lg font-medium hover:text-primary transition-colors">
+                      <p className="text-xs uppercase tracking-wider text-[#36394a] font-medium">Email Dispatch</p>
+                      <a href="mailto:support@invoicekit.app" className="text-sm font-semibold text-[#091135] hover:text-[#0f77ff] transition-colors">
                         support@invoicekit.app
                       </a>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-secondary/5 transition-colors group">
-                    <div className="bg-primary/10 p-3 rounded-lg text-primary group-hover:bg-primary group-hover:text-secondary transition-all">
-                      <MessageSquare className="w-5 h-5" />
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-9 h-9 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0] flex items-center justify-center text-[#0f77ff] shrink-0">
+                      <MessageSquare className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="font-semibold text-sm mb-1 uppercase tracking-wider text-muted-foreground">Live Chat</p>
-                      <p className="text-lg font-medium">Available for account holders</p>
+                      <p className="text-xs uppercase tracking-wider text-[#36394a] font-medium">Live Inquiries</p>
+                      <p className="text-sm font-semibold text-[#091135]">Available for account holders</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-secondary/5 transition-colors group">
-                    <div className="bg-primary/10 p-3 rounded-lg text-primary group-hover:bg-primary group-hover:text-secondary transition-all">
-                      <MapPin className="w-5 h-5" />
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-9 h-9 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0] flex items-center justify-center text-[#0f77ff] shrink-0">
+                      <MapPin className="w-4 h-4" />
                     </div>
                     <div>
-                      <p className="font-semibold text-sm mb-1 uppercase tracking-wider text-muted-foreground">Office</p>
-                      <p className="text-lg font-medium">Remote-first team &middot; Global</p>
+                      <p className="text-xs uppercase tracking-wider text-[#36394a] font-medium">Operating Base</p>
+                      <p className="text-sm font-semibold text-[#091135]">Distributed worldwide</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-8 bg-secondary text-white rounded-3xl relative overflow-hidden">
-                <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl" />
-                <h3 className="text-xl font-bold mb-4 relative z-10">Common Questions?</h3>
-                <p className="text-white/60 text-sm leading-relaxed mb-6 relative z-10">
-                  Check our FAQ page for instant answers to questions about watermark-free PDFs, account setup, and template customization.
+              <div className="p-6 bg-white rounded-xl border border-[#e1e9f0]">
+                <h3 className="text-base font-semibold text-[#091135] mb-2">Common Questions?</h3>
+                <p className="text-[#36394a] text-xs leading-relaxed mb-4">
+                  Check our documentation index for instant explanations regarding watermark-free exports and privacy boundaries.
                 </p>
-                <Link href="/#faq" className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all relative z-10">
-                  View FAQ <span className="text-lg">→</span>
+                <Link href="/#faq" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0f77ff] hover:text-[#127ee3] transition-colors">
+                  Read FAQ <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
             {/* Contact Form */}
             <div className="lg:col-span-2">
-              <div className="bg-white border border-secondary/10 shadow-2xl shadow-secondary/5 rounded-3xl p-8 md:p-12">
-                <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white border border-[#e1e9f0] rounded-xl p-8 shadow-none">
+                <h2 className="text-xl font-semibold text-[#091135] mb-6 tracking-tight">Send a Dispatch</h2>
+                <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold ml-1">Full Name</label>
+                      <label className="text-xs font-medium text-[#091135]">Full Name</label>
                       <input 
                         type="text" 
                         placeholder="John Doe" 
-                        className="w-full px-4 py-3 rounded-xl border border-secondary/10 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all bg-secondary/5"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-[#e1e9f0] bg-white text-sm text-[#091135] placeholder:text-[#36394a]/50 focus:outline-none focus:border-[#0f77ff] focus:ring-1 focus:ring-[#0f77ff] transition-all"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold ml-1">Email Address</label>
+                      <label className="text-xs font-medium text-[#091135]">Email Address</label>
                       <input 
                         type="email" 
                         placeholder="john@example.com" 
-                        className="w-full px-4 py-3 rounded-xl border border-secondary/10 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all bg-secondary/5"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-[#e1e9f0] bg-white text-sm text-[#091135] placeholder:text-[#36394a]/50 focus:outline-none focus:border-[#0f77ff] focus:ring-1 focus:ring-[#0f77ff] transition-all"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold ml-1">Subject</label>
-                    <select className="w-full px-4 py-3 rounded-xl border border-secondary/10 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all bg-secondary/5 appearance-none">
-                      <option>General Inquiry</option>
-                      <option>Technical Support</option>
-                      <option>Account Issues</option>
-                      <option>Feature Request</option>
+                    <label className="text-xs font-medium text-[#091135]">Subject Category</label>
+                    <select className="w-full px-3.5 py-2.5 rounded-lg border border-[#e1e9f0] bg-white text-sm text-[#091135] focus:outline-none focus:border-[#0f77ff] focus:ring-1 focus:ring-[#0f77ff] transition-all">
+                      <option>General System Inquiry</option>
+                      <option>PDF Export Question</option>
+                      <option>Account & Synchronization</option>
+                      <option>Custom Template Request</option>
                     </select>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold ml-1">Message</label>
+                    <label className="text-xs font-medium text-[#091135]">Message Body</label>
                     <textarea 
-                      placeholder="How can we help you?" 
+                      placeholder="Describe your inquiry or technical requirement..." 
                       rows={5}
-                      className="w-full px-4 py-3 rounded-xl border border-secondary/10 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all bg-secondary/5 resize-none"
+                      className="w-full px-3.5 py-2.5 rounded-lg border border-[#e1e9f0] bg-white text-sm text-[#091135] placeholder:text-[#36394a]/50 focus:outline-none focus:border-[#0f77ff] focus:ring-1 focus:ring-[#0f77ff] transition-all resize-none"
                     ></textarea>
                   </div>
 
                   <button 
                     type="submit"
-                    className="w-full py-4 bg-secondary text-white font-bold rounded-xl hover:bg-secondary/90 transition-all shadow-lg shadow-secondary/20"
+                    className="w-full h-11 bg-[#127ee3] text-white font-medium text-sm rounded-lg hover:bg-[#0f77ff] transition-all"
                   >
-                    Send Message
+                    Submit Inquiry
                   </button>
                 </form>
               </div>
@@ -133,3 +139,5 @@ export default function ContactPage() {
     </div>
   );
 }
+
+export default ContactPage;

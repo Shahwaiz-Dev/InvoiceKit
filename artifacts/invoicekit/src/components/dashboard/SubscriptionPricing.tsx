@@ -161,7 +161,7 @@ export function SubscriptionPricing({
         </TimelineContent>
       </article>
 
-      <div className="grid md:grid-cols-3 gap-8 mx-auto lg:p-4 rounded-3xl">
+      <div className="grid md:grid-cols-3 gap-8 w-full lg:p-4 rounded-3xl">
         {(Object.keys(PLANS) as PlanSubTier[]).map((planKey, index) => {
           const plan = PLANS[planKey];
           const isMomentum = planKey === "momentum";

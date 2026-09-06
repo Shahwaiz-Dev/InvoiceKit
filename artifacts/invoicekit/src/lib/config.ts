@@ -1,7 +1,7 @@
 import { TemplateType } from "./schema";
 
 export const APP_CONFIG = {
-  name: "InvoiceKit",
+  name: "InvoiceBro",
   baseUrl: process.env.NEXT_PUBLIC_APP_URL || "https://www.invoice-sync.com",
 };
 

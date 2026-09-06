@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { CheckCircle2, ShieldCheck, Users2, Zap } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Users2, Zap, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -36,90 +36,108 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   const values = [
     {
-      icon: <CheckCircle2 className="w-6 h-6 text-primary" />,
-      title: "Simplicity First",
-      description: "We believe professional billing shouldn't be complicated. Our tool is built for speed and ease of use.",
+      icon: <CheckCircle2 className="w-5 h-5 text-[#0f77ff]" />,
+      title: "Architectural Simplicity",
+      description: "Billing interfaces should operate like clean blueprints. We eliminate bloated sign-up funnels and unnecessary configuration.",
     },
     {
-      icon: <ShieldCheck className="w-6 h-6 text-primary" />,
-      title: "Privacy Focused",
-      description: "Your data is yours. We don't sell your information or track your every move. No ads, just tools.",
+      icon: <ShieldCheck className="w-5 h-5 text-[#0f77ff]" />,
+      title: "Data Sovereignty",
+      description: "Your financial numbers belong to you. Guest sessions are strictly evaluated inside your browser sandbox without telemetry.",
     },
     {
-      icon: <Zap className="w-6 h-6 text-primary" />,
-      title: "Built for Speed",
-      description: "Generate a professional PDF in under 60 seconds with our streamlined editor and pre-made templates.",
+      icon: <Zap className="w-5 h-5 text-[#0f77ff]" />,
+      title: "Deterministic Speed",
+      description: "Produce a publication-quality invoice PDF in under sixty seconds, perfectly rendered with exact margins and vector lines.",
     },
     {
-      icon: <Users2 className="w-6 h-6 text-primary" />,
-      title: "Community Driven",
-      description: "InvoiceKit is built for freelancers, by people who understand the challenges of running a small business.",
+      icon: <Users2 className="w-5 h-5 text-[#0f77ff]" />,
+      title: "Made for Independent Operators",
+      description: "Engineered specifically for developers, contractors, and studios who require professional billing without monthly taxations.",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col font-sans">
+    <div className="min-h-screen bg-white flex flex-col font-sans">
       <Header />
 
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="py-24 px-6 bg-secondary text-white overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-white/5 skew-x-12 transform translate-x-20" />
-          <div className="max-w-4xl mx-auto relative z-10">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-8">
-              Empowering freelancers to <span className="text-primary italic">bill with confidence.</span>
+      <main className="flex-1 pt-16">
+        {/* Hero Section on White Canvas */}
+        <section className="py-24 px-6 bg-white border-b border-[#e1e9f0]">
+          <div className="max-w-[1200px] mx-auto text-center">
+            <span className="text-[13px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-3 block">
+              Observatory Manifesto
+            </span>
+            <h1 className="text-4xl md:text-6xl font-semibold text-[#091135] tracking-[1.008px] mb-6 max-w-3xl mx-auto leading-[1.15]">
+              Empowering independent operators to bill with clarity.
             </h1>
-            <p className="text-xl text-white/60 leading-relaxed max-w-2xl">
-              InvoiceKit was born out of a simple frustration: professional invoice tools were either too expensive, too complex, or filled with intrusive ads. We built a better way.
+            <p className="text-lg text-[#36394a] leading-relaxed max-w-2xl mx-auto tracking-[0.252px]">
+              InvoiceKit began with a singular observation: modern billing tools had become noisy, bloated, and hostile. We built a room-bright, achromatic canvas that respects your time.
             </p>
           </div>
         </section>
 
-        {/* Mission Section */}
-        <section className="py-24 px-6">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        {/* Mission & Values on Lavender Wash */}
+        <section className="py-24 px-6 bg-[#f5f3ff]">
+          <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
-              <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
+              <span className="text-[12px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
+                Core Principles
+              </span>
+              <h2 className="text-3xl font-semibold text-[#091135] tracking-[0.512px] mb-6">
+                Our Architectural Stance
+              </h2>
+              <div className="space-y-4 text-[#36394a] text-base leading-relaxed tracking-[0.128px]">
                 <p>
-                  At InvoiceKit, our mission is to provide the world's most accessible and professional <strong>free invoice generator</strong>. We believe that everyone, from the solo freelancer to the growing small business, deserves access to high-quality billing tools without a paywall.
+                  At InvoiceKit, we treat invoices as essential commercial contracts that require precision, legibility, and restraint. No intrusive watermarks, no forced paywalls on basic functions, and no arbitrary lock-in.
                 </p>
                 <p>
-                  We focus on high-design <strong>invoice templates</strong> that make your business look professional from day one. Whether you're using our "Clean" template for an instant PDF or managing a full client list in your dashboard, we're here to support your growth.
+                  Every layout in our catalog is engineered to communicate authority and trust. Whether you are generating an ad-hoc bill using the Clean template or archiving clients in your authenticated dashboard, the experience remains quiet and reliable.
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               {values.map((value, i) => (
-                <div key={i} className="p-6 bg-secondary/5 rounded-2xl border border-secondary/10 hover:border-primary/20 transition-all group">
-                  <div className="mb-4 transform group-hover:scale-110 transition-transform">{value.icon}</div>
-                  <h3 className="font-semibold mb-2">{value.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{value.description}</p>
+                <div 
+                  key={i} 
+                  className="p-6 bg-white rounded-xl border border-[#e1e9f0] shadow-none flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="w-9 h-9 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0] flex items-center justify-center mb-4">
+                      {value.icon}
+                    </div>
+                    <h3 className="font-semibold text-base text-[#091135] mb-2">{value.title}</h3>
+                    <p className="text-xs text-[#36394a] leading-relaxed">{value.description}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Call to Action */}
-        <section className="py-24 px-6 bg-secondary/5">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">Ready to create your first invoice?</h2>
-            <p className="text-lg text-muted-foreground mb-10">
-              Join thousands of freelancers who trust InvoiceKit for their professional billing needs.
+        {/* Call to Action on White */}
+        <section className="py-24 px-6 bg-white border-t border-[#e1e9f0]">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-semibold text-[#091135] tracking-[0.512px] mb-4">
+              Begin generating your next invoice
+            </h2>
+            <p className="text-base text-[#36394a] mb-8 tracking-[0.128px]">
+              No credit card. No onboarding waiting period. Instant browser compilation.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
               <Link
                 href="/editor"
-                className="px-8 py-4 bg-primary text-secondary font-semibold rounded-full hover:bg-primary/90 transition-all text-center"
+                className="h-11 px-6 rounded-lg bg-[#127ee3] text-white hover:bg-[#0f77ff] font-medium text-sm transition-all flex items-center justify-center gap-2"
               >
-                Create Free Invoice
+                Launch Free Editor
+                <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/register"
-                className="px-8 py-4 bg-secondary text-white font-semibold rounded-full hover:bg-secondary/90 transition-all text-center"
+                className="h-11 px-6 rounded-lg border border-[#e1e9f0] bg-white text-[#091135] hover:bg-[#f5f3ff] font-medium text-sm transition-all flex items-center justify-center gap-2"
               >
-                Create Free Account
+                Create Account
               </Link>
             </div>
           </div>

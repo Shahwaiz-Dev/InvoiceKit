@@ -6,7 +6,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   CreditCard,
-  CheckCircle2,
   Zap,
   User,
   Loader2,
@@ -15,6 +14,8 @@ import {
   Lock,
   AlertTriangle,
   Trash2,
+  KeyRound,
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
@@ -104,7 +105,7 @@ export function SettingsView({ initialUsage }: SettingsViewProps) {
     });
 
     if (error) {
-      toast.error(error.message || "Failed to change password");
+      toast.error(error.message || "Failed to update password");
     } else {
       toast.success("Password updated successfully");
       setCurrentPassword("");
@@ -119,7 +120,7 @@ export function SettingsView({ initialUsage }: SettingsViewProps) {
     try {
       const res = await fetch("/api/user/delete", { method: "POST" });
       if (res.ok) {
-        toast.success("Your account and data have been permanently deleted.");
+        toast.success("Your account and telemetry records have been removed.");
         await authClient.signOut().catch(() => undefined);
         window.location.href = "/";
       } else {
@@ -134,139 +135,144 @@ export function SettingsView({ initialUsage }: SettingsViewProps) {
   };
 
   return (
-    <>
+    <div className="bg-[#fcfdfe] min-h-screen w-full flex flex-col flex-1">
       <DashboardHeader
-        title="Settings"
-        description="Manage your account, security, and subscription preferences."
+        title="Account Settings"
+        description="Manage your user profile, security credentials, and authentication."
       />
 
-      <main className="flex-1 space-y-6 p-8 pt-6 max-w-4xl">
+      <main className="flex-1 space-y-6 p-8 pt-6 w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Account Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <User className="h-4 w-4" /> Personal Account
+          {/* Account Profile Card */}
+          <Card className="rounded-xl border border-[#e1e9f0] bg-white shadow-none">
+            <CardHeader className="border-b border-[#e1e9f0] px-6 py-4">
+              <CardTitle className="text-xs font-semibold uppercase tracking-wider text-[#36394a] flex items-center gap-2">
+                <User className="h-4 w-4 text-[#0f77ff]" /> Account Profile
               </CardTitle>
-              <CardDescription>
-                Your personal profile linked to this account.
-              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center gap-4 p-4 rounded-lg bg-slate-50 border border-slate-100">
-                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xl">
-                  {user?.name?.charAt(0) || "U"}
+            <CardContent className="p-6 space-y-5">
+              <div className="flex items-center gap-3.5 p-4 rounded-xl bg-[#f5f3ff]/40 border border-[#e1e9f0]">
+                <div className="h-12 w-12 rounded-xl bg-[#f5f3ff] border border-[#e1e9f0] flex items-center justify-center text-[#091135] font-bold text-lg">
+                  {user?.name?.charAt(0)?.toUpperCase() || "U"}
                 </div>
-                <div>
-                  <p className="font-semibold">{user?.name}</p>
-                  <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <Mail className="h-3 w-3" />
+                <div className="space-y-0.5">
+                  <p className="font-semibold text-sm text-[#091135]">{user?.name || "Member"}</p>
+                  <div className="flex items-center gap-1.5 text-xs text-[#36394a]">
+                    <Mail className="h-3.5 w-3.5 text-[#8e9bb0]" />
                     {user?.email}
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-4 pt-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    Verification Status
+              <div className="space-y-3 text-xs pt-1">
+                <div className="flex items-center justify-between py-1 border-b border-[#e1e9f0]/60">
+                  <span className="text-[#36394a]">Security Status</span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <ShieldCheck className="h-3 w-3 text-emerald-600" />
+                    Verified
                   </span>
-                  <Badge
-                    variant="outline"
-                    className="bg-emerald-50 text-emerald-700 border-emerald-200 gap-1"
-                  >
-                    <ShieldCheck className="h-3 w-3" /> Verified
-                  </Badge>
                 </div>
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <span>Account created</span>
-                  <span>
+                <div className="flex items-center justify-between py-1">
+                  <span className="text-[#36394a]">Member Since</span>
+                  <span className="font-mono text-[#091135]">
                     {user?.createdAt
-                      ? new Date(user.createdAt).toLocaleDateString()
-                      : "N/A"}
+                      ? new Date(user.createdAt).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      : "Recently"}
                   </span>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Subscription Link */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <Zap className="h-4 w-4" /> Subscription Plan
+          {/* Subscription Link Card */}
+          <Card className="rounded-xl border border-[#e1e9f0] bg-white shadow-none">
+            <CardHeader className="border-b border-[#e1e9f0] px-6 py-4">
+              <CardTitle className="text-xs font-semibold uppercase tracking-wider text-[#36394a] flex items-center gap-2">
+                <Zap className="h-4 w-4 text-[#0f77ff]" /> Subscription Details
               </CardTitle>
-              <CardDescription>
-                View your current plan and available upgrades.
-              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-lg border border-slate-100 bg-slate-50/50">
+            <CardContent className="p-6 space-y-4">
+              <div className="flex items-center justify-between p-4 rounded-xl border border-[#e1e9f0] bg-[#f5f3ff]/40">
                 <div className="space-y-1">
-                  <p className="font-semibold text-lg capitalize">{usageData?.plan || "Explorer"}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {usageData?.usage} / {usageData?.limit} invoices used this {usageData?.usageWindowLabel || "month"}
+                  <div className="flex items-center gap-2">
+                    <p className="font-bold text-base capitalize text-[#091135]">{usageData?.plan || "Explorer"}</p>
+                    {usageData?.isPro && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#0f77ff] text-white">
+                        PRO
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-[#36394a]">
+                    {usageData?.usage} of {usageData?.limit} monthly compiled invoices used
                   </p>
                 </div>
-                {usageData?.isPro && <Zap className="h-5 w-5 text-amber-500 fill-amber-500" />}
+                <Zap className="h-5 w-5 text-[#0f77ff]" />
               </div>
-              <Button asChild variant="outline" className="w-full">
-                <Link href="/dashboard/subscription">
-                  View Subscription Details
+              <Button asChild variant="outline" className="w-full border-[#e1e9f0] text-xs h-9 font-medium text-[#091135] hover:bg-[#f5f3ff]">
+                <Link href="/dashboard/subscription" className="flex items-center justify-center gap-1.5">
+                  Manage Plan & Quotas
+                  <ExternalLink className="h-3.5 w-3.5 text-[#8e9bb0]" />
                 </Link>
               </Button>
             </CardContent>
           </Card>
 
-          {/* Change Password */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                <Lock className="h-4 w-4" /> Security
+          {/* Change Password Card */}
+          <Card className="rounded-xl border border-[#e1e9f0] bg-white shadow-none">
+            <CardHeader className="border-b border-[#e1e9f0] px-6 py-4">
+              <CardTitle className="text-xs font-semibold uppercase tracking-wider text-[#36394a] flex items-center gap-2">
+                <KeyRound className="h-4 w-4 text-[#0f77ff]" /> Security & Password
               </CardTitle>
-              <CardDescription>
-                Update your password to keep your account secure.
-              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleChangePassword} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="current-password">Current Password</Label>
+            <CardContent className="p-6">
+              <form onSubmit={handleChangePassword} className="space-y-3.5">
+                <div className="space-y-1.5">
+                  <Label htmlFor="current-password" className="text-xs font-semibold text-[#091135]">Current Password</Label>
                   <Input
                     id="current-password"
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
+                    className="border-[#e1e9f0] focus-visible:ring-[#0f77ff] text-xs h-9 bg-white"
+                    placeholder="••••••••"
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="new-password">New Password</Label>
+                <div className="space-y-1.5">
+                  <Label htmlFor="new-password" className="text-xs font-semibold text-[#091135]">New Password</Label>
                   <Input
                     id="new-password"
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    className="border-[#e1e9f0] focus-visible:ring-[#0f77ff] text-xs h-9 bg-white"
+                    placeholder="At least 8 characters"
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm New Password</Label>
+                <div className="space-y-1.5">
+                  <Label htmlFor="confirm-password" className="text-xs font-semibold text-[#091135]">Confirm New Password</Label>
                   <Input
                     id="confirm-password"
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="border-[#e1e9f0] focus-visible:ring-[#0f77ff] text-xs h-9 bg-white"
+                    placeholder="Repeat new password"
                     required
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-full"
+                  className="w-full bg-[#127ee3] hover:bg-[#0f77ff] text-white text-xs font-medium h-9 shadow-sm rounded-lg mt-2"
                   disabled={isChangingPassword}
                 >
                   {isChangingPassword ? (
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    <Loader2 className="h-3.5 w-3.5 animate-spin mr-2" />
                   ) : null}
                   Update Password
                 </Button>
@@ -275,56 +281,47 @@ export function SettingsView({ initialUsage }: SettingsViewProps) {
           </Card>
 
           {/* Danger Zone */}
-          <Card className="border-destructive/20 bg-destructive/[0.01]">
-            <CardHeader>
-              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-destructive flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4" /> Danger Zone
+          <Card className="rounded-xl border border-red-200/80 bg-red-50/20 shadow-none">
+            <CardHeader className="border-b border-red-200/60 px-6 py-4">
+              <CardTitle className="text-xs font-semibold uppercase tracking-wider text-red-600 flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-red-500" /> Danger Zone
               </CardTitle>
-              <CardDescription>
-                Permanent actions that cannot be undone.
-              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Deleting your account will permanently wipe all your invoices,
-                business settings, and subscription data. This action is
-                irreversible.
+            <CardContent className="p-6 space-y-4">
+              <p className="text-xs text-[#36394a] leading-relaxed">
+                Permanently eliminate your account, business credentials, and all recorded invoices. This action cannot be reversed.
               </p>
               {isPro && (
-                <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 text-[11px] text-amber-800 font-medium">
-                  <span className="font-bold">IMPORTANT:</span> You have an
-                  active Pro subscription. Please cancel it in the customer
-                  portal before deleting your account to avoid future charges.
+                <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800">
+                  <span className="font-semibold">Notice:</span> You have an active subscription. Please cancel your plan in the billing portal prior to deletion.
                 </div>
               )}
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="destructive" className="w-full">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete My Account
+                  <Button variant="outline" className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 text-xs h-9">
+                    <Trash2 className="h-3.5 w-3.5 mr-2" />
+                    Delete Account
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent>
-                   <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
+                <AlertDialogContent className="border-[#e1e9f0] bg-white rounded-2xl p-6 shadow-xl">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-base font-semibold text-[#091135]">
+                      Confirm Permanent Deletion
                     </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will permanently delete your account and all
-                      associated data from our servers. This action cannot be
-                      undone.
+                    <AlertDialogDescription className="text-xs text-[#36394a]">
+                      This will permanently wipe your account and all associated telemetry, invoice documents, and customer databases.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogFooter className="gap-2">
+                    <AlertDialogCancel className="border-[#e1e9f0] text-xs h-9">Cancel</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDeleteAccount}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      className="bg-red-600 text-white hover:bg-red-700 text-xs h-9 px-4 font-medium"
                     >
                       {isDeleting ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <Loader2 className="h-3.5 w-3.5 animate-spin mr-2" />
                       ) : null}
-                      Yes, delete my account
+                      Yes, Delete Account
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -333,6 +330,6 @@ export function SettingsView({ initialUsage }: SettingsViewProps) {
           </Card>
         </div>
       </main>
-    </>
+    </div>
   );
 }

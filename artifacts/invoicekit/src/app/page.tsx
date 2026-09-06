@@ -10,10 +10,10 @@ export const metadata: Metadata = {
     canonical: "https://www.invoice-sync.com",
   },
   openGraph: {
-    title: "Free Invoice Generator (No Sign-Up) | InvoiceKit",
+    title: "Free Invoice Generator (No Sign-Up) | InvoiceBro",
     description: "Create and download professional invoices in seconds. No sign-up, no hidden fees, and zero watermarks.",
     url: "https://www.invoice-sync.com",
-    siteName: "InvoiceKit",
+    siteName: "InvoiceBro",
     locale: "en_US",
     type: "website",
   },
@@ -23,7 +23,7 @@ export default function Page() {
   const organizationLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "InvoiceKit",
+    name: "InvoiceBro",
     url: "https://www.invoice-sync.com",
     logo: "https://www.invoice-sync.com/favicon.svg",
     description: "Free professional invoice generator for freelancers, contractors, and small businesses.",
@@ -32,7 +32,7 @@ export default function Page() {
   const softwareLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "InvoiceKit",
+    name: "InvoiceBro",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     offers: {
@@ -41,7 +41,7 @@ export default function Page() {
       priceCurrency: "USD",
     },
     description:
-      "InvoiceKit is a professional-grade free invoice generator that lets anyone create PDF invoices with zero watermarks.",
+      "InvoiceBro is a professional-grade free invoice generator that lets anyone create PDF invoices with zero watermarks.",
   };
 
   const faqJsonLd = {
@@ -53,7 +53,7 @@ export default function Page() {
         name: "Is this free invoice generator actually free?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, InvoiceKit is a 100% free invoice generator. No trial periods, no pro tiers, and no hidden fees.",
+          text: "Yes, InvoiceBro is a 100% free invoice generator. No trial periods, no pro tiers, and no hidden fees.",
         },
       },
       {
@@ -103,7 +103,7 @@ export default function Page() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     url: "https://www.invoice-sync.com",
-    name: "InvoiceKit",
+    name: "InvoiceBro",
     description: "Free professional invoice generator",
   };
 

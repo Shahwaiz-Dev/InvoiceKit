@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   ChevronRight,
   Zap,
+  ArrowUpRight,
 } from "lucide-react";
 import { DashboardHeader } from "@/components/dashboard/Header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -71,6 +72,31 @@ function formatCurrency(amount: number, currency: string) {
   return formatters.get(currency)!.format(amount);
 }
 
+function StatusPill({ status }: { status: InvoiceStatus }) {
+  if (status === "paid") {
+    return (
+      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+        Paid
+      </span>
+    );
+  }
+  if (status === "sent") {
+    return (
+      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-[#0f77ff] border border-blue-200">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#0f77ff]" />
+        Sent
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#f5f3ff] text-[#36394a] border border-[#e1e9f0]">
+      <span className="w-1.5 h-1.5 rounded-full bg-[#8e9bb0]" />
+      Draft
+    </span>
+  );
+}
+
 export function DashboardView({ initialInvoices, initialUsage, userName }: DashboardViewProps) {
   const { data: invoices = initialInvoices } = useQuery<InvoiceRecord[]>({
     queryKey: ["invoices"],
@@ -101,141 +127,194 @@ export function DashboardView({ initialInvoices, initialUsage, userName }: Dashb
   const subscriptionHref = "/dashboard/subscription" as Route;
 
   return (
-    <>
+    <div className="flex flex-col flex-1 min-h-0 bg-[#fcfdfe] w-full">
       <DashboardHeader 
         title={`Welcome back, ${userName.split(" ")[0] || "User"}`} 
-        description="Here's what's happening with your invoices today."
+        description="Invoice telemetry and financial overview."
       >
-        <Button asChild size="sm">
-            <Link href="/editor">
-                <Plus className="mr-2 h-4 w-4" />
-                New Invoice
-            </Link>
+        <Button asChild size="sm" className="bg-[#127ee3] hover:bg-[#0f77ff] text-white font-medium shadow-sm transition-colors">
+          <Link href="/editor">
+            <Plus className="mr-1.5 h-4 w-4" />
+            New Invoice
+          </Link>
         </Button>
       </DashboardHeader>
 
-      <main className="flex-1 space-y-6 p-8 pt-6">
-        {/* Usage Card */}
-        <Card className="border-primary/10 bg-primary/[0.02]">
-            <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-lg">Plan: {usageData?.isPro ? "Pro" : "Free"}</h3>
-                            {usageData?.isPro && <Zap className="h-4 w-4 text-amber-500 fill-amber-500" />}
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                            You have sent {usageData?.usage || 0} out of {usageData?.limit || 0} invoices this {usageData?.usageWindowLabel || "month"}.
-                        </p>
-                    </div>
-                    <div className="flex flex-col gap-2 min-w-[200px]">
-                        <Progress value={usageData ? (usageData.usage / usageData.limit) * 100 : 0} className="h-2" />
-                        {!usageData?.isPro && (
-                            <Button asChild size="sm" variant="default" className="w-full bg-amber-600 hover:bg-amber-700">
-                                <Link href={subscriptionHref}>Upgrade to Pro</Link>
-                            </Button>
-                        )}
-                    </div>
+      <main className="flex-1 space-y-6 p-8 pt-6 w-full">
+        {/* Usage Telemetry Banner */}
+        <Card className="border border-[#e1e9f0] bg-white rounded-xl shadow-none overflow-hidden relative">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#127ee3] to-[#0f77ff]" />
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#f5f3ff] text-[#091135] border border-[#e1e9f0]">
+                    <Zap className="h-3.5 w-3.5 text-[#0f77ff] fill-[#0f77ff]" />
+                    {usageData?.isPro ? "Pro Observatory" : "Free Tier"}
+                  </span>
+                  <span className="text-xs font-medium text-[#36394a]">
+                    Active Billing Cycle
+                  </span>
                 </div>
-            </CardContent>
+                <h3 className="font-semibold text-base text-[#091135] tracking-tight">
+                  You have generated {usageData?.usage || 0} of {usageData?.limit || 0} invoices this {usageData?.usageWindowLabel || "month"}.
+                </h3>
+                <p className="text-xs text-[#36394a]">
+                  {usageData?.isPro 
+                    ? "Unlimited client database and premium PDF exports are active." 
+                    : "Upgrade to Pro for unlimited telemetry, customer database, and custom domain exports."}
+                </p>
+              </div>
+              <div className="flex flex-col gap-2.5 min-w-[220px]">
+                <div className="flex justify-between text-xs font-mono text-[#36394a]">
+                  <span>{Math.round(((usageData?.usage || 0) / (usageData?.limit || 1)) * 100)}% utilized</span>
+                  <span>{usageData?.usage || 0}/{usageData?.limit || 0}</span>
+                </div>
+                <Progress 
+                  value={usageData ? Math.min(100, (usageData.usage / (usageData.limit || 1)) * 100) : 0} 
+                  className="h-2 bg-[#f5f3ff] border border-[#e1e9f0]" 
+                />
+                {!usageData?.isPro && (
+                  <Button asChild size="sm" className="w-full bg-[#127ee3] hover:bg-[#0f77ff] text-white font-medium text-xs shadow-sm mt-1">
+                    <Link href={subscriptionHref} className="flex items-center justify-center gap-1.5">
+                      Upgrade to Pro
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            </div>
+          </CardContent>
         </Card>
 
-        {/* Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+        {/* Metric Cards */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Card className="rounded-xl border border-[#e1e9f0] bg-white shadow-none hover:border-[#0f77ff]/30 transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-xs uppercase tracking-wider text-[#36394a] font-semibold">Total Billed</CardTitle>
+              <div className="h-8 w-8 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0]/60 flex items-center justify-center text-[#0f77ff]">
+                <TrendingUp className="h-4 w-4" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold font-mono">{formatCurrency(stats.billed, "USD")}</div>
-              <p className="text-xs text-muted-foreground">Lifetime across all invoices</p>
+              <div className="text-2xl font-bold font-mono tracking-tight text-[#091135]">{formatCurrency(stats.billed, "USD")}</div>
+              <p className="text-xs text-[#36394a] mt-1">Cumulative volume</p>
             </CardContent>
           </Card>
-          <Card>
+
+          <Card className="rounded-xl border border-[#e1e9f0] bg-white shadow-none hover:border-[#0f77ff]/30 transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Invoices</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-xs uppercase tracking-wider text-[#36394a] font-semibold">Invoices</CardTitle>
+              <div className="h-8 w-8 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0]/60 flex items-center justify-center text-[#0f77ff]">
+                <FileText className="h-4 w-4" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold font-mono">{stats.total}</div>
-              <p className="text-xs text-muted-foreground">Active records in database</p>
+              <div className="text-2xl font-bold font-mono tracking-tight text-[#091135]">{stats.total}</div>
+              <p className="text-xs text-[#36394a] mt-1">Compiled documents</p>
             </CardContent>
           </Card>
-          <Card>
+
+          <Card className="rounded-xl border border-[#e1e9f0] bg-white shadow-none hover:border-[#0f77ff]/30 transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sent</CardTitle>
-              <Send className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-xs uppercase tracking-wider text-[#36394a] font-semibold">Awaiting</CardTitle>
+              <div className="h-8 w-8 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0]/60 flex items-center justify-center text-[#0f77ff]">
+                <Send className="h-4 w-4" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold font-mono">{stats.sent}</div>
-              <p className="text-xs text-muted-foreground">Awaiting payment</p>
+              <div className="text-2xl font-bold font-mono tracking-tight text-[#091135]">{stats.sent}</div>
+              <p className="text-xs text-[#36394a] mt-1">Dispatched to clients</p>
             </CardContent>
           </Card>
-          <Card>
+
+          <Card className="rounded-xl border border-[#e1e9f0] bg-white shadow-none hover:border-[#0f77ff]/30 transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Paid</CardTitle>
-              <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+              <CardTitle className="text-xs uppercase tracking-wider text-[#36394a] font-semibold">Settled</CardTitle>
+              <div className="h-8 w-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+                <CheckCircle2 className="h-4 w-4" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold font-mono">{stats.paid}</div>
-              <p className="text-xs text-muted-foreground">Successfully collected</p>
+              <div className="text-2xl font-bold font-mono tracking-tight text-[#091135]">{stats.paid}</div>
+              <p className="text-xs text-[#36394a] mt-1">Confirmed payments</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Recent Invoices */}
-        <Card className="col-span-4">
-            <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                    <CardTitle>Recent Invoices</CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">Your latest invoice activity.</p>
+        {/* Recent Invoices Card */}
+        <Card className="rounded-xl border border-[#e1e9f0] bg-white shadow-none overflow-hidden">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-[#e1e9f0] bg-[#ffffff] px-6 py-4">
+            <div>
+              <CardTitle className="text-sm font-semibold tracking-tight text-[#091135]">Recent Invoices</CardTitle>
+              <p className="text-xs text-[#36394a] mt-0.5">Real-time ledger activity across your account.</p>
+            </div>
+            <Button asChild variant="outline" size="sm" className="h-8 border-[#e1e9f0] text-xs font-medium text-[#091135] hover:bg-[#f5f3ff]">
+              <Link href={"/dashboard/invoices" as any}>
+                View All Records
+              </Link>
+            </Button>
+          </CardHeader>
+          <CardContent className="p-0">
+            {recentInvoices.length === 0 ? (
+              <div className="flex h-48 flex-col items-center justify-center text-center p-6">
+                <div className="h-10 w-10 rounded-xl bg-[#f5f3ff] border border-[#e1e9f0] flex items-center justify-center text-[#0f77ff] mb-3">
+                  <FileText className="h-5 w-5" />
                 </div>
-                <Button asChild variant="outline" size="sm">
-                    <Link href={"/dashboard/invoices" as any}>
-                        View All
-                    </Link>
+                <p className="text-sm font-semibold text-[#091135]">No invoice records yet</p>
+                <p className="text-xs text-[#36394a] mt-1 max-w-sm">Create and issue your first invoice using the interactive visual editor.</p>
+                <Button asChild size="sm" className="bg-[#127ee3] hover:bg-[#0f77ff] text-white text-xs mt-4">
+                  <Link href="/editor">
+                    <Plus className="mr-1.5 h-3.5 w-3.5" />
+                    New Invoice
+                  </Link>
                 </Button>
-            </CardHeader>
-            <CardContent>
-                {recentInvoices.length === 0 ? (
-                    <div className="flex h-[200px] flex-col items-center justify-center text-center">
-                        <p className="text-sm text-muted-foreground">No invoices yet.</p>
-                        <Button asChild variant="link">
-                            <Link href="/editor">Create your first one</Link>
-                        </Button>
+              </div>
+            ) : (
+              <div className="divide-y divide-[#e1e9f0]">
+                {recentInvoices.map((inv) => (
+                  <Link 
+                    href={`/editor?id=${inv._id}`} 
+                    key={inv._id}
+                    className="flex items-center justify-between px-6 py-3.5 hover:bg-[#f5f3ff]/60 transition-colors group"
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <div className="h-9 w-9 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0] flex items-center justify-center text-[#0f77ff] shrink-0">
+                        <FileText className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs font-semibold font-mono text-[#091135] group-hover:text-[#0f77ff] transition-colors">
+                            {inv.invoiceNumber}
+                          </p>
+                          <span className="sm:hidden">
+                            <StatusPill status={inv.status} />
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#36394a]">{inv.clientName}</p>
+                      </div>
                     </div>
-                ) : (
-                    <div className="space-y-4">
-                        {recentInvoices.map((inv) => (
-                            <Link 
-                                href={`/editor?id=${inv._id}`} 
-                                key={inv._id}
-                                className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted/5 transition-colors group"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                                        <FileText className="h-5 w-5" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-medium tracking-tight font-mono">{inv.invoiceNumber}</p>
-                                        <p className="text-xs text-muted-foreground">{inv.clientName}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-6">
-                                    <div className="text-right hidden sm:block">
-                                        <p className="text-sm font-bold font-mono">{formatCurrency(calcTotal(inv), inv.currency || "USD")}</p>
-                                        <p className="text-[10px] text-muted-foreground uppercase">{inv.status}</p>
-                                    </div>
-                                    <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-                                </div>
-                            </Link>
-                        ))}
+                    <div className="flex items-center gap-5">
+                      <div className="hidden sm:block">
+                        <StatusPill status={inv.status} />
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs font-bold font-mono text-[#091135]">
+                          {formatCurrency(calcTotal(inv), inv.currency || "USD")}
+                        </p>
+                        <p className="text-[10px] text-[#36394a]">
+                          {new Date(inv.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                        </p>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-[#8e9bb0] group-hover:text-[#091135] group-hover:translate-x-0.5 transition-all" />
                     </div>
-                )}
-            </CardContent>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </CardContent>
         </Card>
       </main>
-    </>
+    </div>
   );
 }

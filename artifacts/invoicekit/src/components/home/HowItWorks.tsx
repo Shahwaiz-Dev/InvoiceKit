@@ -6,73 +6,73 @@ import { MousePointer2, PenLine, Download } from "lucide-react";
 export function HowItWorks() {
   const steps = [
     {
-      icon: <MousePointer2 className="w-6 h-6 text-primary" />,
-      title: "Select Template",
-      description: "Start instantly with the Clean template, or create an account to unlock the full library of professional layouts.",
-      accentClass: "from-primary/15 via-primary/5 to-transparent",
+      num: "01",
+      icon: <MousePointer2 className="w-5 h-5 text-[#0f77ff]" />,
+      title: "Select Layout",
+      description: "Initialize immediately with the Clean layout, or sign in to activate the complete library of specialized templates.",
     },
     {
-      icon: <PenLine className="w-6 h-6 text-primary" />,
-      title: "Enter Data",
-      description: "Fill in your client details and line items. Our online invoice maker calculates taxes automatically.",
-      accentClass: "from-accent/20 via-accent/5 to-transparent",
+      num: "02",
+      icon: <PenLine className="w-5 h-5 text-[#0f77ff]" />,
+      title: "Enter Records",
+      description: "Specify recipient identity, hours or units, and rates. Taxes, discounts, and line totals compute in milliseconds.",
     },
     {
-      icon: <Download className="w-6 h-6 text-primary" />,
-      title: "Download PDF",
-      description: "Download your professional PDF invoice instantly with no watermark. Create an account whenever you want more templates and saved workflows.",
-      accentClass: "from-secondary/20 via-secondary/5 to-transparent",
+      num: "03",
+      icon: <Download className="w-5 h-5 text-[#0f77ff]" />,
+      title: "Export PDF",
+      description: "Trigger print rendering to produce an uncompromised vector PDF with zero watermarks, ready for client delivery.",
     },
   ];
 
   return (
-    <section
-      id="how-it-works"
-      className="relative overflow-hidden px-6 py-24 bg-[linear-gradient(180deg,hsl(var(--background))_0%,#ffffff_45%,hsl(var(--background))_100%)]"
-    >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-20 top-10 h-60 w-60 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -right-16 bottom-0 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
-      </div>
-
-      <div className="relative max-w-6xl mx-auto">
-        <div className="text-center mb-14">
-          <span className="inline-flex items-center rounded-full border border-accent/25 bg-accent/10 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent mb-4">
-            Simple by design
+    <section id="how-it-works" className="px-6 py-24 bg-white">
+      <div className="max-w-[1200px] mx-auto">
+        <div className="text-center mb-16">
+          <span className="text-[13px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
+            Three-phase pipeline
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl text-foreground tracking-tight leading-tight">
-            Create Your Invoice in Three Easy Steps
+          <h2 className="text-3xl sm:text-4xl font-semibold text-[#091135] tracking-[0.512px] leading-tight">
+            Designed for minimal operational overhead
           </h2>
+          <p className="text-base text-[#36394a] max-w-xl mx-auto mt-3 tracking-[0.128px]">
+            No onboarding queues or verification walls. The shortest distance between work finished and invoice dispatched.
+          </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
           {steps.map((step, i) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 18 }}
+              key={step.num}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ delay: i * 0.1, duration: 0.45, ease: "easeOut" }}
-              whileHover={{ y: -6 }}
-              className="group relative isolate overflow-hidden rounded-2xl border border-border/75 bg-white/90 p-7 shadow-[0_18px_45px_-32px_rgba(30,58,138,.55)] transition-all duration-300 hover:border-primary/45"
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ delay: i * 0.1, duration: 0.4 }}
+              className="bg-white rounded-xl border border-[#e1e9f0] p-7 transition-colors hover:border-[#b1bbcd] flex flex-col justify-between shadow-none"
             >
-              <div className={`absolute inset-x-0 top-0 h-20 bg-gradient-to-b ${step.accentClass}`} />
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="w-10 h-10 rounded-lg bg-[#f5f3ff] border border-[#e1e9f0] flex items-center justify-center">
+                    {step.icon}
+                  </div>
+                  <span className="font-mono text-xs font-semibold text-[#36394a]/60">
+                    PHASE {step.num}
+                  </span>
+                </div>
 
-              {i < steps.length - 1 ? (
-                <div className="hidden md:block absolute top-[3.5rem] -right-3 w-6 border-t border-dashed border-primary/30" />
-              ) : null}
+                <h3 className="text-lg font-semibold text-[#091135] mb-2 tracking-tight">
+                  {step.title}
+                </h3>
 
-              <div className="w-12 h-12 bg-white border border-primary/20 rounded-xl flex items-center justify-center mb-5 relative z-10 group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                {step.icon}
+                <p className="text-sm text-[#36394a] leading-relaxed tracking-[0.056px]">
+                  {step.description}
+                </p>
               </div>
 
-              <h3 className="text-xl font-semibold text-foreground mb-3 relative z-10">
-                {step.title}
-              </h3>
-
-              <p className="text-[15px] text-muted-foreground leading-relaxed relative z-10">
-                {step.description}
-              </p>
+              <div className="mt-6 pt-4 border-t border-[#e1e9f0] flex items-center justify-between text-xs text-[#36394a]">
+                <span>Status</span>
+                <span className="font-medium text-[#0f77ff]">Ready</span>
+              </div>
             </motion.div>
           ))}
         </div>

@@ -6,161 +6,238 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-card-border: hsl(var(--card-border));
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-border: var(--card-border);
 
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-popover-border: hsl(var(--popover-border));
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover-border: var(--popover-border);
 
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --color-primary-border: var(--primary-border);
 
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary-border: var(--secondary-border);
 
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-muted-border: var(--muted-border);
 
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-accent-border: var(--accent-border);
 
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-destructive-border: var(--destructive-border);
 
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 
-  --color-sidebar: hsl(var(--sidebar));
-  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
-  --color-sidebar-border: hsl(var(--sidebar-border));
-  --color-sidebar-primary: hsl(var(--sidebar-primary));
-  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-  --color-sidebar-primary-border: var(--sidebar-primary-border);
-  --color-sidebar-accent: hsl(var(--sidebar-accent));
-  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
-  --color-sidebar-accent-border: var(--sidebar-accent-border);
-  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  /* Clearbit Named Colors */
+  --color-midnight-ink: #091135;
+  --color-electric-blue: #0f77ff;
+  --color-cobalt-surface: #127ee3;
+  --color-slate: #36394a;
+  --color-frost-border: #e1e9f0;
+  --color-mist: #b1bbcd;
+  --color-graphite: #000000;
+  --color-paper: #ffffff;
+  --color-lavender-wash: #f5f3ff;
 
-  --font-sans: var(--app-font-sans);
-  --font-serif: var(--app-font-serif);
-  --font-mono: var(--app-font-mono);
+  --font-sans: 'Inter', var(--app-font-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-intervar: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Inter', sans-serif;
+  --font-mono: var(--app-font-mono), monospace;
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-cards: 12px;
+  --radius-tags: 9999px;
+  --radius-buttons: 8px;
+  --radius-inputs: 8px;
 }
 
-/* LIGHT MODE */
+/* CLEARBIT LIGHT THEME SYSTEM */
 :root {
-  --button-outline: rgba(0,0,0, .10);
-  --badge-outline: rgba(0,0,0, .05);
+  /* Clearbit Palette */
+  --color-midnight-ink: #091135;
+  --color-electric-blue: #0f77ff;
+  --color-cobalt-surface: #127ee3;
+  --color-slate: #36394a;
+  --color-frost-border: #e1e9f0;
+  --color-mist: #b1bbcd;
+  --color-graphite: #000000;
+  --color-paper: #ffffff;
+  --color-lavender-wash: #f5f3ff;
 
-  --opaque-button-border-intensity: -8;
+  /* Semantic UI Tokens mapped to Clearbit */
+  --background: #ffffff; /* Paper canvas */
+  --foreground: #091135; /* Midnight Ink */
 
-  --elevate-1: rgba(0,0,0, .03);
-  --elevate-2: rgba(0,0,0, .08);
+  --border: #e1e9f0; /* Frost Border */
+  --input: #e1e9f0;  /* Frost Border */
+  --ring: #0f77ff;   /* Electric Blue */
 
-  --background: 45 20% 96%; /* Warm White #F8F7F4 */
-  --foreground: 24 9% 10%; /* Deep Ink #1C1917 */
+  --card: #ffffff; /* Paper */
+  --card-foreground: #091135; /* Midnight Ink */
+  --card-border: #e1e9f0; /* Frost Border */
 
-  --border: 24 6% 90%; /* Light Smoke #E7E5E4 */
+  --popover: #ffffff;
+  --popover-foreground: #091135;
+  --popover-border: #e1e9f0;
 
-  --card: 0 0% 100%; /* Pure White #FFFFFF */
-  --card-foreground: 24 9% 10%;
-  --card-border: 24 6% 90%;
+  --primary: #127ee3; /* Cobalt Surface (Action Button) */
+  --primary-foreground: #ffffff;
+  --primary-border: #127ee3;
 
-  --sidebar: 0 0% 100%;
-  --sidebar-foreground: 24 9% 10%;
-  --sidebar-border: 24 6% 90%;
-  --sidebar-primary: 228 71% 55%; /* Slate Blue #3B5BDB */
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 175 84% 32%; /* Teal Mint #0D9488 */
-  --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-ring: 228 71% 55%;
+  --secondary: #091135; /* Midnight Ink */
+  --secondary-foreground: #ffffff;
+  --secondary-border: #091135;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 24 9% 10%;
-  --popover-border: 24 6% 90%;
+  --muted: #f5f3ff; /* Lavender Wash */
+  --muted-foreground: #36394a; /* Slate */
+  --muted-border: #e1e9f0;
 
-  --primary: 228 71% 55%; /* Slate Blue #3B5BDB */
-  --primary-foreground: 0 0% 100%;
+  --accent: #0f77ff; /* Electric Blue */
+  --accent-foreground: #ffffff;
+  --accent-border: #0f77ff;
 
-  --secondary: 224 64% 33%; /* Deep Navy #1E3A8A */
-  --secondary-foreground: 0 0% 100%;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --destructive-border: #ef4444;
 
-  --muted: 25 5% 45%; /* Stone Gray #78716C */
-  --muted-foreground: 24 9% 10%;
+  /* Sidebar Tokens */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #091135;
+  --sidebar-primary: #127ee3;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f5f3ff;
+  --sidebar-accent-foreground: #091135;
+  --sidebar-border: #e1e9f0;
+  --sidebar-ring: #0f77ff;
 
-  --accent: 175 84% 32%; /* Teal Mint #0D9488 */
-  --accent-foreground: 0 0% 100%;
+  --button-outline: #e1e9f0;
+  --badge-outline: #e1e9f0;
 
-  --destructive: 0 84% 60%; /* Soft Red #EF4444 */
-  --destructive-foreground: 0 0% 100%;
+  --radius: 8px;
+  --radius-cards: 12px;
+  --radius-tags: 9999px;
 
-  --input: 24 6% 90%;
-  --ring: 228 71% 55%;
+  /* Clearbit Typography Tracking Scale */
+  --tracking-caption: 0.056px;
+  --tracking-body: 0.128px;
+  --tracking-subheading: 0.252px;
+  --tracking-heading-sm: 0.512px;
+  --tracking-heading: 1.008px;
+  --tracking-display: 1.152px;
 
-  --chart-1: 228 71% 55%;
-  --chart-2: 175 84% 32%;
-  --chart-3: 224 64% 33%;
-  --chart-4: 25 5% 45%;
-  --chart-5: 0 84% 60%;
+  /* Clearbit Elevation: Flat by default, deep-blue focus ring on active */
+  --shadow-subtle: rgb(15, 119, 255) 0px 0px 0px 1px, rgba(12, 43, 100, 0.32) 0px 1px 2px 0px, rgba(12, 43, 100, 0.32) 0px 6px 16px 0px;
+  --shadow-2xs: none;
+  --shadow-xs: none;
+  --shadow-sm: none;
+  --shadow: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+  --shadow-2xl: none;
 
-  --app-font-sans: var(--font-geist-sans), sans-serif;
-  --app-font-serif: 'DM Serif Display', serif;
-  --app-font-mono: var(--font-geist-mono), monospace;
-  --radius: .5rem; /* 8px */
-
-  --shadow-2xs: 0px 2px 0px 0px hsl(228 71% 55% / 0.05);
-  --shadow-xs: 0px 2px 0px 0px hsl(228 71% 55% / 0.05);
-  --shadow-sm: 0px 2px 0px 0px hsl(228 71% 55% / 0.05), 0px 1px 2px -1px hsl(228 71% 55% / 0.05);
-  --shadow: 0px 2px 0px 0px hsl(228 71% 55% / 0.05), 0px 1px 2px -1px hsl(228 71% 55% / 0.05);
-  --shadow-md: 0px 2px 0px 0px hsl(228 71% 55% / 0.05), 0px 2px 4px -1px hsl(228 71% 55% / 0.05);
-  --shadow-lg: 0px 2px 0px 0px hsl(228 71% 55% / 0.05), 0px 4px 6px -1px hsl(228 71% 55% / 0.05);
-  --shadow-xl: 0px 2px 0px 0px hsl(228 71% 55% / 0.05), 0px 8px 10px -1px hsl(228 71% 55% / 0.05);
-  --shadow-2xl: 0px 2px 0px 0px hsl(228 71% 55% / 0.05);
-  
-  --tracking-normal: 0em;
-  --spacing: 0.25rem;
-
-  --sidebar-primary-border: hsl(var(--sidebar-primary) / 0.8);
-  --sidebar-accent-border: hsl(var(--sidebar-accent) / 0.8);
-  --primary-border: hsl(var(--primary) / 0.8);
-  --secondary-border: hsl(var(--secondary) / 0.8);
-  --muted-border: hsl(var(--muted) / 0.8);
-  --accent-border: hsl(var(--accent) / 0.8);
-  --destructive-border: hsl(var(--destructive) / 0.8);
+  --app-font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --app-font-serif: 'Inter', sans-serif;
+  --app-font-mono: 'Roboto Mono', monospace;
 }
 
 .dark {
-  /* No dark mode */
+  /* Clearbit theme is light */
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border);
+  }
+
+  html {
+    color-scheme: light;
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    letter-spacing: var(--tracking-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-midnight-ink);
+    font-family: var(--font-sans);
+    letter-spacing: var(--tracking-heading-sm);
+  }
+
+  h1 {
+    letter-spacing: var(--tracking-heading);
+  }
+}
+
+/* Clearbit typography tracking utility classes */
+.tracking-caption {
+  letter-spacing: 0.056px;
+}
+.tracking-body {
+  letter-spacing: 0.128px;
+}
+.tracking-subheading {
+  letter-spacing: 0.252px;
+}
+.tracking-heading-sm {
+  letter-spacing: 0.512px;
+}
+.tracking-heading {
+  letter-spacing: 1.008px;
+}
+.tracking-display {
+  letter-spacing: 1.152px;
+}
+
+/* Clearbit Card surfaces & sections */
+.clearbit-card {
+  background-color: #ffffff;
+  border: 1px solid #e1e9f0;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.clearbit-section-wash {
+  background-color: #f5f3ff;
+}
+
+.clearbit-section-white {
+  background-color: #ffffff;
+}
+
+.clearbit-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: rgb(15, 119, 255) 0px 0px 0px 1px, rgba(12, 43, 100, 0.32) 0px 1px 2px 0px, rgba(12, 43, 100, 0.32) 0px 6px 16px 0px;
 }
 
 @media print {
@@ -186,54 +263,27 @@
 
 @layer utilities {
   input[type="search"]::-webkit-search-cancel-button {
-    @apply hidden;
+    display: none;
   }
   [contenteditable][data-placeholder]:empty::before {
     content: attr(data-placeholder);
-    color: hsl(var(--muted-foreground));
+    color: var(--color-slate);
     pointer-events: none;
   }
-  .no-default-hover-elevate {}
-  .no-default-active-elevate {}
 
-  .toggle-elevate::before,
-  .toggle-elevate-2::before {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    inset: 0px;
-    border-radius: inherit;
-    z-index: -1;
+  /* Sleek modern scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
   }
-  .toggle-elevate.toggle-elevated::before { background-color: var(--elevate-2); }
-  .border.toggle-elevate::before { inset: -1px; }
-
-  .hover-elevate:not(.no-default-hover-elevate),
-  .active-elevate:not(.no-default-active-elevate),
-  .hover-elevate-2:not(.no-default-hover-elevate),
-  .active-elevate-2:not(.no-default-active-elevate) {
-    position: relative;
-    z-index: 0;
+  ::-webkit-scrollbar-track {
+    background: transparent;
   }
-
-  .hover-elevate:not(.no-default-hover-elevate)::after,
-  .active-elevate:not(.no-default-active-elevate)::after,
-  .hover-elevate-2:not(.no-default-hover-elevate)::after,
-  .active-elevate-2:not(.no-default-active-elevate)::after {
-    content: "";
-    pointer-events: none;
-    position: absolute;
-    inset: 0px;
-    border-radius: inherit;
-    z-index: 999;
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
   }
-  .hover-elevate:hover:not(.no-default-hover-elevate)::after,
-  .active-elevate:active:not(.no-default-active-elevate)::after { background-color: var(--elevate-1); }
-  .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
-  .active-elevate-2:active:not(.no-default-active-elevate)::after { background-color: var(--elevate-2); }
-  .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
-  .border.active-elevate:not(.no-active-interaction-elevate)::after,
-  .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
-  .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
-  .border.hover-elevate:not(.no-hover-interaction-elevate)::after { inset: -1px; }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
 }

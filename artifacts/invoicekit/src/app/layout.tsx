@@ -28,10 +28,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.invoice-sync.com"),
   title: {
     default: "Free Invoice Generator | Create Professional Invoice Templates Online",
-    template: "%s | Professional Invoice Templates | InvoiceKit",
+    template: "%s | Professional Invoice Templates | InvoiceBro",
   },
   description:
-    "InvoiceKit is a free invoice generator for creating professional PDF invoices instantly. Use the Clean template without signing up, then create an account to unlock the full template library.",
+    "InvoiceBro is a free invoice generator for creating professional PDF invoices instantly. Use the Clean template without signing up, then create an account to unlock the full template library.",
   keywords: [
     "invoice generator",
     "invoice template",
@@ -47,24 +47,24 @@ export const metadata: Metadata = {
     "no login invoice generator",
   ],
   openGraph: {
-    title: "InvoiceKit | Free Professional Invoice Generator",
+    title: "InvoiceBro | Free Professional Invoice Generator",
     description:
       "Create and download professional PDF invoices instantly. Start with the Clean template for free and unlock the full library with an account.",
     type: "website",
     url: "https://www.invoice-sync.com",
-    siteName: "InvoiceKit",
+    siteName: "InvoiceBro",
     images: [
       {
         url: "/opengraph.jpg",
         width: 1200,
         height: 630,
-        alt: "InvoiceKit Free Professional Invoice Generator",
+        alt: "InvoiceBro Free Professional Invoice Generator",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "InvoiceKit | Free Professional Invoice Generator",
+    title: "InvoiceBro | Free Professional Invoice Generator",
     description:
       "Create and download professional PDF invoices instantly. Clean is free for everyone, with more templates unlocked by account.",
     images: ["/opengraph.jpg"],

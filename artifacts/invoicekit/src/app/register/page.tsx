@@ -99,7 +99,7 @@ function RegisterPageContent() {
         className="space-y-6"
       >
         <div className="space-y-2 group">
-          <Label htmlFor="name" className="text-xs font-mono tracking-widest uppercase text-muted-foreground group-focus-within:text-foreground transition-colors">
+          <Label htmlFor="name" className="text-xs font-medium uppercase tracking-[0.004em] text-[#091135]">
             Full Name
           </Label>
           <Input
@@ -110,12 +110,12 @@ function RegisterPageContent() {
             onChange={(e) => setName(e.target.value)}
             required
             autoComplete="name"
-            className="h-12 rounded-none border-0 border-b border-border/80 bg-transparent px-0 font-medium placeholder:font-normal focus-visible:border-primary focus-visible:ring-0 shadow-none transition-all"
+            className="h-10 rounded-lg border border-[#e1e9f0] bg-white px-3.5 text-sm text-[#091135] placeholder:text-[#36394a]/50 focus-visible:border-[#0f77ff] focus-visible:ring-1 focus-visible:ring-[#0f77ff] transition-all"
           />
         </div>
 
         <div className="space-y-2 group">
-          <Label htmlFor="email" className="text-xs font-mono tracking-widest uppercase text-muted-foreground group-focus-within:text-foreground transition-colors">
+          <Label htmlFor="email" className="text-xs font-medium uppercase tracking-[0.004em] text-[#091135]">
             Email Address
           </Label>
           <Input
@@ -126,16 +126,16 @@ function RegisterPageContent() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            className="h-12 rounded-none border-0 border-b border-border/80 bg-transparent px-0 font-medium placeholder:font-normal focus-visible:border-primary focus-visible:ring-0 shadow-none transition-all"
+            className="h-10 rounded-lg border border-[#e1e9f0] bg-white px-3.5 text-sm text-[#091135] placeholder:text-[#36394a]/50 focus-visible:border-[#0f77ff] focus-visible:ring-1 focus-visible:ring-[#0f77ff] transition-all"
           />
         </div>
 
         <div className="space-y-2 group">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password" className="text-xs font-mono tracking-widest uppercase text-muted-foreground group-focus-within:text-foreground transition-colors">
+            <Label htmlFor="password" className="text-xs font-medium uppercase tracking-[0.004em] text-[#091135]">
               Password
             </Label>
-            <span className="text-[10px] uppercase font-mono tracking-widest text-muted-foreground/60">Min 8 chars</span>
+            <span className="text-[10px] uppercase text-[#36394a]/60">Min 8 chars</span>
           </div>
           <Input
             id="password"
@@ -146,13 +146,13 @@ function RegisterPageContent() {
             required
             minLength={8}
             autoComplete="new-password"
-            className="h-12 rounded-none border-0 border-b border-border/80 bg-transparent px-0 font-medium placeholder:font-normal focus-visible:border-primary focus-visible:ring-0 shadow-none transition-all font-mono"
+            className="h-10 rounded-lg border border-[#e1e9f0] bg-white px-3.5 text-sm text-[#091135] placeholder:text-[#36394a]/50 focus-visible:border-[#0f77ff] focus-visible:ring-1 focus-visible:ring-[#0f77ff] transition-all font-mono"
           />
         </div>
 
         <Button
           type="submit"
-          className="mt-8 h-12 w-full rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-medium text-sm transition-all shadow-sm"
+          className="mt-6 h-11 w-full rounded-lg bg-[#127ee3] text-white hover:bg-[#0f77ff] font-medium text-sm transition-all"
           disabled={loading || googleLoading}
         >
           {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
@@ -161,10 +161,10 @@ function RegisterPageContent() {
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border/60"></div>
+            <div className="w-full border-t border-[#e1e9f0]"></div>
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-background px-2 text-muted-foreground font-mono tracking-widest uppercase">
+            <span className="bg-white px-2 text-[#36394a] uppercase tracking-wider text-[10px]">
               Or continue with
             </span>
           </div>
@@ -175,12 +175,12 @@ function RegisterPageContent() {
           variant="outline"
           onClick={handleGoogleLogin}
           disabled={loading || googleLoading}
-          className="h-12 w-full rounded-md border-border/80 bg-transparent hover:bg-muted/50 font-medium text-sm transition-all text-foreground"
+          className="h-11 w-full rounded-lg border border-[#e1e9f0] bg-white hover:bg-[#f5f3ff] text-[#091135] font-medium text-sm transition-all"
         >
           {googleLoading ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            <FcGoogle className="mr-2 h-5 w-5" />
+            <FcGoogle className="mr-2 h-4 w-4" />
           )}
           {googleLoading ? "Connecting..." : "Google"}
         </Button>

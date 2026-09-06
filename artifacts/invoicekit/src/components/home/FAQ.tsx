@@ -6,54 +6,63 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { motion } from "framer-motion";
 
 export function FAQ() {
   const faqs = [
-    { q: "Is this free invoice generator actually free?", a: "Yes, InvoiceKit is a 100% free invoice generator. No trial periods, no pro tiers, and no hidden fees." },
-    { q: "Do I need to sign up for an invoice generator?", a: "You can use the Clean template and download PDFs without an account. Create a free account to unlock the rest of the template library, saved invoices, and email sending." },
-    { q: "Can I choose my own invoice template?", a: "Yes. Guests can use the Clean template right away, and signed-in users can access the full collection of professional invoice templates." },
-    { q: "Is my business data stored on your servers?", a: "No. Everything stays in your browser's private storage. We don't see or store your client data." },
-    { q: "Can I add my own business logo to the free invoice template?", a: "Yes, the free Clean template supports high-quality logo uploads and customization, and so do the account-only templates." },
-    { q: "Which currencies does the invoice maker support?", a: "We support USD, GBP, EUR, PKR, CAD, AUD, and many more for international billing." },
+    {
+      q: "Is InvoiceKit genuinely free to use?",
+      a: "Yes. The Clean template is 100% free with no trial clocks, no watermark penalties, and no credit card requirements.",
+    },
+    {
+      q: "Do I need an account to download an invoice?",
+      a: "No. You can configure your invoice and generate production-ready PDFs as a guest immediately. Signing up is only required if you wish to persist client profiles or access additional templates.",
+    },
+    {
+      q: "Can I add custom brand logos?",
+      a: "Yes. You can upload high-resolution PNG, SVG, or JPEG logos directly in the browser editor. Logos are rendered sharply in the exported PDF.",
+    },
+    {
+      q: "Where is my client and billing data stored?",
+      a: "For guests, all data stays securely within your browser's private local storage. We do not transmit or index your commercial figures on external databases without your authenticated intent.",
+    },
+    {
+      q: "Which international currencies are supported?",
+      a: "InvoiceKit supports USD, EUR, GBP, CAD, AUD, JPY, INR, PKR, and all standard ISO currency codes with proper localized symbol placement.",
+    },
+    {
+      q: "How does the PDF export work?",
+      a: "Invoices are converted directly to vector print layouts matching A4 and US Letter standards, ensuring crystal-clear text and lines on any screen or printer.",
+    },
   ];
 
   return (
-    <section className="py-24 bg-white px-6">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-[30px] font-bold text-foreground mb-12 text-center tracking-tight">
-          Frequently Asked Questions about our Invoice Generator
-        </h2>
+    <section id="faq" className="py-24 bg-white px-6">
+      <div className="max-w-[1000px] mx-auto">
+        <div className="text-center mb-16">
+          <span className="text-[13px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
+            Knowledge base
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-semibold text-[#091135] tracking-[0.512px] leading-tight">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-base text-[#36394a] max-w-lg mx-auto mt-2 tracking-[0.128px]">
+            Key facts regarding privacy boundaries, PDF vector export, and template unlocks.
+          </p>
+        </div>
 
-        <div className="grid md:grid-cols-2 gap-x-12 gap-y-4">
-          <div className="space-y-4">
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.slice(0, 3).map((faq, i) => (
-                <AccordionItem key={i} value={`item-${i}`}>
-                  <AccordionTrigger className="text-left font-semibold text-foreground hover:no-underline hover:text-primary transition-colors">
-                    {faq.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground leading-relaxed">
-                    {faq.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-          <div className="space-y-4">
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.slice(3, 6).map((faq, i) => (
-                <AccordionItem key={i + 3} value={`item-${i + 3}`}>
-                  <AccordionTrigger className="text-left font-semibold text-foreground hover:no-underline hover:text-primary transition-colors">
-                    {faq.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground leading-relaxed">
-                    {faq.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
+        <div className="rounded-xl border border-[#e1e9f0] bg-white divide-y divide-[#e1e9f0]">
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, i) => (
+              <AccordionItem key={i} value={`item-${i}`} className="border-b border-[#e1e9f0] last:border-b-0 px-6">
+                <AccordionTrigger className="text-left font-medium text-[16px] text-[#091135] hover:no-underline py-5 hover:text-[#0f77ff] transition-colors">
+                  {faq.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-[15px] text-[#36394a] leading-relaxed pb-5 tracking-[0.056px]">
+                  {faq.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
     </section>
