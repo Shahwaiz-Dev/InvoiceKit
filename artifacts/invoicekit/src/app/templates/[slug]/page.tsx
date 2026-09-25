@@ -4,7 +4,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CheckCircle2, FileText, ArrowRight, Zap, ShieldCheck, HelpCircle, Sparkles } from "lucide-react";
 import Link from "next/link";
-import Script from "next/script";
 import type { Metadata, Route } from "next";
 
 interface Props {
@@ -30,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: template.description,
       url: pageUrl,
       type: "website",
-      siteName: "InvoiceKit",
+      siteName: "InvoiceSync",
       images: [
         {
           url: "/opengraph.jpg",
@@ -143,23 +142,23 @@ export default async function TemplatePage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
-      <Script
+      <script
         id="template-software-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
       />
-      <Script
+      <script
         id="template-breadcrumb-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <Script
+      <script
         id="template-howto-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
       {template.faqs.length > 0 && (
-        <Script
+        <script
           id="template-faq-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}

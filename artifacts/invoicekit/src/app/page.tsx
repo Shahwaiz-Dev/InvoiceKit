@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import HomePage from "@/features/HomePage";
 
 export const metadata: Metadata = {
@@ -109,22 +108,22 @@ export default function Page() {
 
   return (
     <>
-      <Script
+      <script
         id="organization-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
       />
-      <Script
+      <script
         id="website-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
       />
-      <Script
+      <script
         id="software-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareLd) }}
       />
-      <Script
+      <script
         id="faq-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}

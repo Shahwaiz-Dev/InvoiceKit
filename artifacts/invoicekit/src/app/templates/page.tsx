@@ -12,23 +12,23 @@ export const metadata: Metadata = {
     canonical: "https://www.invoice-sync.com/templates",
   },
   openGraph: {
-    title: "Professional Invoice Templates | InvoiceKit",
+    title: "Professional Invoice Templates | InvoiceSync",
     description: "Browse our library of high-quality, free invoice templates. Generate professional PDFs instantly.",
     url: "https://www.invoice-sync.com/templates",
-    siteName: "InvoiceKit",
+    siteName: "InvoiceSync",
     type: "website",
     images: [
       {
         url: "/opengraph.jpg",
         width: 1200,
         height: 630,
-        alt: "InvoiceKit Professional Invoice Templates",
+        alt: "InvoiceSync Professional Invoice Templates",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Professional Invoice Templates | InvoiceKit",
+    title: "Professional Invoice Templates | InvoiceSync",
     description: "Browse our library of high-quality, free invoice templates. Generate professional PDFs instantly.",
     images: ["/opengraph.jpg"],
   },
