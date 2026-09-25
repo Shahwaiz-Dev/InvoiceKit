@@ -18,10 +18,11 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph.jpg",
+        url: "https://www.invoice-sync.com/opengraph.jpg",
         width: 1200,
         height: 630,
         alt: "About InvoiceSync",
+        type: "image/jpeg",
       },
     ],
   },
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "About Us | InvoiceSync",
     description: "Learn about the mission behind InvoiceSync - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
-    images: ["/opengraph.jpg"],
+    images: ["https://www.invoice-sync.com/opengraph.jpg"],
   },
 };
 

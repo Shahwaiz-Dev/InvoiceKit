@@ -15,6 +15,21 @@ export const metadata: Metadata = {
     siteName: "InvoiceSync",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "https://www.invoice-sync.com/opengraph.jpg",
+        width: 1200,
+        height: 630,
+        alt: "InvoiceSync - Free Professional Invoice Generator",
+        type: "image/jpeg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free Invoice Generator (No Sign-Up) | InvoiceSync",
+    description: "Create and download professional invoices in seconds. No sign-up, no hidden fees, and zero watermarks.",
+    images: ["https://www.invoice-sync.com/opengraph.jpg"],
   },
 };
 

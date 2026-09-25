@@ -32,10 +32,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "InvoiceSync",
       images: [
         {
-          url: "/opengraph.jpg",
+          url: "https://www.invoice-sync.com/opengraph.jpg",
           width: 1200,
           height: 630,
           alt: `${template.name} - Free Professional Invoice Template`,
+          type: "image/jpeg",
         },
       ],
     },
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: `${template.name} | Free Invoice Template`,
       description: template.description,
-      images: ["/opengraph.jpg"],
+      images: ["https://www.invoice-sync.com/opengraph.jpg"],
     },
   };
 }
