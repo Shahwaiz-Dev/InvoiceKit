@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Sign In",
-  description: "Sign in to your InvoiceKit account to access saved invoices, custom templates, and email delivery.",
+  description: "Sign in to your InvoiceSync account to access saved invoices, custom templates, and email delivery.",
   robots: {
     index: false,
     follow: true,

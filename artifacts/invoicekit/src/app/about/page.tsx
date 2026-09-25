@@ -6,29 +6,29 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: "Learn about the mission behind InvoiceKit - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
+  description: "Learn about the mission behind InvoiceSync - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
   alternates: {
     canonical: "https://www.invoice-sync.com/about",
   },
   openGraph: {
-    title: "About Us | InvoiceKit",
-    description: "Learn about the mission behind InvoiceKit - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
+    title: "About Us | InvoiceSync",
+    description: "Learn about the mission behind InvoiceSync - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
     url: "https://www.invoice-sync.com/about",
-    siteName: "InvoiceKit",
+    siteName: "InvoiceSync",
     type: "website",
     images: [
       {
         url: "/opengraph.jpg",
         width: 1200,
         height: 630,
-        alt: "About InvoiceKit",
+        alt: "About InvoiceSync",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "About Us | InvoiceKit",
-    description: "Learn about the mission behind InvoiceKit - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
+    title: "About Us | InvoiceSync",
+    description: "Learn about the mission behind InvoiceSync - helping freelancers and small businesses manage their billing with professional, free invoice templates.",
     images: ["/opengraph.jpg"],
   },
 };
@@ -72,7 +72,7 @@ export default function AboutPage() {
               Empowering independent operators to bill with clarity.
             </h1>
             <p className="text-lg text-[#36394a] leading-relaxed max-w-2xl mx-auto tracking-[0.252px]">
-              InvoiceKit began with a singular observation: modern billing tools had become noisy, bloated, and hostile. We built a room-bright, achromatic canvas that respects your time.
+              InvoiceSync began with a singular observation: modern billing tools had become noisy, bloated, and hostile. We built a room-bright, achromatic canvas that respects your time.
             </p>
           </div>
         </section>
@@ -89,7 +89,7 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-4 text-[#36394a] text-base leading-relaxed tracking-[0.128px]">
                 <p>
-                  At InvoiceKit, we treat invoices as essential commercial contracts that require precision, legibility, and restraint. No intrusive watermarks, no forced paywalls on basic functions, and no arbitrary lock-in.
+                  At InvoiceSync, we treat invoices as essential commercial contracts that require precision, legibility, and restraint. No intrusive watermarks, no forced paywalls on basic functions, and no arbitrary lock-in.
                 </p>
                 <p>
                   Every layout in our catalog is engineered to communicate authority and trust. Whether you are generating an ad-hoc bill using the Clean template or archiving clients in your authenticated dashboard, the experience remains quiet and reliable.
