@@ -34,7 +34,7 @@ export function Templates({
         <div className="w-full h-full bg-white p-4 flex flex-col font-sans text-[8px] text-[#091135]">
           <div className="flex justify-between items-start mb-4">
             <div className="w-8 h-8 bg-[#127ee3] rounded-sm flex items-center justify-center font-bold text-white text-[9px]">
-              iB
+              IS
             </div>
             <div className="text-right">
               <div className="text-[10px] font-bold text-[#091135] mb-0.5">INVOICE</div>
@@ -170,14 +170,14 @@ export function Templates({
     <section id="templates" className="py-24 bg-[#f5f3ff] border-y border-[#e1e9f0] px-6">
       <div className="max-w-[1200px] mx-auto">
         <div className="text-center mb-16">
-          <span className="text-[13px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
-            Layout catalog
+          <span className="text-[13px] font-semibold uppercase tracking-[0.05em] text-[#0f77ff] mb-2 block">
+            Free Invoice Templates
           </span>
-          <h2 className="text-3xl sm:text-4xl font-semibold text-[#091135] tracking-[0.512px] leading-tight">
-            Clean is open to everyone. Unlock more with an account.
+          <h2 className="text-3xl sm:text-4xl font-semibold text-[#091135] tracking-tight leading-tight">
+            Professional Invoice Templates for Every Industry
           </h2>
-          <p className="mt-3 text-base text-[#36394a] max-w-xl mx-auto tracking-[0.128px]">
-            The Clean blueprint works immediately without sign-in. Register once to access specialized layouts and retain customer records.
+          <p className="mt-3 text-base text-[#36394a] max-w-xl mx-auto tracking-normal">
+            Our free invoice generator provides beautifully formatted templates. Start immediately with our Clean template or create a free account to unlock contractor, corporate, and modern layouts.
           </p>
         </div>
 

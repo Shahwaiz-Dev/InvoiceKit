@@ -5,29 +5,28 @@ import { StandaloneEditor } from "./editor/components/StandaloneEditor";
 
 export function EditorSection() {
   return (
-    <section id="editor-section" className="relative py-16 sm:py-24 bg-gradient-to-b from-slate-50/60 via-white to-slate-50/40 border-t border-slate-200/80 overflow-hidden">
+    <section id="editor-section" className="relative pt-24 sm:pt-28 pb-16 sm:pb-20 bg-gradient-to-b from-slate-50/70 via-white to-slate-50/40 border-b border-slate-200/80 overflow-hidden">
       {/* Soft ambient lighting */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[260px] bg-blue-500/5 blur-[80px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-blue-500/8 blur-[90px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-[1360px] mx-auto px-3 sm:px-6">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="relative"
         >
-          {/* Header Block */}
+          {/* Header Block with primary H1 */}
           <div className="text-center mb-8 sm:mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-blue-600 text-xs font-semibold tracking-wider uppercase mb-3.5 shadow-2xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-              Direct Synthesis
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-blue-700 text-xs font-semibold tracking-wider uppercase mb-3.5 shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+              Free Online Invoice Maker · Instant PDF Export
             </div>
-            <h2 className="text-3xl sm:text-4xl font-semibold text-slate-900 tracking-tight leading-tight">
-              Interactive Invoice Maker
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto mt-2.5 leading-relaxed font-normal">
-              Fill in your line items and billing coordinates. The document updates in real-time without latency.
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.15] max-w-4xl mx-auto">
+              Free Invoice Generator &amp; Online Invoice Maker
+            </h1>
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mt-3 leading-relaxed font-normal">
+              Create, customize, and download professional PDF invoices in seconds with our free invoice maker online. 100% free, no sign-up required, zero watermarks, and calculated privately in your browser.
             </p>
           </div>
 
@@ -40,17 +39,22 @@ export function EditorSection() {
           <div className="mt-7 flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-slate-500 font-medium">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>Runs 100% in browser</span>
+              <span>100% Free Invoice Maker</span>
             </div>
             <span className="hidden sm:inline text-slate-300">•</span>
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              <span>Real-time synthesis</span>
+              <span>Instant Vector PDF Download</span>
+            </div>
+            <span className="hidden sm:inline text-slate-300">•</span>
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+              <span>Zero Watermarks · No Sign-Up</span>
             </div>
             <span className="hidden sm:inline text-slate-300">•</span>
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-              <span>Zero watermarks</span>
+              <span>Custom Logo &amp; Multi-Currency</span>
             </div>
           </div>
         </motion.div>

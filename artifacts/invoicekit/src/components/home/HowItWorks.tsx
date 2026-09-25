@@ -8,20 +8,20 @@ export function HowItWorks() {
     {
       num: "01",
       icon: <MousePointer2 className="w-5 h-5 text-[#0f77ff]" />,
-      title: "Select Layout",
-      description: "Initialize immediately with the Clean layout, or sign in to activate the complete library of specialized templates.",
+      title: "Choose an Invoice Template",
+      description: "Select from our library of clean, professional invoice templates tailored for freelancers, contractors, and growing businesses.",
     },
     {
       num: "02",
       icon: <PenLine className="w-5 h-5 text-[#0f77ff]" />,
-      title: "Enter Records",
-      description: "Specify recipient identity, hours or units, and rates. Taxes, discounts, and line totals compute in milliseconds.",
+      title: "Enter Billing & Line Items",
+      description: "Fill in client coordinates, line items, rates, taxes, and discounts. Our free invoice maker calculates all totals and balances in real time.",
     },
     {
       num: "03",
       icon: <Download className="w-5 h-5 text-[#0f77ff]" />,
-      title: "Export PDF",
-      description: "Trigger print rendering to produce an uncompromised vector PDF with zero watermarks, ready for client delivery.",
+      title: "Download PDF Invoice Free",
+      description: "Export an uncompromised, print-ready vector PDF invoice with zero watermarks directly from your browser—no sign-up required.",
     },
   ];
 
@@ -29,14 +29,14 @@ export function HowItWorks() {
     <section id="how-it-works" className="px-6 py-24 bg-white">
       <div className="max-w-[1200px] mx-auto">
         <div className="text-center mb-16">
-          <span className="text-[13px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
-            Three-phase pipeline
+          <span className="text-[13px] font-semibold uppercase tracking-[0.05em] text-[#0f77ff] mb-2 block">
+            Simple 3-Step Process
           </span>
-          <h2 className="text-3xl sm:text-4xl font-semibold text-[#091135] tracking-[0.512px] leading-tight">
-            Designed for minimal operational overhead
+          <h2 className="text-3xl sm:text-4xl font-semibold text-[#091135] tracking-tight leading-tight">
+            How Our Free Online Invoice Maker Works
           </h2>
-          <p className="text-base text-[#36394a] max-w-xl mx-auto mt-3 tracking-[0.128px]">
-            No onboarding queues or verification walls. The shortest distance between work finished and invoice dispatched.
+          <p className="text-base text-[#36394a] max-w-xl mx-auto mt-3 tracking-normal">
+            Generate client-ready bills with our online invoice generator in three simple steps—zero registration, zero hidden fees, and zero waiting.
           </p>
         </div>
 

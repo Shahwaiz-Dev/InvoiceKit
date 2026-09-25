@@ -37,7 +37,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { InvoiceBroIcon } from "@/components/layout/InvoiceBroLogo";
+import { InvoiceSyncIcon } from "@/components/layout/InvoiceBroLogo";
 
 const data = {
   navMain: [
@@ -80,17 +80,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" className="border-r border-[#e1e9f0] bg-white" {...props}>
-      <SidebarHeader className="border-b border-[#e1e9f0]/80 p-3">
+      <SidebarHeader className="border-b border-[#e1e9f0]/80 p-3 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild className="hover:bg-[#f5f3ff] transition-colors rounded-lg">
-              <Link href="/dashboard" className="flex items-center gap-3">
+          <SidebarMenuItem className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
+            <SidebarMenuButton
+              size="lg"
+              asChild
+              className="hover:bg-[#f5f3ff] transition-colors rounded-lg group-data-[collapsible=icon]:size-9 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto"
+            >
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-3 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full"
+              >
                 <div className="flex aspect-square size-8 shrink-0 items-center justify-center">
-                  <InvoiceBroIcon className="size-8" />
+                  <InvoiceSyncIcon className="size-8" />
                 </div>
                 <div className="grid flex-1 text-left leading-tight group-data-[collapsible=icon]:hidden">
                   <span className="truncate font-semibold tracking-tight text-sm text-[#091135]">
-                    Invoice<span className="text-[#091135]">Bro</span>
+                    Invoice<span className="text-[#091135]">Sync</span>
                   </span>
                   <span className="truncate text-[10px] font-medium uppercase tracking-wider text-[#36394a]/80">
                     Observatory
@@ -102,9 +109,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent className="p-2">
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-[11px] font-semibold uppercase tracking-wider text-[#36394a]/70 px-2 mb-1">
+      <SidebarContent className="p-2 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:items-center">
+        <SidebarGroup className="group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:w-full">
+          <SidebarGroupLabel className="text-[11px] font-semibold uppercase tracking-wider text-[#36394a]/70 px-2 mb-1 group-data-[collapsible=icon]:hidden">
             Workspace
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -112,20 +119,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               {data.navMain.map((item) => {
                 const isActive = pathname === item.url;
                 return (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem key={item.title} className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
                       tooltip={item.title}
                       className={`h-9 rounded-lg font-medium text-xs tracking-tight transition-all duration-150 ${
                         isActive
-                          ? "bg-[#f5f3ff] text-[#091135] font-semibold shadow-none border-l-[3px] border-[#0f77ff] rounded-l-none pl-2.5"
-                          : "text-[#36394a] hover:text-[#091135] hover:bg-[#f5f3ff]/70"
-                      }`}
+                          ? "bg-[#f5f3ff] text-[#091135] font-semibold shadow-none border-l-[3px] border-[#0f77ff] rounded-l-none pl-2.5 group-data-[collapsible=icon]:border-l-0 group-data-[collapsible=icon]:rounded-lg group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center"
+                          : "text-[#36394a] hover:text-[#091135] hover:bg-[#f5f3ff]/70 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center"
+                      } group-data-[collapsible=icon]:size-9 group-data-[collapsible=icon]:mx-auto`}
                     >
-                      <Link href={item.url as any} className="flex items-center gap-2.5">
+                      <Link
+                        href={item.url as any}
+                        className="flex items-center gap-2.5 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full"
+                      >
                         <item.icon className={`size-4 shrink-0 ${isActive ? "text-[#0f77ff]" : "text-[#36394a]"}`} />
-                        <span className="truncate">{item.title}</span>
+                        <span className="truncate group-data-[collapsible=icon]:hidden">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -135,16 +145,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup className="mt-auto pt-4">
+        <SidebarGroup className="mt-auto pt-4 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:pt-2 group-data-[collapsible=icon]:w-full">
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
+              <SidebarMenuItem className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
                 <SidebarMenuButton
                   asChild
                   tooltip="Create Invoice"
-                  className="h-10 rounded-lg bg-[#127ee3] text-white hover:bg-[#0f77ff] hover:text-white font-medium text-xs tracking-tight shadow-sm transition-all"
+                  className="h-10 rounded-lg bg-[#127ee3] text-white hover:bg-[#0f77ff] hover:text-white font-medium text-xs tracking-tight shadow-sm transition-all group-data-[collapsible=icon]:size-9 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:justify-center"
                 >
-                  <Link href="/editor" className="flex items-center justify-center gap-2">
+                  <Link
+                    href="/editor"
+                    className="flex items-center justify-center gap-2 group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:h-full"
+                  >
                     <Plus className="size-4 shrink-0" />
                     <span className="group-data-[collapsible=icon]:hidden font-medium">New Invoice</span>
                   </Link>
@@ -155,16 +168,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-[#e1e9f0]/80 p-2">
+      <SidebarFooter className="border-t border-[#e1e9f0]/80 p-2 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
         <SidebarMenu>
-          <SidebarMenuItem>
+          <SidebarMenuItem className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="h-12 rounded-lg hover:bg-[#f5f3ff] data-[state=open]:bg-[#f5f3ff] transition-colors"
+                  className="h-12 rounded-lg hover:bg-[#f5f3ff] data-[state=open]:bg-[#f5f3ff] transition-colors group-data-[collapsible=icon]:size-9 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:mx-auto"
                 >
-                  <Avatar className="h-8 w-8 rounded-lg border border-[#e1e9f0] bg-[#f5f3ff]">
+                  <Avatar className="h-8 w-8 rounded-lg border border-[#e1e9f0] bg-[#f5f3ff] shrink-0">
                     <AvatarImage src={session?.user?.image || ""} alt={session?.user?.name || "User"} />
                     <AvatarFallback className="rounded-lg bg-[#f5f3ff] text-[#091135] font-semibold text-xs">
                       {session?.user?.name?.charAt(0)?.toUpperCase() || "U"}

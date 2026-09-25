@@ -66,7 +66,7 @@ export function AuthShell({
 
         <div className="relative z-10 flex items-center justify-between border-t border-[#e1e9f0] pt-6">
           <p className="text-xs text-[#36394a]">
-            &copy; {new Date().getFullYear()} InvoiceBro
+            &copy; {new Date().getFullYear()} InvoiceSync
           </p>
           <p className="text-xs font-medium text-[#0f77ff]">
             Achromatic Invoicing

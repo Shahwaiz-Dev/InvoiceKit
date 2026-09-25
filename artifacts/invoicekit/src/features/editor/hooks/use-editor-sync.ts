@@ -33,23 +33,21 @@ export function useEditorSync({
     templateRef.current = template;
   }, [template]);
 
-  // Auto-save draft
+  // Sync form values into editor state
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     const subscription = form.watch((val) => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(() => {
         setData(val as InvoiceData);
-        if (!session) {
-          saveDraft(val as InvoiceData, template);
-        }
-      }, 150); // Increased slightly for better debounce
+      }, 50);
     });
     return () => {
       subscription.unsubscribe();
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [form, session, template, saveDraft, setData]);
+  }, [form, setData]);
+
 
   const saveInvoiceToDB = useCallback(
     async (values: InvoiceData, status: "draft" | "sent" = "draft") => {
@@ -69,7 +67,10 @@ export function useEditorSync({
           }),
         });
 
-        if (!response.ok) throw new Error("Failed to save");
+        if (!response.ok) {
+          const errJson = await response.json().catch(() => ({}));
+          throw new Error(errJson.error || "Failed to save invoice");
+        }
 
         // Invalidate usage query for either create or updates
         queryClient.invalidateQueries({ queryKey: ["usage"] });
@@ -78,15 +79,20 @@ export function useEditorSync({
           status === "sent" ? "Invoice sent & saved" : "Invoice saved to dashboard"
         );
 
-        if (!invoiceId) {
+        if (!invoiceId && status !== "sent") {
           clearDraft();
           router.push("/dashboard");
         }
-      } catch {
-        toast.error("Failed to save invoice");
+      } catch (err: any) {
+        if (status === "sent") {
+          console.warn("Save after sending notice:", err.message);
+        } else {
+          toast.error(err.message || "Failed to save invoice");
+        }
       } finally {
         setIsSavingToDb(false);
       }
+
     },
     [session, invoiceId, router, queryClient, clearDraft]
   );

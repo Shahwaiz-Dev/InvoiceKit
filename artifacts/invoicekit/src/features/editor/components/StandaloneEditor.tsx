@@ -5,22 +5,28 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence } from "framer-motion";
-import { Loader2, Pencil, Eye, Download } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { invoiceSchema, InvoiceData, TemplateType } from "@/lib/schema";
 import { Preview } from "@/components/home/Preview";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/auth-client";
-import { EditorSidebar } from "./EditorSidebar";
-import { EditorHeader } from "./EditorHeader";
 import { DraftBanner } from "./DraftBanner";
 import { UpsellDialog } from "./UpsellDialog";
+import { InvoiceActionBar } from "./canvas/InvoiceActionBar";
+import { InvoiceMakerCanvas } from "./canvas/InvoiceMakerCanvas";
+import { SendEmailDialog } from "./canvas/SendEmailDialog";
 import { useInvoiceActions } from "../hooks/use-invoice-actions";
 import { useEditorSync } from "../hooks/use-editor-sync";
-import { getLabels, getDefaultInvoiceData, getNextInvoiceNumber } from "../lib/editor-utils";
+import { 
+  getDefaultInvoiceData, 
+  getNextInvoiceNumber, 
+  toInputDate, 
+  calculateDueDateByTerms 
+} from "../lib/editor-utils";
 import {
   DEFAULT_TEMPLATE,
-  INVOICE_TEMPLATES,
   getAvailableTemplates,
 } from "@/lib/config";
 
@@ -35,23 +41,26 @@ export function StandaloneEditor({
   invoiceId = null,
   mode = "full",
 }: StandaloneEditorProps) {
-  const { data: authSession, isPending: isSessionPending } = useSession();
-  
+  const { data: authSession } = useSession();
+
   // Basic States
   const [template, setTemplate] = useState<TemplateType>(initialTemplate);
   const [data, setData] = useState<InvoiceData>(() => getDefaultInvoiceData());
   const deferredData = useDeferredValue(data);
   const [showUpsell, setShowUpsell] = useState(false);
   const [showDraftBanner, setShowDraftBanner] = useState(false);
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [profileLoaded, setProfileLoaded] = useState(false);
 
-  // Responsive mobile/desktop preview & scale states
-  const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+  // View state: "canvas" (direct document maker) vs "preview" (rendered printable A4)
+  const [activeView, setActiveView] = useState<"canvas" | "preview">("canvas");
   const [scale, setScale] = useState(0.85);
   const [paperHeight, setPaperHeight] = useState(1046);
   const containerRef = useRef<HTMLDivElement>(null);
   const paperRef = useRef<HTMLDivElement>(null);
 
+  // Measure and scale A4 sheet for preview
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -70,7 +79,7 @@ export function StandaloneEditor({
     const ro = new ResizeObserver(updateScale);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [activeTab]);
+  }, [activeView]);
 
   useEffect(() => {
     const p = paperRef.current;
@@ -86,17 +95,15 @@ export function StandaloneEditor({
     return () => ro.disconnect();
   }, [deferredData]);
 
-  const labels = useMemo(() => getLabels(template), [template]);
   const { handleDownload, handleSendEmail, isSending } = useInvoiceActions();
 
   const form = useForm<InvoiceData>({
     resolver: zodResolver(invoiceSchema),
     defaultValues: data,
-    mode: "onSubmit",
-    reValidateMode: "onChange",
+    mode: "onChange",
   });
 
-  // Editor Sync logic
+  // Editor Sync logic (local draft + database save)
   const { isSavingToDb, saveInvoiceToDB, handleRestoreDraft, hasDraft, session } = useEditorSync({
     form,
     template,
@@ -116,7 +123,6 @@ export function StandaloneEditor({
     enabled: !!invoiceId && !!session,
   });
 
-  // Sync form with existing invoice
   useEffect(() => {
     if (existingInvoice) {
       const { _id, userId, createdAt, updatedAt, ...cleanData } = existingInvoice;
@@ -128,14 +134,13 @@ export function StandaloneEditor({
     }
   }, [existingInvoice, form]);
 
-  // Check for draft on mount
   useEffect(() => {
     if (hasDraft && !invoiceId) {
       setShowDraftBanner(true);
     }
   }, [hasDraft, invoiceId]);
 
-  // Pre-fill business profile
+  // Pre-fill business profile for logged-in users
   const { data: settingsData } = useQuery<{
     businessName?: string;
     businessEmail?: string;
@@ -151,7 +156,7 @@ export function StandaloneEditor({
     staleTime: 5 * 60_000,
   });
 
-  const { data: usageData } = useQuery<{ usage: number, limit: number, isPro: boolean, canManageCustomers?: boolean }>({
+  const { data: usageData } = useQuery<{ usage: number; limit: number; isPro: boolean; canManageCustomers?: boolean }>({
     queryKey: ["usage"],
     queryFn: () => fetch("/api/usage").then((r) => r.json()),
     enabled: !!session,
@@ -160,7 +165,7 @@ export function StandaloneEditor({
   const { data: customers = [] } = useQuery<any[]>({
     queryKey: ["customers"],
     queryFn: () => fetch("/api/customers").then((r) => r.json()),
-    enabled: !!session && (session.user as any).subscriptionPlan === "authority",
+    enabled: !!session && (session.user as any)?.subscriptionPlan === "authority",
   });
 
   const { data: lastNumberData } = useQuery<{ lastNumber: string | null }>({
@@ -174,7 +179,7 @@ export function StandaloneEditor({
     if (lastNumberData && lastNumberData.lastNumber && !invoiceId) {
       const nextNumber = getNextInvoiceNumber(lastNumberData.lastNumber);
       const current = form.getValues("invoiceNumber");
-      if (current === "INV-001") {
+      if (current === "0001" || current === "INV-001") {
         form.setValue("invoiceNumber", nextNumber);
         setData((prev) => ({ ...prev, invoiceNumber: nextNumber }));
       }
@@ -199,72 +204,123 @@ export function StandaloneEditor({
     }
   }, [settingsData, profileLoaded, form]);
 
-  const onDownloadHandler = form.handleSubmit(async (v) => {
-    const success = await handleDownload(v, setData, session, usageData ?? null, invoiceId, saveInvoiceToDB);
-    if (success) {
-      if (!session) setShowUpsell(true);
+  // Download PDF flow
+  const onDownloadHandler = async () => {
+    setIsDownloading(true);
+    try {
+      const currentValues = form.getValues();
+      const success = await handleDownload(
+        currentValues,
+        setData,
+        session,
+        usageData ?? null,
+        invoiceId,
+        saveInvoiceToDB
+      );
+      if (success) {
+        toast.success("Invoice PDF generated successfully!");
+        if (!session) setShowUpsell(true);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate PDF");
+    } finally {
+      setIsDownloading(false);
     }
-  });
+  };
 
-  const onSendEmailHandler = form.handleSubmit(async (v) => {
-    await handleSendEmail(v, session);
-    if (session) await saveInvoiceToDB(v, "sent");
-  });
+  // Email sending flow from dialog
+  const onSendEmailHandler = async (recipientEmail: string, customMessage?: string) => {
+    const currentValues = form.getValues();
+    await handleSendEmail(currentValues, session, recipientEmail, customMessage);
+    if (session) await saveInvoiceToDB(currentValues, "sent");
+  };
 
-  const filteredTemplates = useMemo(() => 
-    getAvailableTemplates(Boolean(session)),
+  // Reset to Blank
+  const onResetHandler = () => {
+    const blank = getDefaultInvoiceData();
+    form.reset(blank);
+    setData(blank);
+    toast.info("Invoice reset to blank");
+  };
+
+  const filteredTemplates = useMemo(
+    () => getAvailableTemplates(Boolean(session)),
     [session]
   );
 
   const containerClasses = mode === "full" 
-    ? "fixed inset-0 bg-white flex flex-col overflow-hidden" 
-    : "relative w-full bg-white flex flex-col overflow-hidden h-[740px] sm:h-[800px] lg:h-[840px]";
+    ? "fixed inset-0 bg-slate-50 flex flex-col overflow-hidden" 
+    : "relative w-full bg-slate-50/60 flex flex-col overflow-hidden min-h-[760px] sm:min-h-[840px]";
 
   return (
     <div className={containerClasses}>
-      <AnimatePresence>
-        {showDraftBanner && (
-          <DraftBanner 
-            onRestore={() => { handleRestoreDraft(); setShowDraftBanner(false); }} 
-            onDiscard={() => setShowDraftBanner(false)} 
-          />
-        )}
-      </AnimatePresence>
-
+      {/* Pro Upsell Modal */}
       {showUpsell && <UpsellDialog onClose={() => setShowUpsell(false)} />}
 
-      <EditorHeader
-        template={template}
-        setTemplate={setTemplate}
-        session={session}
-        isSavingToDb={isSavingToDb}
-        onSave={form.handleSubmit((v) => saveInvoiceToDB(v, "draft"))}
-        templates={filteredTemplates}
-        mode={mode}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
+      {/* Send Email Modal */}
+      <SendEmailDialog
+        open={showEmailDialog}
+        onOpenChange={setShowEmailDialog}
+        data={form.getValues()}
+        onSend={onSendEmailHandler}
+        isSending={isSending}
       />
 
+      {/* Top Invoice Action & Navigation Bar */}
+      <InvoiceActionBar
+        template={template}
+        setTemplate={setTemplate}
+        templates={filteredTemplates}
+        activeView={activeView}
+        setActiveView={setActiveView}
+        onDownload={onDownloadHandler}
+        isDownloading={isDownloading}
+        onOpenEmail={() => setShowEmailDialog(true)}
+        onReset={onResetHandler}
+        onSave={session ? form.handleSubmit((v) => saveInvoiceToDB(v, "draft")) : undefined}
+        isSavingToDb={isSavingToDb}
+        session={session}
+        mode={mode}
+      />
+
+
+      {/* Loading Overlay */}
       {loadingExisting && (
         <div className="absolute inset-0 z-[100] bg-white/80 backdrop-blur-sm flex items-center justify-center">
           <div className="flex flex-col items-center gap-2">
-            <Loader2 className="w-8 h-8 animate-spin text-[#0f77ff]" />
-            <p className="text-sm text-[#36394a] font-medium">Loading draft...</p>
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <p className="text-sm text-slate-700 font-medium">Loading draft...</p>
           </div>
         </div>
       )}
 
+      {/* Main Flow Body */}
       <div className="flex flex-1 overflow-hidden relative">
-        {/* Responsive Invoice Preview Pane */}
+        {/* VIEW 1: The Interactive Invoice Maker Canvas (Matches user reference image) */}
+        <div
+          className={cn(
+            "flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-6 lg:p-10 flex flex-col items-center justify-start",
+            activeView === "canvas" ? "flex" : "hidden"
+          )}
+        >
+          <InvoiceMakerCanvas
+            form={form}
+            data={deferredData}
+            customers={customers}
+            canManageCustomers={usageData?.canManageCustomers}
+          />
+        </div>
+
+        {/* VIEW 2: Rendered Printable A4 Sheet Preview */}
         <div
           ref={containerRef}
           className={cn(
-            "bg-slate-50/80 overflow-y-auto overflow-x-hidden p-3 sm:p-6 flex-col items-center justify-start border-r border-slate-200/80",
-            // Desktop: always visible side-by-side
-            "lg:flex lg:flex-1 lg:static lg:opacity-100 lg:pointer-events-auto",
-            // Mobile: full-width when preview active, or kept in DOM offscreen for seamless PDF downloads
-            activeTab === "preview"
+            "bg-slate-100/80 overflow-y-auto overflow-x-hidden p-3 sm:p-6 flex-col items-center justify-start border-r border-slate-200/80",
+            // Visible when preview view is active
+            activeView === "preview"
               ? "flex flex-1 w-full opacity-100 relative z-10"
+              // Offscreen when canvas view is active so html2pdf can seamlessly clone #print-area!
               : "fixed -left-[9999px] -top-[9999px] w-[740px] opacity-0 pointer-events-none"
           )}
         >
@@ -273,7 +329,7 @@ export function StandaloneEditor({
               width: `${Math.round(740 * scale)}px`,
               height: `${Math.round(paperHeight * scale)}px`,
             }}
-            className="relative shrink-0 transition-transform duration-75 my-auto shadow-xl shadow-slate-900/5 rounded-sm"
+            className="relative shrink-0 transition-transform duration-75 my-auto shadow-2xl shadow-slate-900/10 rounded-sm"
           >
             <div
               ref={paperRef}
@@ -290,44 +346,7 @@ export function StandaloneEditor({
               </div>
             </div>
           </div>
-
-          {/* Mobile Bottom Action Bar when viewing Preview */}
-          <div className="lg:hidden w-full p-3 bg-white border-t border-slate-200/80 flex items-center gap-2 shrink-0 sticky bottom-0 mt-auto z-20 rounded-t-lg shadow-sm">
-            <button
-              type="button"
-              onClick={() => setActiveTab("edit")}
-              className="flex-1 h-10 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/90 font-medium text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-2xs"
-            >
-              <Pencil className="w-3.5 h-3.5 text-blue-600" />
-              Edit Details
-            </button>
-            <button
-              type="button"
-              onClick={onDownloadHandler}
-              className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-xs"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Download PDF
-            </button>
-          </div>
         </div>
-
-        {/* Sidebar Form */}
-        <EditorSidebar
-          form={form}
-          template={template}
-          labels={labels}
-          onDownload={onDownloadHandler}
-          onSendEmail={onSendEmailHandler}
-          isSending={isSending}
-          session={session}
-          customers={customers}
-          canManageCustomers={usageData?.canManageCustomers}
-          mode={mode}
-          className={cn(
-            activeTab === "edit" ? "flex" : "hidden lg:flex"
-          )}
-        />
       </div>
     </div>
   );

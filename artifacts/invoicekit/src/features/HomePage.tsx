@@ -1,6 +1,5 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/home/Hero";
 import { EditorSection } from "./EditorSection";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { TemplateSection } from "./TemplateSection";
@@ -12,7 +11,6 @@ export default function HomePage() {
       <Header />
 
       <main className="flex-1">
-        <Hero />
         <EditorSection />
         <HowItWorks />
         <TemplateSection />

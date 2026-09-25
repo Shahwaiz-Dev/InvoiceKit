@@ -7,7 +7,7 @@ interface TemplateProps {
 }
 
 export function CleanTemplate({ data }: TemplateProps) {
-  const { formatCurrency, subtotal, tax, discountAmount, total } = getTemplateUtils(data);
+  const { formatCurrency, subtotal, tax, discountAmount, shipping, total, balanceDue } = getTemplateUtils(data);
 
   return (
     <div className="w-full h-full min-h-full bg-white p-10 flex flex-col font-sans text-foreground box-border">
@@ -83,10 +83,29 @@ export function CleanTemplate({ data }: TemplateProps) {
                 <span className="font-medium text-foreground">-{formatCurrency(discountAmount)}</span>
               </div>
             )}
+            {Number(shipping) > 0 && (
+              <div className="flex justify-between text-muted-foreground">
+                <span>Shipping</span>
+                <span className="font-medium text-foreground">{formatCurrency(shipping)}</span>
+              </div>
+            )}
             <div className="flex justify-between font-bold text-lg border-t border-border pt-3 mt-2">
               <span>Total</span>
               <span className="text-primary">{formatCurrency(total)}</span>
             </div>
+            {Number(data.amountPaid) > 0 && (
+              <div className="flex justify-between text-muted-foreground text-sm pt-1">
+                <span>Amount Paid</span>
+                <span className="font-medium text-foreground">{formatCurrency(data.amountPaid || 0)}</span>
+              </div>
+            )}
+            {Number(data.amountPaid) > 0 && (
+              <div className="flex justify-between font-bold text-base border-t border-border/60 pt-2 text-primary">
+                <span>Balance Due</span>
+                <span>{formatCurrency(balanceDue)}</span>
+              </div>
+            )}
+
           </div>
         </div>
       </div>

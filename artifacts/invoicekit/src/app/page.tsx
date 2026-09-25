@@ -10,10 +10,10 @@ export const metadata: Metadata = {
     canonical: "https://www.invoice-sync.com",
   },
   openGraph: {
-    title: "Free Invoice Generator (No Sign-Up) | InvoiceBro",
+    title: "Free Invoice Generator (No Sign-Up) | InvoiceSync",
     description: "Create and download professional invoices in seconds. No sign-up, no hidden fees, and zero watermarks.",
     url: "https://www.invoice-sync.com",
-    siteName: "InvoiceBro",
+    siteName: "InvoiceSync",
     locale: "en_US",
     type: "website",
   },
@@ -23,16 +23,16 @@ export default function Page() {
   const organizationLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "InvoiceBro",
+    name: "InvoiceSync",
     url: "https://www.invoice-sync.com",
-    logo: "https://www.invoice-sync.com/favicon.svg",
+    logo: "https://www.invoice-sync.com/Logo.png",
     description: "Free professional invoice generator for freelancers, contractors, and small businesses.",
   };
 
   const softwareLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "InvoiceBro",
+    name: "InvoiceSync",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     offers: {
@@ -41,7 +41,7 @@ export default function Page() {
       priceCurrency: "USD",
     },
     description:
-      "InvoiceBro is a professional-grade free invoice generator that lets anyone create PDF invoices with zero watermarks.",
+      "InvoiceSync is a professional-grade free invoice generator that lets anyone create PDF invoices with zero watermarks.",
   };
 
   const faqJsonLd = {
@@ -50,50 +50,50 @@ export default function Page() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "Is this free invoice generator actually free?",
+        name: "Is this free invoice generator genuinely 100% free to use?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, InvoiceBro is a 100% free invoice generator. No trial periods, no pro tiers, and no hidden fees.",
+          text: "Yes. InvoiceSync is a completely free online invoice maker. You can create and download unlimited professional PDF invoices with zero trial clocks, zero watermark penalties, and no credit card required.",
         },
       },
       {
         "@type": "Question",
-        name: "Do I need to sign up for an invoice generator?",
+        name: "Can I use this online invoice maker without signing up?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "You can use the Clean template and download PDFs without an account. Create a free account to unlock the rest of the template library, saved invoices, and email sending.",
+          text: "Yes! You can configure your invoice and generate production-ready PDFs immediately as a guest. Creating a free account is only required if you wish to save client profiles and access specialized invoice templates.",
         },
       },
       {
         "@type": "Question",
-        name: "Can I choose my own invoice template?",
+        name: "Can I add my business logo and customize currencies in the free invoice maker?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Guests can use the Clean template right away, and signed-in users can access the full collection of professional invoice templates.",
+          text: "Yes. You can upload high-resolution PNG, SVG, or JPEG logos directly in our free invoice maker online. We support USD, EUR, GBP, CAD, AUD, JPY, INR, PKR, and all standard ISO currencies with localized symbols.",
         },
       },
       {
         "@type": "Question",
-        name: "Is my business data stored on your servers?",
+        name: "Where is my client and billing data stored when creating invoices online?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "No. Everything stays in your browser's private storage. We don't see or store your client data.",
+          text: "For guest users, all billing coordinates and financial figures remain strictly inside your browser's local storage. We never store, index, or sell your private client data.",
         },
       },
       {
         "@type": "Question",
-        name: "Can I add my own business logo to the free invoice template?",
+        name: "How does the PDF invoice download work?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, the free Clean template supports high-quality logo uploads and customization, and so do the account-only templates.",
+          text: "Invoices are rendered directly to vector print layouts conforming to standard A4 and US Letter specifications, ensuring crystal-clear text, exact math, and sharp logos on any screen or printer.",
         },
       },
       {
         "@type": "Question",
-        name: "Which currencies does the invoice maker support?",
+        name: "What makes InvoiceSync the best free invoice generator online?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "We support USD, GBP, EUR, PKR, CAD, AUD, and many more for international billing.",
+          text: "Unlike typical billing tools that enforce monthly subscription paywalls or slap ugly watermarks on your PDFs, InvoiceSync delivers real-time calculation, modern templates, logo branding, and instant PDF download completely free.",
         },
       },
     ],
@@ -103,7 +103,7 @@ export default function Page() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     url: "https://www.invoice-sync.com",
-    name: "InvoiceBro",
+    name: "InvoiceSync",
     description: "Free professional invoice generator",
   };
 

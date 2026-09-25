@@ -43,7 +43,7 @@ export function Header() {
       }`}
     >
       <div className="max-w-[1200px] mx-auto px-6 h-full flex items-center justify-between">
-        {/* Brand Mark - InvoiceBro blue squircle icon + Midnight Ink wordmark */}
+        {/* Brand Mark - InvoiceSync blue squircle icon + Midnight Ink wordmark */}
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center group">
             <InvoiceBroLogo size="md" />

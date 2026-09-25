@@ -29,10 +29,27 @@ export const toInputDate = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
+export const calculateDueDateByTerms = (issueDateStr: string, terms: string): string => {
+  if (!issueDateStr) return toInputDate(new Date());
+  const date = new Date(issueDateStr);
+  if (isNaN(date.getTime())) return issueDateStr;
+
+  if (terms === "Due on receipt") {
+    return issueDateStr;
+  } else if (terms === "Net 7") {
+    date.setDate(date.getDate() + 7);
+  } else if (terms === "Net 15") {
+    date.setDate(date.getDate() + 15);
+  } else if (terms === "Net 30") {
+    date.setDate(date.getDate() + 30);
+  } else if (terms === "Net 60") {
+    date.setDate(date.getDate() + 60);
+  }
+  return toInputDate(date);
+};
+
 export const getDefaultInvoiceData = (): InvoiceData => {
   const issueDate = new Date();
-  const dueDate = new Date(issueDate);
-  dueDate.setDate(dueDate.getDate() + 14);
   return {
     businessName: "",
     businessEmail: "",
@@ -41,16 +58,20 @@ export const getDefaultInvoiceData = (): InvoiceData => {
     clientName: "",
     clientEmail: "",
     clientAddress: "",
-    invoiceNumber: "INV-001",
+    invoiceNumber: "0001",
     issueDate: toInputDate(issueDate),
-    dueDate: toInputDate(dueDate),
+    dueDate: toInputDate(issueDate),
+    terms: "Due on receipt",
     lineItems: [{ id: "item-1", description: "", quantity: 1, unitPrice: 0 }],
     taxRate: 0,
     discount: 0,
+    shipping: 0,
+    amountPaid: 0,
     currency: "USD",
     notes: "",
   };
 };
+
 
 export const getLabels = (template: TemplateType) => {
   const defaults = {
@@ -140,54 +161,30 @@ export const getLabels = (template: TemplateType) => {
 };
 
 export const CURRENCIES = [
-  { value: "USD", label: "US Dollar ($)" },
-  { value: "EUR", label: "Euro (€)" },
-  { value: "GBP", label: "British Pound (£)" },
-  { value: "JPY", label: "Japanese Yen (¥)" },
-  { value: "PKR", label: "Pakistani Rupee (Rs)" },
-  { value: "INR", label: "Indian Rupee (₹)" },
-  { value: "CAD", label: "Canadian Dollar (CA$)" },
-  { value: "AUD", label: "Australian Dollar (AU$)" },
-  { value: "CHF", label: "Swiss Franc (Fr)" },
-  { value: "CNY", label: "Chinese Yuan (¥)" },
-  { value: "BRL", label: "Brazilian Real (R$)" },
-  { value: "RUB", label: "Russian Ruble (₽)" },
-  { value: "KRW", label: "South Korean Won (₩)" },
-  { value: "SAR", label: "Saudi Riyal (SR)" },
-  { value: "AED", label: "UAE Dirham (AED)" },
-  { value: "ZAR", label: "South African Rand (R)" },
-  { value: "TRY", label: "Turkish Lira (₺)" },
-  { value: "MXN", label: "Mexican Peso ($)" },
-  { value: "SGD", label: "Singapore Dollar (S$)" },
-  { value: "HKD", label: "Hong Kong Dollar (HK$)" },
-  { value: "NZD", label: "New Zealand Dollar (NZ$)" },
-  { value: "THB", label: "Thai Baht (฿)" },
-  { value: "IDR", label: "Indonesian Rupiah (Rp)" },
-  { value: "MYR", label: "Malaysian Ringgit (RM)" },
-  { value: "PHP", label: "Philippine Peso (₱)" },
-  { value: "VND", label: "Vietnamese Dong (₫)" },
-  { value: "EGP", label: "Egyptian Pound (E£)" },
-  { value: "NGN", label: "Nigerian Naira (₦)" },
-  { value: "KES", label: "Kenyan Shilling (KSh)" },
-  { value: "GHS", label: "Ghanaian Cedi (GH₵)" },
-  { value: "SEK", label: "Swedish Krona (kr)" },
-  { value: "NOK", label: "Norwegian Krone (kr)" },
-  { value: "DKK", label: "Danish Krone (kr)" },
-  { value: "PLN", label: "Polish Zloty (zł)" },
-  { value: "CZK", label: "Czech Koruna (Kč)" },
-  { value: "HUF", label: "Hungarian Forint (Ft)" },
-  { value: "ILS", label: "Israeli New Shekel (₪)" },
-  { value: "TWD", label: "Taiwan New Dollar (NT$)" },
-  { value: "CLP", label: "Chilean Peso ($)" },
-  { value: "COP", label: "Colombian Peso ($)" },
-  { value: "PEN", label: "Peruvian Sol (S/.)" },
-  { value: "ARS", label: "Argentine Peso ($)" },
-  { value: "BDT", label: "Bangladeshi Taka (৳)" },
-  { value: "UAH", label: "Ukrainian Hryvnia (₴)" },
-  { value: "RON", label: "Romanian Leu (lei)" },
+  { value: "USD", label: "USD — US dollar", symbol: "$" },
+  { value: "EUR", label: "EUR — Euro", symbol: "€" },
+  { value: "GBP", label: "GBP — British pound", symbol: "£" },
+  { value: "CAD", label: "CAD — Canadian dollar", symbol: "CA$" },
+  { value: "AUD", label: "AUD — Australian dollar", symbol: "AU$" },
+  { value: "INR", label: "INR — Indian rupee", symbol: "₹" },
+  { value: "PKR", label: "PKR — Pakistani rupee", symbol: "Rs" },
+  { value: "JPY", label: "JPY — Japanese yen", symbol: "¥" },
+  { value: "CHF", label: "CHF — Swiss franc", symbol: "Fr" },
+  { value: "SGD", label: "SGD — Singapore dollar", symbol: "S$" },
+  { value: "AED", label: "AED — UAE dirham", symbol: "AED" },
+  { value: "SAR", label: "SAR — Saudi riyal", symbol: "SR" },
+  { value: "NZD", label: "NZD — New Zealand dollar", symbol: "NZ$" },
+  { value: "CNY", label: "CNY — Chinese yuan", symbol: "¥" },
+  { value: "BRL", label: "BRL — Brazilian real", symbol: "R$" },
+  { value: "ZAR", label: "ZAR — South African rand", symbol: "R" },
+  { value: "TRY", label: "TRY — Turkish lira", symbol: "₺" },
+  { value: "MXN", label: "MXN — Mexican peso", symbol: "$" },
+  { value: "SEK", label: "SEK — Swedish krona", symbol: "kr" },
+  { value: "NOK", label: "NOK — Norwegian krone", symbol: "kr" },
 ];
 
 let resolutionCanvas: HTMLCanvasElement | null = null;
+
 let resolutionCtx: CanvasRenderingContext2D | null = null;
 
 /**

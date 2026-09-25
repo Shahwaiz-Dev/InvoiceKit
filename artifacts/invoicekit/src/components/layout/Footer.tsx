@@ -64,7 +64,7 @@ export function Footer() {
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 text-xs text-[#36394a]">
           <div>
-            &copy; {new Date().getFullYear()} InvoiceBro. Built with architectural restraint.
+            &copy; {new Date().getFullYear()} InvoiceSync. Built with architectural restraint.
           </div>
 
           <div className="flex items-center gap-6">

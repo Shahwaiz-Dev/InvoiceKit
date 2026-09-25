@@ -42,24 +42,40 @@ export const getTemplateUtils = (data: InvoiceData) => {
     return subtotal * (discount / 100);
   };
 
+  const calculateShipping = () => {
+    return safeNumber(data.shipping, 0);
+  };
+
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
     const tax = calculateTax(subtotal);
     const discountAmount = calculateDiscount(subtotal);
-    return subtotal + tax - discountAmount;
+    const shipping = calculateShipping();
+    return Math.max(0, subtotal + tax - discountAmount + shipping);
+  };
+
+  const calculateBalanceDue = () => {
+    const total = calculateTotal();
+    const paid = safeNumber(data.amountPaid, 0);
+    return Math.max(0, total - paid);
   };
 
   const subtotal = calculateSubtotal();
   const tax = calculateTax(subtotal);
   const discountAmount = calculateDiscount(subtotal);
+  const shipping = calculateShipping();
   const total = calculateTotal();
+  const balanceDue = calculateBalanceDue();
 
   return {
     formatCurrency,
     subtotal,
     tax,
     discountAmount,
+    shipping,
     total,
+    balanceDue,
     safeNumber,
   };
 };
+

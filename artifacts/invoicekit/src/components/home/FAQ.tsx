@@ -10,28 +10,28 @@ import {
 export function FAQ() {
   const faqs = [
     {
-      q: "Is InvoiceKit genuinely free to use?",
-      a: "Yes. The Clean template is 100% free with no trial clocks, no watermark penalties, and no credit card requirements.",
+      q: "Is this free invoice generator genuinely 100% free to use?",
+      a: "Yes. InvoiceSync is a completely free online invoice maker. You can create and download unlimited professional PDF invoices with zero trial clocks, zero watermark penalties, and no credit card required.",
     },
     {
-      q: "Do I need an account to download an invoice?",
-      a: "No. You can configure your invoice and generate production-ready PDFs as a guest immediately. Signing up is only required if you wish to persist client profiles or access additional templates.",
+      q: "Can I use this online invoice maker without signing up?",
+      a: "Yes! You can configure your invoice and generate production-ready PDFs immediately as a guest. Creating a free account is only required if you wish to save client profiles and access specialized invoice templates.",
     },
     {
-      q: "Can I add custom brand logos?",
-      a: "Yes. You can upload high-resolution PNG, SVG, or JPEG logos directly in the browser editor. Logos are rendered sharply in the exported PDF.",
+      q: "Can I add my business logo and customize currencies in the free invoice maker?",
+      a: "Yes. You can upload high-resolution PNG, SVG, or JPEG logos directly in our free invoice maker online. We support USD, EUR, GBP, CAD, AUD, JPY, INR, PKR, and all standard ISO currencies with localized symbols.",
     },
     {
-      q: "Where is my client and billing data stored?",
-      a: "For guests, all data stays securely within your browser's private local storage. We do not transmit or index your commercial figures on external databases without your authenticated intent.",
+      q: "Where is my client and billing data stored when creating invoices online?",
+      a: "For guest users, all billing coordinates and financial figures remain strictly inside your browser's local storage. We never store, index, or sell your private client data.",
     },
     {
-      q: "Which international currencies are supported?",
-      a: "InvoiceKit supports USD, EUR, GBP, CAD, AUD, JPY, INR, PKR, and all standard ISO currency codes with proper localized symbol placement.",
+      q: "How does the PDF invoice download work?",
+      a: "Invoices are rendered directly to vector print layouts conforming to standard A4 and US Letter specifications, ensuring crystal-clear text, exact math, and sharp logos on any screen or printer.",
     },
     {
-      q: "How does the PDF export work?",
-      a: "Invoices are converted directly to vector print layouts matching A4 and US Letter standards, ensuring crystal-clear text and lines on any screen or printer.",
+      q: "What makes InvoiceSync the best free invoice generator online?",
+      a: "Unlike typical billing tools that enforce monthly subscription paywalls or slap ugly watermarks on your PDFs, InvoiceSync delivers real-time calculation, modern templates, logo branding, and instant PDF download completely free.",
     },
   ];
 
@@ -39,14 +39,14 @@ export function FAQ() {
     <section id="faq" className="py-24 bg-white px-6">
       <div className="max-w-[1000px] mx-auto">
         <div className="text-center mb-16">
-          <span className="text-[13px] font-medium uppercase tracking-[0.004em] text-[#091135] mb-2 block">
-            Knowledge base
+          <span className="text-[13px] font-semibold uppercase tracking-[0.05em] text-[#0f77ff] mb-2 block">
+            Invoice Maker FAQ
           </span>
-          <h2 className="text-3xl sm:text-4xl font-semibold text-[#091135] tracking-[0.512px] leading-tight">
-            Frequently Asked Questions
+          <h2 className="text-3xl sm:text-4xl font-semibold text-[#091135] tracking-tight leading-tight">
+            Frequently Asked Questions About Our Free Invoice Generator
           </h2>
-          <p className="text-base text-[#36394a] max-w-lg mx-auto mt-2 tracking-[0.128px]">
-            Key facts regarding privacy boundaries, PDF vector export, and template unlocks.
+          <p className="text-base text-[#36394a] max-w-lg mx-auto mt-2 tracking-normal">
+            Everything you need to know about using our free online invoice maker, PDF export, and commercial data privacy.
           </p>
         </div>
 

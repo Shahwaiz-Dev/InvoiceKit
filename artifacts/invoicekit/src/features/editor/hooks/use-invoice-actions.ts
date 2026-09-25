@@ -10,6 +10,153 @@ interface UsageData {
   isPro: boolean;
 }
 
+function buildPdfOptions(values: InvoiceData) {
+  return {
+    margin: 0,
+    filename: `invoice-${values.invoiceNumber || "001"}.pdf`,
+    image: { type: "jpeg" as const, quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      letterRendering: true,
+      scrollY: 0,
+      scrollX: 0,
+      windowWidth: 794,
+      logging: false,
+      onclone: (clonedDoc: Document) => {
+        const style = clonedDoc.createElement('style');
+        style.innerHTML = `
+          @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=Great+Vibes&family=Pacifico&family=Dancing+Script:wght@400;700&family=Roboto+Mono:wght@400;500;700&display=swap');
+          
+          :root, html, body {
+            --font-signature-1: 'Great Vibes', cursive !important;
+            --font-signature-2: 'Pacifico', cursive !important;
+            --font-signature-3: 'Dancing Script', cursive !important;
+            --app-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            --font-geist-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            --app-font-serif: 'DM Serif Display', Georgia, serif !important;
+            --font-serif: 'DM Serif Display', Georgia, serif !important;
+            --app-font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+            --font-geist-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+            --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+          }
+
+          .font-serif {
+            font-family: 'DM Serif Display', Georgia, serif !important;
+          }
+
+          .font-mono {
+            font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+          }
+
+          .font-sans {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+          }
+        `;
+        clonedDoc.head.appendChild(style);
+
+        // Handle signatures explicitly
+        const sigElements = clonedDoc.querySelectorAll(".signature-font");
+        sigElements.forEach((el) => {
+          const node = el as HTMLElement;
+          const sigFont = node.getAttribute("data-sigfont") || "";
+          if (sigFont.includes("signature-1") || sigFont.toLowerCase().includes("great vibes")) {
+            node.style.setProperty("font-family", "'Great Vibes', cursive", "important");
+          } else if (sigFont.includes("signature-2") || sigFont.toLowerCase().includes("pacifico")) {
+            node.style.setProperty("font-family", "'Pacifico', cursive", "important");
+          } else if (sigFont.includes("signature-3") || sigFont.toLowerCase().includes("dancing script")) {
+            node.style.setProperty("font-family", "'Dancing Script', cursive", "important");
+          } else if (sigFont) {
+            node.style.setProperty("font-family", `${sigFont}, cursive`, "important");
+          }
+        });
+
+        // Fix any background-clip text for html2canvas compatibility
+        const gradientTexts = clonedDoc.querySelectorAll(".bg-clip-text, [class*='bg-clip-text']");
+        gradientTexts.forEach((el) => {
+          const node = el as HTMLElement;
+          node.style.webkitBackgroundClip = "initial";
+          node.style.backgroundClip = "initial";
+          node.style.color = "#c026d3";
+          node.style.backgroundImage = "none";
+        });
+
+        const elements = clonedDoc.querySelectorAll("*");
+        elements.forEach((el) => {
+          const node = el as HTMLElement;
+          const computedStyle = window.getComputedStyle(node);
+          if (node.classList.contains('tracking-tighter')) {
+            node.style.letterSpacing = '-0.02em';
+          }
+
+          const colorProps = [
+            "color", 
+            "backgroundColor", 
+            "borderColor", 
+            "borderTopColor", 
+            "borderBottomColor", 
+            "borderLeftColor", 
+            "borderRightColor", 
+            "outlineColor", 
+            "fill", 
+            "stroke",
+            "boxShadow",
+            "background",
+            "backgroundImage",
+            "border",
+            "outline"
+          ];
+          colorProps.forEach((prop) => {
+            const cssProperty = prop.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+            const val = node.style.getPropertyValue(cssProperty) || computedStyle.getPropertyValue(cssProperty);
+
+            const isModernColor = val && (val.includes("oklch") || val.includes("oklab") || val.includes("lab") || val.includes("lch") || val.includes("hwb") || val.includes("from") || val.includes("color-mix"));
+            if (isModernColor) {
+              node.style.setProperty(cssProperty, resolveModernColor(val));
+            }
+          });
+        });
+
+        const printArea = clonedDoc.getElementById("print-area");
+        if (printArea) {
+          let parent = printArea.parentElement;
+          while (parent && parent !== clonedDoc.body) {
+            parent.style.opacity = "1";
+            parent.style.visibility = "visible";
+            parent.style.display = "block";
+            parent.style.position = "static";
+            parent.style.transform = "none";
+            parent = parent.parentElement;
+          }
+          printArea.style.width = "794px";
+          printArea.style.minHeight = "1123px";
+          printArea.style.height = "auto";
+          printArea.style.transform = "none";
+          printArea.style.margin = "0";
+          printArea.style.boxSizing = "border-box";
+          printArea.style.fontSize = "14px";
+          printArea.style.opacity = "1";
+          printArea.style.visibility = "visible";
+          printArea.style.display = "block";
+        }
+
+        const heavyEffects = clonedDoc.querySelectorAll(".blur-\\[120px\\], .absolute.rounded-full.opacity-20, .shadow-xl, .shadow-2xl");
+        heavyEffects.forEach((el) => {
+          const node = el as HTMLElement;
+          if (node.classList.contains('blur-[120px]')) node.style.display = "none";
+          else node.style.boxShadow = "none";
+        });
+        
+        const images = clonedDoc.querySelectorAll("img");
+        images.forEach(img => {
+          if (!img.src.startsWith('data:')) img.crossOrigin = "anonymous";
+        });
+      },
+    },
+    jsPDF: { unit: "mm" as const, format: "a4" as const, orientation: "portrait" as const, compress: true },
+  };
+}
+
 export function useInvoiceActions() {
   const [isSending, setIsSending] = useState(false);
   const router = useRouter();
@@ -22,14 +169,13 @@ export function useInvoiceActions() {
     invoiceId: string | null,
     saveInvoiceToDB: (values: InvoiceData, status: "draft" | "sent") => Promise<void>
   ) => {
-    if (session && usageData) {
-      if (usageData.usage >= usageData.limit) {
-        toast.error("Monthly usage limit reached. Please upgrade to Pro.");
-        router.push("/dashboard");
-        return;
-      }
-      if (!invoiceId) {
-        await saveInvoiceToDB(values, "draft");
+    if (session && usageData && !invoiceId) {
+      if (usageData.usage < usageData.limit) {
+        try {
+          await saveInvoiceToDB(values, "draft");
+        } catch (e) {
+          console.warn("Could not save to DB before download:", e);
+        }
       }
     }
 
@@ -50,138 +196,7 @@ export function useInvoiceActions() {
     }
 
     const html2pdf = (await import("html2pdf.js")).default;
-    const opt = {
-      margin: 0,
-      filename: `invoice-${values.invoiceNumber || "001"}.pdf`,
-      image: { type: "jpeg" as const, quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        letterRendering: true,
-        scrollY: 0,
-        scrollX: 0,
-        windowWidth: 794,
-        logging: false,
-        onclone: (clonedDoc: Document) => {
-          const style = clonedDoc.createElement('style');
-          style.innerHTML = `
-            @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=Great+Vibes&family=Pacifico&family=Dancing+Script:wght@400;700&family=Roboto+Mono:wght@400;500;700&display=swap');
-            
-            :root, html, body {
-              --font-signature-1: 'Great Vibes', cursive !important;
-              --font-signature-2: 'Pacifico', cursive !important;
-              --font-signature-3: 'Dancing Script', cursive !important;
-              --app-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-              --font-geist-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-              --app-font-serif: 'DM Serif Display', Georgia, serif !important;
-              --font-serif: 'DM Serif Display', Georgia, serif !important;
-              --app-font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
-              --font-geist-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
-              --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
-            }
-
-            .font-serif {
-              font-family: 'DM Serif Display', Georgia, serif !important;
-            }
-
-            .font-mono {
-              font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
-            }
-
-            .font-sans {
-              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-            }
-          `;
-          clonedDoc.head.appendChild(style);
-
-          // Handle signatures explicitly
-          const sigElements = clonedDoc.querySelectorAll(".signature-font");
-          sigElements.forEach((el) => {
-            const node = el as HTMLElement;
-            const sigFont = node.getAttribute("data-sigfont") || "";
-            if (sigFont.includes("signature-1") || sigFont.toLowerCase().includes("great vibes")) {
-              node.style.setProperty("font-family", "'Great Vibes', cursive", "important");
-            } else if (sigFont.includes("signature-2") || sigFont.toLowerCase().includes("pacifico")) {
-              node.style.setProperty("font-family", "'Pacifico', cursive", "important");
-            } else if (sigFont.includes("signature-3") || sigFont.toLowerCase().includes("dancing script")) {
-              node.style.setProperty("font-family", "'Dancing Script', cursive", "important");
-            } else if (sigFont) {
-              node.style.setProperty("font-family", `${sigFont}, cursive`, "important");
-            }
-          });
-
-          // Fix any background-clip text for html2canvas compatibility
-          const gradientTexts = clonedDoc.querySelectorAll(".bg-clip-text, [class*='bg-clip-text']");
-          gradientTexts.forEach((el) => {
-            const node = el as HTMLElement;
-            node.style.webkitBackgroundClip = "initial";
-            node.style.backgroundClip = "initial";
-            node.style.color = "#c026d3";
-            node.style.backgroundImage = "none";
-          });
-
-          const elements = clonedDoc.querySelectorAll("*");
-          elements.forEach((el) => {
-            const node = el as HTMLElement;
-            const computedStyle = window.getComputedStyle(node);
-            if (node.classList.contains('tracking-tighter')) {
-              node.style.letterSpacing = '-0.02em';
-            }
-
-            const colorProps = [
-              "color", 
-              "backgroundColor", 
-              "borderColor", 
-              "borderTopColor", 
-              "borderBottomColor", 
-              "borderLeftColor", 
-              "borderRightColor", 
-              "outlineColor", 
-              "fill", 
-              "stroke",
-              "boxShadow",
-              "background",
-              "backgroundImage",
-              "border",
-              "outline"
-            ];
-            colorProps.forEach((prop) => {
-              const cssProperty = prop.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
-              const val = node.style.getPropertyValue(cssProperty) || computedStyle.getPropertyValue(cssProperty);
-
-              const isModernColor = val && (val.includes("oklch") || val.includes("oklab") || val.includes("lab") || val.includes("lch") || val.includes("hwb") || val.includes("from") || val.includes("color-mix"));
-              if (isModernColor) {
-                node.style.setProperty(cssProperty, resolveModernColor(val));
-              }
-            });
-          });
-
-          const printArea = clonedDoc.getElementById("print-area");
-          if (printArea) {
-            printArea.style.width = "794px";
-            printArea.style.minHeight = "1123px";
-            printArea.style.height = "auto";
-            printArea.style.transform = "none";
-            printArea.style.margin = "0";
-            printArea.style.boxSizing = "border-box";
-            printArea.style.fontSize = "14px";
-          }
-
-          const heavyEffects = clonedDoc.querySelectorAll(".blur-\\[120px\\], .absolute.rounded-full.opacity-20, .shadow-xl, .shadow-2xl");
-          heavyEffects.forEach((el) => {
-            const node = el as HTMLElement;
-            if (node.classList.contains('blur-[120px]')) node.style.display = "none";
-            else node.style.boxShadow = "none";
-          });
-          
-          const images = clonedDoc.querySelectorAll("img");
-          images.forEach(img => {
-            if (!img.src.startsWith('data:')) img.crossOrigin = "anonymous";
-          });
-        },
-      },
-      jsPDF: { unit: "mm" as const, format: "a4" as const, orientation: "portrait" as const, compress: true },
-    };
+    const opt = buildPdfOptions(values);
 
     try {
       await html2pdf().set(opt).from(element).save();
@@ -194,7 +209,13 @@ export function useInvoiceActions() {
     }
   };
 
-  const handleSendEmail = async (values: InvoiceData, session: any) => {
+  const handleSendEmail = async (
+    values: InvoiceData, 
+    session: any, 
+    customRecipient?: string, 
+    customMessage?: string
+  ) => {
+    const targetEmail = customRecipient || values.clientEmail;
     if (!session) {
       const callbackUrl = encodeURIComponent(window.location.pathname + window.location.search);
       toast.error("Please login to send invoices via email", {
@@ -206,7 +227,7 @@ export function useInvoiceActions() {
       return;
     }
 
-    if (!values.clientEmail) {
+    if (!targetEmail) {
       toast.error("Please provide a client email address");
       return;
     }
@@ -214,16 +235,35 @@ export function useInvoiceActions() {
     setIsSending(true);
     
     const sendPromise = async () => {
-      const subtotal = values.lineItems.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0);
-      const taxAmount = subtotal * (values.taxRate / 100);
-      const discountAmount = subtotal * (values.discount / 100);
-      const total = subtotal + taxAmount - discountAmount;
+      const subtotal = (values.lineItems || []).reduce((acc, item) => acc + (Number(item.quantity) || 0) * (Number(item.unitPrice) || 0), 0);
+      const taxAmount = subtotal * ((Number(values.taxRate) || 0) / 100);
+      const discountAmount = subtotal * ((Number(values.discount) || 0) / 100);
+      const shippingAmount = Number(values.shipping) || 0;
+      const total = subtotal + taxAmount - discountAmount + shippingAmount;
+
+      // Attempt to generate inline PDF base64 for instant attachment & direct download
+      let pdfBase64: string | undefined;
+      const element = document.getElementById("print-area");
+      if (element) {
+        try {
+          const html2pdf = (await import("html2pdf.js")).default;
+          const opt = buildPdfOptions(values);
+          const pdfUri = await html2pdf().set(opt).from(element).outputPdf("datauristring");
+          if (typeof pdfUri === "string" && pdfUri.includes(",")) {
+            pdfBase64 = pdfUri.split(",")[1];
+          }
+        } catch (pdfErr) {
+          console.warn("Could not generate inline PDF for email attachment:", pdfErr);
+        }
+      }
 
       const response = await fetch("/api/send-invoice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          to: values.clientEmail,
+          to: targetEmail,
+          customMessage,
+          pdfBase64,
           invoiceData: {
             ...values,
             totalAmount: total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
@@ -240,7 +280,7 @@ export function useInvoiceActions() {
       loading: "Sending invoice...",
       success: () => {
         setIsSending(false);
-        return `Invoice sent to ${values.clientEmail}`;
+        return `Invoice sent to ${targetEmail}`;
       },
       error: (err) => {
         setIsSending(false);
