@@ -66,7 +66,7 @@ export default function NotFound() {
           className="mt-20 flex items-center justify-center gap-2 grayscale brightness-200 contrast-0"
         >
           <div className="w-6 h-6 bg-primary rounded-sm opacity-20" />
-          <span className="font-serif italic text-sm text-foreground tracking-tight opacity-40">InvoiceKit</span>
+          <span className="font-serif italic text-sm text-foreground tracking-tight opacity-40">InvoiceSync</span>
         </motion.div>
       </div>
     </div>
