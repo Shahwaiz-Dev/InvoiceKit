@@ -199,6 +199,13 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
     await new Promise<void>((resolve) =>
       requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
     );
+    try {
+      if (typeof document !== "undefined" && document.fonts) {
+        await document.fonts.ready;
+      }
+    } catch {
+      // Ignore font readiness errors
+    }
 
     const element = document.getElementById("print-area");
     if (!element) return;
@@ -213,21 +220,80 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
         scale: 2,
         useCORS: true,
         letterRendering: true,
+        scrollY: 0,
+        scrollX: 0,
+        windowWidth: 794,
+        logging: false,
         onclone: (clonedDoc: Document) => {
+          const style = clonedDoc.createElement('style');
+          style.innerHTML = `
+            @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=Great+Vibes&family=Pacifico&family=Dancing+Script:wght@400;700&family=Roboto+Mono:wght@400;500;700&display=swap');
+            
+            :root, html, body {
+              --font-signature-1: 'Great Vibes', cursive !important;
+              --font-signature-2: 'Pacifico', cursive !important;
+              --font-signature-3: 'Dancing Script', cursive !important;
+              --app-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              --font-geist-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+              --app-font-serif: 'DM Serif Display', Georgia, serif !important;
+              --font-serif: 'DM Serif Display', Georgia, serif !important;
+              --app-font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+              --font-geist-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+              --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+            }
+
+            .font-serif {
+              font-family: 'DM Serif Display', Georgia, serif !important;
+            }
+
+            .font-mono {
+              font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace !important;
+            }
+
+            .font-sans {
+              font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            }
+          `;
+          clonedDoc.head.appendChild(style);
+
+          const sigElements = clonedDoc.querySelectorAll(".signature-font");
+          sigElements.forEach((el) => {
+            const node = el as HTMLElement;
+            const sigFont = node.getAttribute("data-sigfont") || "";
+            if (sigFont.includes("signature-1") || sigFont.toLowerCase().includes("great vibes")) {
+              node.style.setProperty("font-family", "'Great Vibes', cursive", "important");
+            } else if (sigFont.includes("signature-2") || sigFont.toLowerCase().includes("pacifico")) {
+              node.style.setProperty("font-family", "'Pacifico', cursive", "important");
+            } else if (sigFont.includes("signature-3") || sigFont.toLowerCase().includes("dancing script")) {
+              node.style.setProperty("font-family", "'Dancing Script', cursive", "important");
+            } else if (sigFont) {
+              node.style.setProperty("font-family", `${sigFont}, cursive`, "important");
+            }
+          });
+
+          const gradientTexts = clonedDoc.querySelectorAll(".bg-clip-text, [class*='bg-clip-text']");
+          gradientTexts.forEach((el) => {
+            const node = el as HTMLElement;
+            node.style.webkitBackgroundClip = "initial";
+            node.style.backgroundClip = "initial";
+            node.style.color = "#c026d3";
+            node.style.backgroundImage = "none";
+          });
+
           const elements = clonedDoc.querySelectorAll("*");
           elements.forEach((el) => {
             const node = el as HTMLElement;
-            const style = window.getComputedStyle(node);
+            const computedStyle = window.getComputedStyle(node);
             const colorProps = [
-              "color",
-              "backgroundColor",
-              "borderColor",
-              "borderTopColor",
-              "borderBottomColor",
-              "borderLeftColor",
-              "borderRightColor",
-              "outlineColor",
-              "fill",
+              "color", 
+              "backgroundColor", 
+              "borderColor", 
+              "borderTopColor", 
+              "borderBottomColor", 
+              "borderLeftColor", 
+              "borderRightColor", 
+              "outlineColor", 
+              "fill", 
               "stroke",
               "boxShadow",
               "background",
@@ -239,7 +305,7 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
             colorProps.forEach((prop) => {
               const cssProperty = prop.replace(/[A-Z]/g, (m: string) => `-${m.toLowerCase()}`);
               const inlineValue = node.style.getPropertyValue(cssProperty);
-              const value = inlineValue || style.getPropertyValue(cssProperty);
+              const value = inlineValue || computedStyle.getPropertyValue(cssProperty);
               const isModernColor = value && (
                 value.includes("oklch") || 
                 value.includes("oklab") || 
@@ -255,12 +321,24 @@ export function Editor({ template, isOpen, onClose }: EditorProps) {
               }
             });
           });
+
+          const printArea = clonedDoc.getElementById("print-area");
+          if (printArea) {
+            printArea.style.width = "794px";
+            printArea.style.minHeight = "1123px";
+            printArea.style.height = "auto";
+            printArea.style.transform = "none";
+            printArea.style.margin = "0";
+            printArea.style.boxSizing = "border-box";
+            printArea.style.fontSize = "14px";
+          }
         },
       },
       jsPDF: {
         unit: "mm" as const,
         format: "a4" as const,
         orientation: "portrait" as const,
+        compress: true,
       },
     };
 

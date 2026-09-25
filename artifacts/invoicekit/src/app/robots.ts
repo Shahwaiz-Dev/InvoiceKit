@@ -5,6 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/dashboard", "/settings", "/api/"],
     },
     sitemap: "https://www.invoice-sync.com/sitemap.xml",
   };

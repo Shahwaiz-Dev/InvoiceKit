@@ -4,8 +4,27 @@ import { multiSession } from "better-auth/plugins/multi-session";
 import { db, ObjectId } from "@workspace/db";
 import { normalizeAuthId } from "./server-utils";
 
+function cleanUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  const cleaned = url.trim().replace(/^["']|["']$/g, "").trim().replace(/\/+$/, "");
+  try {
+    new URL(cleaned);
+    return cleaned;
+  } catch {
+    return undefined;
+  }
+}
+
 export const auth = betterAuth({
   database: mongodbAdapter(db),
+  trustedOrigins: [
+    "https://invoicebro-tau.vercel.app",
+    "https://www.invoice-sync.com",
+    "https://invoice-sync.com",
+    "http://localhost:3000",
+    ...(cleanUrl(process.env.BETTER_AUTH_URL) ? [cleanUrl(process.env.BETTER_AUTH_URL)!] : []),
+    ...(cleanUrl(process.env.NEXT_PUBLIC_APP_URL) ? [cleanUrl(process.env.NEXT_PUBLIC_APP_URL)!] : []),
+  ],
   emailAndPassword: {
     enabled: true,
   },

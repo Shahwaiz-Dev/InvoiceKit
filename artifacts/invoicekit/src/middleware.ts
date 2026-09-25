@@ -74,21 +74,13 @@ export async function middleware(request: NextRequest) {
       request.cookies.get("__Secure-better-auth.session_token")?.value;
 
     if (!sessionToken) {
+      if (pathname.startsWith("/api")) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = "/login";
       loginUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      // Note: For page requests, we should redirect, for API we return 401.
-      // But middleware runs for both. Better to redirect for pages.
-    }
-
-    // In a real production app, we would verify the session via fetch to /api/auth/get-session
-    // but for now, we'll keep the redirect logic consistent.
-    if (!sessionToken && !pathname.startsWith("/api")) {
-        const loginUrl = request.nextUrl.clone();
-        loginUrl.pathname = "/login";
-        loginUrl.searchParams.set("callbackUrl", pathname);
-        return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(loginUrl);
     }
   }
 

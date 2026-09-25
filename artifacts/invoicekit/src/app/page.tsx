@@ -3,27 +3,36 @@ import Script from "next/script";
 import HomePage from "@/features/HomePage";
 
 export const metadata: Metadata = {
-  title: "Free Invoice Generator | Create Professional Invoice Templates Online",
+  title: "Free Invoice Generator (No Sign-Up) | Instant PDF Invoice Maker",
   description:
-    "Generate professional PDF invoices instantly with our free invoice generator. Choose from multiple professional templates, no watermarks, and zero sign-up required. Secure, fast, and easy to use.",
+    "Create and download professional PDF invoices in seconds with zero sign-up required. 100% free in-browser invoice maker, no watermarks, instant PDF export, and multiple professional templates.",
   alternates: {
     canonical: "https://www.invoice-sync.com",
   },
   openGraph: {
-    title: "100% Free Invoice Generator | InvoiceKit",
+    title: "Free Invoice Generator (No Sign-Up) | InvoiceSync",
     description: "Create and download professional invoices in seconds. No sign-up, no hidden fees, and zero watermarks.",
     url: "https://www.invoice-sync.com",
-    siteName: "InvoiceKit",
+    siteName: "InvoiceSync",
     locale: "en_US",
     type: "website",
   },
 };
 
 export default function Page() {
+  const organizationLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "InvoiceSync",
+    url: "https://www.invoice-sync.com",
+    logo: "https://www.invoice-sync.com/Logo.png",
+    description: "Free professional invoice generator for freelancers, contractors, and small businesses.",
+  };
+
   const softwareLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "InvoiceKit",
+    name: "InvoiceSync",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     offers: {
@@ -31,13 +40,8 @@ export default function Page() {
       price: "0",
       priceCurrency: "USD",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "1250",
-    },
     description:
-      "InvoiceKit is a professional-grade free invoice generator that lets anyone create PDF invoices with zero watermarks.",
+      "InvoiceSync is a professional-grade free invoice generator that lets anyone create PDF invoices with zero watermarks.",
   };
 
   const faqJsonLd = {
@@ -46,48 +50,51 @@ export default function Page() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "Is InvoiceKit really free?",
+        name: "Is this free invoice generator genuinely 100% free to use?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, InvoiceKit is 100% free with no trial periods, hidden fees, or pro tiers for basic generation.",
+          text: "Yes. InvoiceSync is a completely free online invoice maker. You can create and download unlimited professional PDF invoices with zero trial clocks, zero watermark penalties, and no credit card required.",
         },
       },
       {
         "@type": "Question",
-        name: "Do I need to create an account to make an invoice?",
+        name: "Can I use this online invoice maker without signing up?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "No account is required to generate invoices using our Clean template. You can download your PDF instantly.",
+          text: "Yes! You can configure your invoice and generate production-ready PDFs immediately as a guest. Creating a free account is only required if you wish to save client profiles and access specialized invoice templates.",
         },
       },
       {
         "@type": "Question",
-        name: "Will there be watermarks on my PDF invoices?",
+        name: "Can I add my business logo and customize currencies in the free invoice maker?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Absolutely not. Every invoice generated with InvoiceKit is watermark-free, regardless of which template you choose.",
+          text: "Yes. You can upload high-resolution PNG, SVG, or JPEG logos directly in our free invoice maker online. We support USD, EUR, GBP, CAD, AUD, JPY, INR, PKR, and all standard ISO currencies with localized symbols.",
         },
       },
       {
         "@type": "Question",
-        name: "What file format are the invoices?",
+        name: "Where is my client and billing data stored when creating invoices online?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "All invoices are generated as high-quality, print-ready PDF documents.",
+          text: "For guest users, all billing coordinates and financial figures remain strictly inside your browser's local storage. We never store, index, or sell your private client data.",
         },
       },
-    ],
-  };
-
-  const breadcrumbLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
       {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://www.invoice-sync.com",
+        "@type": "Question",
+        name: "How does the PDF invoice download work?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Invoices are rendered directly to vector print layouts conforming to standard A4 and US Letter specifications, ensuring crystal-clear text, exact math, and sharp logos on any screen or printer.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What makes InvoiceSync the best free invoice generator online?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Unlike typical billing tools that enforce monthly subscription paywalls or slap ugly watermarks on your PDFs, InvoiceSync delivers real-time calculation, modern templates, logo branding, and instant PDF download completely free.",
+        },
       },
     ],
   };
@@ -96,17 +103,17 @@ export default function Page() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     url: "https://www.invoice-sync.com",
-    name: "InvoiceKit",
+    name: "InvoiceSync",
     description: "Free professional invoice generator",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://www.invoice-sync.com/templates?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
   };
 
   return (
     <>
+      <Script
+        id="organization-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
+      />
       <Script
         id="website-jsonld"
         type="application/ld+json"
@@ -121,11 +128,6 @@ export default function Page() {
         id="faq-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <Script
-        id="breadcrumb-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       <HomePage />
     </>
