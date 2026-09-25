@@ -63,10 +63,11 @@ export const metadata: Metadata = {
     siteName: "InvoiceSync",
     images: [
       {
-        url: "/opengraph.jpg",
+        url: "https://www.invoice-sync.com/opengraph.jpg",
         width: 1200,
         height: 630,
         alt: "InvoiceSync Free Professional Invoice Generator",
+        type: "image/jpeg",
       },
     ],
   },
@@ -75,7 +76,7 @@ export const metadata: Metadata = {
     title: "InvoiceSync | Free Professional Invoice Generator",
     description:
       "Create and download professional PDF invoices instantly. Clean is free for everyone, with more templates unlocked by account.",
-    images: ["/opengraph.jpg"],
+    images: ["https://www.invoice-sync.com/opengraph.jpg"],
   },
   alternates: {
     canonical: "https://www.invoice-sync.com",
